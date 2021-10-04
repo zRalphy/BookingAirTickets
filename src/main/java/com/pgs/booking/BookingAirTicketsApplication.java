@@ -1,6 +1,6 @@
-package com.pgs.BookingAirTickets;
+package com.pgs.booking;
 
-import com.pgs.BookingAirTickets.helloController.HelloController;
+import com.pgs.booking.controller.Controller;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -9,7 +9,7 @@ public class BookingAirTicketsApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BookingAirTicketsApplication.class, args);
-		HelloController helloController = new HelloController();
-		helloController.index();
+		Controller controller = new Controller();
+		controller.index();
 	}
 }

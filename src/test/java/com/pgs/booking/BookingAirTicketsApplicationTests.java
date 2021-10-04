@@ -1,4 +1,4 @@
-package com.pgs.BookingAirTickets;
+package com.pgs.booking;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
