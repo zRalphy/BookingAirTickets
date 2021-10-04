@@ -1,12 +1,12 @@
-package com.pgs.BookingAirTickets.helloController;
+package com.pgs.booking.helloController;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class HelloController {
-    @GetMapping("/")
-    public void index() {
-        System.out.println("Greetings from Spring Boot!");
+    @GetMapping("/api/hello")
+    public String index() {
+        return "Greetings from Spring Boot!";
     }
 }

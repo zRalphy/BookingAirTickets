@@ -1,6 +1,6 @@
-package com.pgs.BookingAirTickets;
+package com.pgs.booking;
 
-import com.pgs.BookingAirTickets.helloController.HelloController;
+import com.pgs.booking.helloController.HelloController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
