@@ -1,4 +1,4 @@
-package helloController;
+package com.pgs.BookingAirTickets.helloController;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
