@@ -3,10 +3,7 @@ package com.pgs.booking.controller;
 import com.pgs.booking.model.Passenger;
 import com.pgs.booking.service.PassengerService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 import java.util.List;
 
 @RestController

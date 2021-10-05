@@ -3,12 +3,7 @@ package com.pgs.booking.service;
 import com.pgs.booking.model.Passenger;
 import com.pgs.booking.repository.PassengerRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
