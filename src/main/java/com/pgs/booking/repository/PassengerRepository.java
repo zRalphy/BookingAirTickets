@@ -2,12 +2,10 @@ package com.pgs.booking.repository;
 
 import com.pgs.booking.model.Passenger;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.List;
+import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
+@Repository
 public interface PassengerRepository extends JpaRepository<Passenger, Long> {
-    List<Passenger> findAllPassenger();
-    Optional<Passenger> findPassengerById(Long id);
     Optional<Passenger> findPassengerByEmail(String email);
 }

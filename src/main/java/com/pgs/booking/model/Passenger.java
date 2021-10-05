@@ -24,4 +24,6 @@ public class Passenger {
     private String email;
     private String country;
     private String telephone;
+    private String telephone2;
 }
+
