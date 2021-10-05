@@ -1,20 +1,20 @@
 package com.pgs.booking.model;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @RequiredArgsConstructor
 @Entity
-public class Employee {
+@Table(name = "passenger")
+public class Passenger {
     @Id
     @GeneratedValue
     private Long id;
@@ -23,5 +23,5 @@ public class Employee {
     private String lastName;
     private String email;
     private String country;
-    private Integer telephone;
+    private String telephone;
 }
