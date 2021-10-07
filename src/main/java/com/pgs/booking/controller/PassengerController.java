@@ -18,8 +18,8 @@ public class PassengerController {
     }
 
     @GetMapping("/api/passengers/{id}")
-    public Passenger getSinglePassenger(@PathVariable long id) {
-        return passengerService.getSinglePassenger(id);
+    public Passenger getSinglePassenger(@PathVariable long id)  {
+            return passengerService.getSinglePassenger(id);
     }
 
     @PostMapping("/api/passengers")

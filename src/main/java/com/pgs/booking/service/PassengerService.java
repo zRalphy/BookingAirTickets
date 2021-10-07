@@ -1,5 +1,6 @@
 package com.pgs.booking.service;
 
+import com.pgs.booking.exception.ResourceNotFoundException;
 import com.pgs.booking.model.Passenger;
 import com.pgs.booking.repository.PassengerRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,20 +20,20 @@ public class PassengerService {
     }
 
     public Passenger getSinglePassenger(long id) {
-        return passengerRepository.findById(id).orElseThrow();
+        return passengerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Passenger with id " + id + " not found."));
     }
 
     public void addNewPassenger(Passenger passenger) {
         Optional<Passenger> geolocationOptional = passengerRepository.findById(passenger.getId());
         if(geolocationOptional.isPresent()) {
-            throw new IllegalStateException("Passenger with id " + passenger.getId() + " exist in database");
+            throw new IllegalStateException("Passenger exist in database.");
         }
         passengerRepository.save(passenger);
     }
 
     public Passenger editPassenger(Passenger passenger) {
         Passenger passengerEdited = passengerRepository.findById(passenger.getId())
-                .orElseThrow(() -> new IllegalStateException(" Passenger with id " + passenger.getId() + " does not exists "));
+                .orElseThrow(() -> new ResourceNotFoundException("Passenger with id " + passenger.getId() + " not found."));
 
 
         if(passenger.getFirstName() != null &&
@@ -52,7 +53,7 @@ public class PassengerService {
                 && !Objects.equals(passengerEdited.getEmail(), passenger.getEmail())) {
             Optional <Passenger> passengerEmailOptional = passengerRepository.findPassengerByEmail(passenger.getEmail());
             if(passengerEmailOptional.isPresent()) {
-                throw new IllegalStateException(" Email exist in database ");
+                throw new IllegalStateException("Email exist in database.");
             }
             passengerEdited.setEmail(passenger.getEmail());
         }
