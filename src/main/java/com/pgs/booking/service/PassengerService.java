@@ -1,74 +1,82 @@
 package com.pgs.booking.service;
 
+import com.pgs.booking.controller.PassengerDtoMapper;
 import com.pgs.booking.exception.ResourceNotFoundException;
 import com.pgs.booking.model.Passenger;
+import com.pgs.booking.model.dto.PassengerDto;
 import com.pgs.booking.repository.PassengerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class PassengerService {
 
     private final PassengerRepository passengerRepository;
+    private final PassengerDtoMapper passengerDtoMapper;
 
-    public List<Passenger> getPassengers() {
-        return passengerRepository.findAll();
+    public List<PassengerDto> getPassengers() {
+        List<Passenger> findAll = passengerRepository.findAll();
+        return passengerDtoMapper.mapToPassengersDto(findAll);
     }
 
-    public Passenger getSinglePassenger(long id) {
-        return passengerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Passenger with id " + id + " not found."));
+    public PassengerDto getSinglePassenger(long id) {
+       Passenger passengerFromRepo = passengerRepository
+               .findById(id)
+               .orElseThrow(() -> new ResourceNotFoundException("Passenger with id " + id + " not found."));
+       return passengerDtoMapper.mapToPassengerDto(passengerFromRepo);
     }
-
-    public void addNewPassenger(Passenger passenger) {
-        Optional<Passenger> geolocationOptional = passengerRepository.findById(passenger.getId());
-        if(geolocationOptional.isPresent()) {
-            throw new IllegalStateException("Passenger exist in database.");
+/*
+    public void addNewPassenger(PassengerDto passengerDto) {
+        Optional<PassengerDto> PassengerOptional = passengerRepository.findByEmail(passengerDto.getEmail());
+        if(PassengerOptional.isPresent()) {
+            throw new IllegalStateException("Passenger with this email exist in database.");
         }
-        passengerRepository.save(passenger);
+        passengerRepository.save(passengerDto);
     }
+*/
+/*
+    public Passenger editPassenger(PassengerDto passengerDto) {
 
-    public Passenger editPassenger(Passenger passenger) {
-        Passenger passengerEdited = passengerRepository.findById(passenger.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Passenger with id " + passenger.getId() + " not found."));
+        PassengerDto passengerEditedDto = passengerRepository.findById(passengerDto.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Passenger with id " + passengerDto.getId() + " not found."));
 
 
-        if(passenger.getFirstName() != null &&
-                passenger.getFirstName().length() > 0
-                && !Objects.equals(passengerEdited.getFirstName(), passenger.getFirstName())) {
-            passengerEdited.setFirstName(passenger.getFirstName());
+        if(passengerDto.getFirstName() != null &&
+                passengerDto.getFirstName().length() > 0
+                && !Objects.equals(passengerEditedDto.getFirstName(), passengerDto.getFirstName())) {
+            passengerEditedDto.setFirstName(passengerDto.getFirstName());
         }
 
-        if(passenger.getLastName() != null &&
-                passenger.getLastName().length() > 0
-                && !Objects.equals(passengerEdited.getLastName(), passenger.getLastName())) {
-            passengerEdited.setLastName(passenger.getLastName());
+        if(passengerDto.getLastName() != null &&
+                passengerDto.getLastName().length() > 0
+                && !Objects.equals(passengerEditedDto.getLastName(), passengerDto.getLastName())) {
+            passengerEditedDto.setLastName(passengerDto.getLastName());
         }
 
-        if(passenger.getEmail() != null &&
-                passenger.getEmail().length() > 0
-                && !Objects.equals(passengerEdited.getEmail(), passenger.getEmail())) {
-            Optional <Passenger> passengerEmailOptional = passengerRepository.findPassengerByEmail(passenger.getEmail());
-            if(passengerEmailOptional.isPresent()) {
+        if(passengerDto.getEmail() != null &&
+                passengerDto.getEmail().length() > 0
+                && !Objects.equals(passengerEditedDto.getEmail(), passengerDto.getEmail())) {
+            Optional <PassengerDto> passengerEmailOptionalDto = passengerRepository.findByEmail(passengerDto.getEmail());
+            if(passengerEmailOptionalDto.isPresent()) {
                 throw new IllegalStateException("Email exist in database.");
             }
-            passengerEdited.setEmail(passenger.getEmail());
+            passengerEditedDto.setEmail(passengerDto.getEmail());
         }
 
-        if(passenger.getCountry() != null &&
-                passenger.getCountry().length() > 0
-                && !Objects.equals(passengerEdited.getCountry(), passenger.getCountry())) {
-            passengerEdited.setCountry(passenger.getCountry());
+        if(passengerDto.getCountry() != null &&
+                passengerDto.getCountry().length() > 0
+                && !Objects.equals(passengerEditedDto.getCountry(), passengerDto.getCountry())) {
+            passengerEditedDto.setCountry(passengerDto.getCountry());
         }
 
-        if(passenger.getTelephone() != null &&
-                passenger.getTelephone().length() > 0
-                && !Objects.equals(passengerEdited.getTelephone(), passenger.getTelephone())) {
-            passengerEdited.setTelephone(passenger.getTelephone());
+        if(passengerDto.getTelephone() != null &&
+                passengerDto.getTelephone().length() > 0
+                && !Objects.equals(passengerEditedDto.getTelephone(), passengerDto.getTelephone())) {
+            passengerEditedDto.setTelephone(passengerDto.getTelephone());
         }
-        return passengerEdited;
+        return passengerEditedDto;
     }
+ */
 }

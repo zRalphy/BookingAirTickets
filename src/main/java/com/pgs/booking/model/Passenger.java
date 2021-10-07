@@ -14,7 +14,7 @@ public class Passenger {
     @Id
     @GeneratedValue
     @Column(name = "id")
-    private Long id;
+    private final Long id = null;
     @Column(name = "firstName")
     private String firstName;
     @Column(name = "lastName")
