@@ -1,5 +1,7 @@
 package com.pgs.booking.controller;
 
+import com.pgs.booking.model.Passenger;
+import com.pgs.booking.model.dto.CreateUpdatePassengerDto;
 import com.pgs.booking.model.dto.PassengerDto;
 import com.pgs.booking.service.PassengerService;
 import lombok.RequiredArgsConstructor;
@@ -21,18 +23,14 @@ public class PassengerController {
     public PassengerDto getSinglePassenger(@PathVariable long id)  {
             return passengerService.getSinglePassenger(id);
     }
-/*
+
     @PostMapping("/api/passengers")
-    public void addPassenger(@RequestBody PassengerDto passengerDto) {
-        passengerService.addNewPassenger(passengerDto);
+    public Passenger addPassenger(@RequestBody CreateUpdatePassengerDto createUpdatePassengerDto) {
+        return passengerService.addNewPassenger(createUpdatePassengerDto);
     }
 
- */
-/*
     @PutMapping("/api/passengers/{id}")
-    public Passenger editPassenger(@RequestBody PassengerDto passengerDto) {
-        return passengerService.editPassenger(passengerDto);
+    public Passenger editPassenger(@RequestBody CreateUpdatePassengerDto createUpdatePassengerDto, @PathVariable long id) {
+        return passengerService.editPassenger(id, createUpdatePassengerDto);
     }
-
- */
 }

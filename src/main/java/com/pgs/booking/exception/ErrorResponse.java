@@ -12,7 +12,6 @@ public class ErrorResponse {
     private String details;
 
     public ErrorResponse(Date timestamp, String message, String details) {
-        super();
         this.timestamp = timestamp;
         this.message = message;
         this.details = details;

@@ -1,5 +1,6 @@
 package com.pgs.booking.model;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

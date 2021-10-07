@@ -12,7 +12,7 @@ import java.util.Date;
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<ErrorResponse> handleAllExceptions(Exception ex, WebRequest request) {
-        if(ex instanceof NoSuchFieldException){
+        if(ex instanceof ResourceNotFoundException){
             ErrorResponse error = new ErrorResponse(new Date(), ex.getMessage(), request.getDescription(false));
             return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
         } else {

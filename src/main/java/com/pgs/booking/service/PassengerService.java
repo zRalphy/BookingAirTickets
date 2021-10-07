@@ -1,13 +1,17 @@
 package com.pgs.booking.service;
 
+import com.pgs.booking.controller.CreateUpdatePassengerDtoMapper;
 import com.pgs.booking.controller.PassengerDtoMapper;
 import com.pgs.booking.exception.ResourceNotFoundException;
 import com.pgs.booking.model.Passenger;
+import com.pgs.booking.model.dto.CreateUpdatePassengerDto;
 import com.pgs.booking.model.dto.PassengerDto;
 import com.pgs.booking.repository.PassengerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +19,8 @@ public class PassengerService {
 
     private final PassengerRepository passengerRepository;
     private final PassengerDtoMapper passengerDtoMapper;
+    private final CreateUpdatePassengerDtoMapper createUpdatePassengerDtoMapper;
+
 
     public List<PassengerDto> getPassengers() {
         List<Passenger> findAll = passengerRepository.findAll();
@@ -27,56 +33,60 @@ public class PassengerService {
                .orElseThrow(() -> new ResourceNotFoundException("Passenger with id " + id + " not found."));
        return passengerDtoMapper.mapToPassengerDto(passengerFromRepo);
     }
-/*
-    public void addNewPassenger(PassengerDto passengerDto) {
-        Optional<PassengerDto> PassengerOptional = passengerRepository.findByEmail(passengerDto.getEmail());
-        if(PassengerOptional.isPresent()) {
+
+    public Passenger addNewPassenger(CreateUpdatePassengerDto createUpdatePassengerDto) {
+        Optional<Passenger> passengerOptionalEmail = passengerRepository
+                .findByEmail(createUpdatePassengerDtoMapper
+                        .mapToPassenger(createUpdatePassengerDto)
+                        .getEmail());
+        if(passengerOptionalEmail.isPresent()) {
             throw new IllegalStateException("Passenger with this email exist in database.");
         }
-        passengerRepository.save(passengerDto);
+        return passengerRepository
+                .save(createUpdatePassengerDtoMapper.mapToPassenger(createUpdatePassengerDto));
     }
-*/
-/*
-    public Passenger editPassenger(PassengerDto passengerDto) {
 
-        PassengerDto passengerEditedDto = passengerRepository.findById(passengerDto.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Passenger with id " + passengerDto.getId() + " not found."));
+    public Passenger editPassenger (long id, CreateUpdatePassengerDto createUpdatePassengerDto) {
 
+        Passenger passengerToEdit = passengerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Passenger with id " + id + " not found."));
 
-        if(passengerDto.getFirstName() != null &&
-                passengerDto.getFirstName().length() > 0
-                && !Objects.equals(passengerEditedDto.getFirstName(), passengerDto.getFirstName())) {
-            passengerEditedDto.setFirstName(passengerDto.getFirstName());
+        if(passengerToEdit.getFirstName() != null &&
+                passengerToEdit.getFirstName().length() > 0
+                && !Objects.equals(passengerToEdit.getFirstName(), createUpdatePassengerDto.getFirstName())) {
+            passengerToEdit.setFirstName(createUpdatePassengerDto.getFirstName());
         }
 
-        if(passengerDto.getLastName() != null &&
-                passengerDto.getLastName().length() > 0
-                && !Objects.equals(passengerEditedDto.getLastName(), passengerDto.getLastName())) {
-            passengerEditedDto.setLastName(passengerDto.getLastName());
+        if(passengerToEdit.getLastName() != null &&
+                passengerToEdit.getLastName().length() > 0
+                && !Objects.equals(passengerToEdit.getLastName(), createUpdatePassengerDto.getLastName())) {
+            passengerToEdit.setLastName(createUpdatePassengerDto.getLastName());
         }
 
-        if(passengerDto.getEmail() != null &&
-                passengerDto.getEmail().length() > 0
-                && !Objects.equals(passengerEditedDto.getEmail(), passengerDto.getEmail())) {
-            Optional <PassengerDto> passengerEmailOptionalDto = passengerRepository.findByEmail(passengerDto.getEmail());
-            if(passengerEmailOptionalDto.isPresent()) {
+        if(passengerToEdit.getEmail() != null &&
+                passengerToEdit.getEmail().length() > 0
+                && !Objects.equals(passengerToEdit.getEmail(), createUpdatePassengerDto.getEmail())) {
+            Optional<Passenger> passengerOptionalEmail = passengerRepository
+                    .findByEmail(createUpdatePassengerDto
+                            .getEmail());
+            if(passengerOptionalEmail.isPresent()) {
                 throw new IllegalStateException("Email exist in database.");
             }
-            passengerEditedDto.setEmail(passengerDto.getEmail());
+            passengerToEdit.setEmail(createUpdatePassengerDto.getEmail());
         }
 
-        if(passengerDto.getCountry() != null &&
-                passengerDto.getCountry().length() > 0
-                && !Objects.equals(passengerEditedDto.getCountry(), passengerDto.getCountry())) {
-            passengerEditedDto.setCountry(passengerDto.getCountry());
+        if(passengerToEdit.getCountry() != null &&
+                passengerToEdit.getCountry().length() > 0
+                && !Objects.equals(passengerToEdit.getCountry(), createUpdatePassengerDto.getCountry())) {
+            passengerToEdit.setCountry(createUpdatePassengerDto.getCountry());
         }
 
-        if(passengerDto.getTelephone() != null &&
-                passengerDto.getTelephone().length() > 0
-                && !Objects.equals(passengerEditedDto.getTelephone(), passengerDto.getTelephone())) {
-            passengerEditedDto.setTelephone(passengerDto.getTelephone());
+        if(passengerToEdit.getTelephone() != null &&
+                passengerToEdit.getTelephone().length() > 0
+                && !Objects.equals(passengerToEdit.getTelephone(), createUpdatePassengerDto.getTelephone())) {
+            passengerToEdit.setTelephone(createUpdatePassengerDto.getTelephone());
         }
-        return passengerEditedDto;
+        return passengerRepository
+                .save(passengerToEdit);
     }
- */
 }
