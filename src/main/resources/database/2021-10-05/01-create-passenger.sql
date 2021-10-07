@@ -1,5 +1,6 @@
 --liquibase formatted sql
 -- changeset rmecwaldowski:1
+CREATE SCHEMA passengers;
 CREATE TABLE passenger(
 	id BIGINT AUTO_INCREMENT PRIMARY KEY,
     firstName VARCHAR(45) NOT NULL,
