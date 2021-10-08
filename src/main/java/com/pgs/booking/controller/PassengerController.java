@@ -5,39 +5,38 @@ import com.pgs.booking.model.dto.CreateUpdatePassengerDto;
 import com.pgs.booking.model.dto.PassengerDto;
 import com.pgs.booking.service.PassengerService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class PassengerController {
 
     private final PassengerService passengerService;
-    private static final Logger LOGGER = LoggerFactory.getLogger(PassengerController.class);
 
     @GetMapping("/api/passengers")
     public List<PassengerDto> getPassengers() {
-        LOGGER.info("Inside method: getPassengers.");
+        log.trace("Controller method: getPassengers.");
         return passengerService.getPassengers();
     }
 
     @GetMapping("/api/passengers/{id}")
     public PassengerDto getSinglePassenger(@PathVariable long id)  {
-        LOGGER.info("Inside method: getSinglePassenger.");
+        log.trace("Controller method: getSinglePassenger.");
             return passengerService.getSinglePassenger(id);
     }
 
     @PostMapping("/api/passengers")
     public Passenger addPassenger(@RequestBody CreateUpdatePassengerDto createUpdatePassengerDto) {
-        LOGGER.info("Inside method: addPassenger.");
+        log.trace("Controller method: addPassenger.");
         return passengerService.addNewPassenger(createUpdatePassengerDto);
     }
 
     @PutMapping("/api/passengers/{id}")
     public Passenger editPassenger(@RequestBody CreateUpdatePassengerDto createUpdatePassengerDto, @PathVariable long id) {
-        LOGGER.info("Inside method: editPassenger.");
+        log.trace("Controller method: editPassenger.");
         return passengerService.editPassenger(id, createUpdatePassengerDto);
     }
 }
