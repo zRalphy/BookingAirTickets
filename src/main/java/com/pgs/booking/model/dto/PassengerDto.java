@@ -1,7 +1,7 @@
 package com.pgs.booking.model.dto;
 
-import lombok.Value;
 import lombok.Builder;
+import lombok.Value;
 
 @Value
 @Builder
