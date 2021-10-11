@@ -11,10 +11,13 @@ import com.pgs.booking.repository.PassengerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+@Validated
 @Service
 @RequiredArgsConstructor
 @Slf4j
