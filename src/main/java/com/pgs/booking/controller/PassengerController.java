@@ -5,32 +5,38 @@ import com.pgs.booking.model.dto.CreateUpdatePassengerDto;
 import com.pgs.booking.model.dto.PassengerDto;
 import com.pgs.booking.service.PassengerService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class PassengerController {
 
     private final PassengerService passengerService;
 
     @GetMapping("/api/passengers")
     public List<PassengerDto> getPassengers() {
+        log.trace("Controller method: getPassengers.");
         return passengerService.getPassengers();
     }
 
     @GetMapping("/api/passengers/{id}")
     public PassengerDto getSinglePassenger(@PathVariable long id)  {
+        log.trace("Controller method: getSinglePassenger.");
             return passengerService.getSinglePassenger(id);
     }
 
     @PostMapping("/api/passengers")
     public Passenger addPassenger(@RequestBody CreateUpdatePassengerDto createUpdatePassengerDto) {
+        log.trace("Controller method: addPassenger.");
         return passengerService.addNewPassenger(createUpdatePassengerDto);
     }
 
     @PutMapping("/api/passengers/{id}")
     public Passenger editPassenger(@RequestBody CreateUpdatePassengerDto createUpdatePassengerDto, @PathVariable long id) {
+        log.trace("Controller method: editPassenger.");
         return passengerService.editPassenger(id, createUpdatePassengerDto);
     }
 }

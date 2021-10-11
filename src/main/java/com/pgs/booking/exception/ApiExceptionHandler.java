@@ -14,10 +14,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public final ResponseEntity<ErrorResponse> handleAllExceptions(Exception ex, WebRequest request) {
         if(ex instanceof ResourceNotFoundException){
             ErrorResponse error = new ErrorResponse(new Date(), ex.getMessage(), request.getDescription(false));
+            logger.error("Resource was not found.", ex);
             return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
         } else {
             HttpStatus internalConflict = HttpStatus.INTERNAL_SERVER_ERROR;
             ErrorResponse error = new ErrorResponse(new Date(), ex.getMessage(), request.getDescription(false));
+            logger.error("Oops, internal server error.", ex);
             return new ResponseEntity<>(error, internalConflict);
         }
     }
