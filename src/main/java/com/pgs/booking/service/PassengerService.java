@@ -49,7 +49,6 @@ public class PassengerService {
             log.warn("Passenger with this email exist in database.");
             throw new IllegalStateException("Passenger with this email exist in database.");
         }
-        log.info("Passenger saved in repository.");
         return passengerRepository
                 .save(createUpdatePassengerDtoMapper.mapToPassenger(createUpdatePassengerDto));
 
@@ -64,14 +63,12 @@ public class PassengerService {
                 passengerToEdit.getFirstName().length() > 0
                 && !Objects.equals(passengerToEdit.getFirstName(), createUpdatePassengerDto.getFirstName())) {
             passengerToEdit.setFirstName(createUpdatePassengerDto.getFirstName());
-            log.info("Passenger firstNameField was change.");
         }
 
         if(passengerToEdit.getLastName() != null &&
                 passengerToEdit.getLastName().length() > 0
                 && !Objects.equals(passengerToEdit.getLastName(), createUpdatePassengerDto.getLastName())) {
             passengerToEdit.setLastName(createUpdatePassengerDto.getLastName());
-            log.info("Passenger lastNameField was change.");
         }
 
         if(passengerToEdit.getEmail() != null &&
@@ -85,23 +82,19 @@ public class PassengerService {
                 throw new IllegalStateException("Email exist in database.");
             }
             passengerToEdit.setEmail(createUpdatePassengerDto.getEmail());
-            log.info("Passenger emailField was change.");
         }
 
         if(passengerToEdit.getCountry() != null &&
                 passengerToEdit.getCountry().length() > 0
                 && !Objects.equals(passengerToEdit.getCountry(), createUpdatePassengerDto.getCountry())) {
             passengerToEdit.setCountry(createUpdatePassengerDto.getCountry());
-            log.info("Passenger countryField was change.");
         }
 
         if(passengerToEdit.getTelephone() != null &&
                 passengerToEdit.getTelephone().length() > 0
                 && !Objects.equals(passengerToEdit.getTelephone(), createUpdatePassengerDto.getTelephone())) {
             passengerToEdit.setTelephone(createUpdatePassengerDto.getTelephone());
-            log.info("Passenger telephoneField was change.");
         }
-        log.info("Passenger saved in repository.");
         return passengerRepository
                 .save(passengerToEdit);
     }
