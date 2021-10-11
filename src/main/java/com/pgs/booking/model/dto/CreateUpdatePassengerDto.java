@@ -2,11 +2,9 @@ package com.pgs.booking.model.dto;
 
 import lombok.Value;
 import lombok.Builder;
-
 @Value
 @Builder
-public class PassengerDto {
-    Long id;
+public class CreateUpdatePassengerDto {
     String firstName;
     String lastName;
     String email;
