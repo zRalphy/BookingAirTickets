@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +22,6 @@ import java.util.Map;
 public class PassengerController {
 
     private final PassengerService passengerService;
-    private Object HttpStatus;
 
     @GetMapping("/api/passengers")
     public List<PassengerDto> getPassengers() {
@@ -48,7 +48,7 @@ public class PassengerController {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(
             MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
@@ -59,5 +59,4 @@ public class PassengerController {
         });
         return errors;
     }
-    
 }

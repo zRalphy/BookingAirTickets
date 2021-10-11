@@ -10,22 +10,19 @@ import javax.validation.constraints.Size;
 @Value
 @Builder
 public class CreateUpdatePassengerDto {
-    @NotEmpty
     @NotBlank(message = "Please enter your firstName.")
-    @Size(min = 2, message = "Passenger firstName should have at least 2 characters.")
+    @Size(min = 3, max = 45, message = "Passenger firstName should have at least 3 characters.")
     String firstName;
-    @NotEmpty
     @NotBlank(message = "Please enter your lastName.")
-    @Size(min = 2, message = "Passenger lastName should have at least 2 characters.")
+    @Size(min = 3, max = 45, message = "Passenger lastName should have at least 3 characters.")
     String lastName;
-    @NotEmpty
     @NotBlank(message = "Please enter your email.")
     @Email
     String email;
-    @NotEmpty
     @NotBlank(message = "Please enter your country.")
+    @Size(min = 3, max = 45, message = "Passenger country should have at least 3 characters.")
     String country;
-    @NotEmpty
     @NotBlank(message = "Please enter your phoneNumber.")
+    @Size(min = 9, max = 45, message = "Passenger telephone should have at least 9 characters.")
     String telephone;
 }
