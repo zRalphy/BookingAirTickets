@@ -1,7 +1,6 @@
 package com.pgs.booking.service;
 
 import com.pgs.booking.controller.CreateUpdatePassengerDtoMapper;
-import com.pgs.booking.controller.PassengerController;
 import com.pgs.booking.controller.PassengerDtoMapper;
 import com.pgs.booking.exception.ResourceNotFoundException;
 import com.pgs.booking.model.Passenger;
@@ -11,7 +10,6 @@ import com.pgs.booking.repository.PassengerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.Objects;
