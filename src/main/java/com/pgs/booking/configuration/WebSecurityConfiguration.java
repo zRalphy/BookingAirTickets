@@ -35,9 +35,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
                 .usersByUsernameQuery("""
-                        select username, password, enabled
-                            from user
-                            where username=?
+                        SELECT username, password, enabled
+                            FROM user
+                            WHERE username=?
                                     """)
                 .authoritiesByUsernameQuery("""
                         SELECT user.username, role.name
