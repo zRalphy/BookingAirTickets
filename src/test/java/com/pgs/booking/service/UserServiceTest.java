@@ -42,9 +42,8 @@ class UserServiceTest {
     @Test
     void testLoadByUsernameExceptionOccurrence() {
         userService.loadUserByUsername("user");
-        Exception exception = assertThrows(UsernameNotFoundException.class, () ->{
-            userService.loadUserByUsername("admin");
-        });
+        Exception exception = assertThrows(UsernameNotFoundException.class, () ->
+            userService.loadUserByUsername("admin"));
         assertTrue(exception.getMessage().contains("admin"));
     }
 }
