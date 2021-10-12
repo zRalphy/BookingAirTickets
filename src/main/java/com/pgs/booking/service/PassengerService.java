@@ -1,7 +1,7 @@
 package com.pgs.booking.service;
 
-import com.pgs.booking.controller.CreateUpdatePassengerDtoMapper;
-import com.pgs.booking.controller.PassengerDtoMapper;
+import com.pgs.booking.mappers.CreateUpdatePassengerDtoMapper;
+import com.pgs.booking.mappers.PassengerDtoMapper;
 import com.pgs.booking.exception.ResourceNotFoundException;
 import com.pgs.booking.model.Passenger;
 import com.pgs.booking.model.dto.CreateUpdatePassengerDto;

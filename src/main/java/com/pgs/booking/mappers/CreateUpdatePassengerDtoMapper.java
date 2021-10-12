@@ -1,4 +1,4 @@
-package com.pgs.booking.controller;
+package com.pgs.booking.mappers;
 
 import com.pgs.booking.model.Passenger;
 import com.pgs.booking.model.dto.CreateUpdatePassengerDto;
