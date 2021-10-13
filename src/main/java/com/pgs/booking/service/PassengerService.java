@@ -56,8 +56,7 @@ public class PassengerService {
         log.trace("Entering service method editPassenger.");
         Passenger passengerToEdit = passengerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Passenger with id " + id + " not found."));
-        Passenger passengerToSave;
-        passengerToSave = passengerRepository.save(passengerToEdit);
+        Passenger passengerToSave = passengerRepository.save(passengerToEdit);
         return passengerDtoMapper.mapToPassengerDto(passengerToSave);
     }
 }
