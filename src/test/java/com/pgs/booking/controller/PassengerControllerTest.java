@@ -20,7 +20,6 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -103,32 +102,33 @@ class PassengerControllerTest {
     @WithMockUser
     @Test
     void testAddPassenger() throws Exception {
-        when(passengerService.addPassenger(any(CreateUpdatePassengerDto.class))).thenReturn(CREATE_UPDATE_PASSENGER_DTO);
+        when(passengerService.addPassenger(CREATE_UPDATE_PASSENGER_DTO)).thenReturn(PASSENGER_DTO);
         mockMvc.perform(post("/api/passengers")
                         .content(objectMapper.writeValueAsString(CREATE_UPDATE_PASSENGER_DTO))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-              //.andExpect(jsonPath("$.id").exists());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").exists());
         verify(passengerService).addPassenger(CREATE_UPDATE_PASSENGER_DTO);
     }
 
     @WithMockUser
     @Test
     void testEditPassenger() throws Exception {
-
-        given(passengerService.editPassenger(2L, CREATE_UPDATE_PASSENGER_DTO)).willReturn(CREATE_UPDATE_PASSENGER_DTO);
-        mockMvc.perform(put("/api/passengers/2")
+        long id = 5L;
+        when(passengerService.editPassenger(id, CREATE_UPDATE_PASSENGER_DTO)).thenReturn(PASSENGER_DTO);
+        mockMvc.perform(put("/api/passengers/" + id)
                 .content(objectMapper.writeValueAsString(CREATE_UPDATE_PASSENGER_DTO))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value(CREATE_UPDATE_PASSENGER_DTO.getFirstName()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value(CREATE_UPDATE_PASSENGER_DTO.getLastName()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email").value(CREATE_UPDATE_PASSENGER_DTO.getEmail()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.country").value(CREATE_UPDATE_PASSENGER_DTO.getCountry()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.telephone").value(CREATE_UPDATE_PASSENGER_DTO.getTelephone()));
-        verify(passengerService).editPassenger(2L, CREATE_UPDATE_PASSENGER_DTO);
+        verify(passengerService).editPassenger(id, CREATE_UPDATE_PASSENGER_DTO);
     }
 
     @Test

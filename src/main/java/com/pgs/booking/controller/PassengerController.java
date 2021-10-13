@@ -35,13 +35,13 @@ public class PassengerController {
     }
 
     @PostMapping("/api/passengers")
-    public CreateUpdatePassengerDto addPassenger(@Valid @RequestBody CreateUpdatePassengerDto createUpdatePassengerDto) {
+    public PassengerDto addPassenger(@Valid @RequestBody CreateUpdatePassengerDto createUpdatePassengerDto) {
         log.trace("Controller method: addPassenger.");
         return passengerService.addPassenger(createUpdatePassengerDto);
     }
 
     @PutMapping("/api/passengers/{id}")
-    public CreateUpdatePassengerDto editPassenger(@Valid @RequestBody CreateUpdatePassengerDto createUpdatePassengerDto, @PathVariable long id) {
+    public PassengerDto editPassenger(@Valid @RequestBody CreateUpdatePassengerDto createUpdatePassengerDto, @PathVariable long id) {
         log.trace("Controller method: editPassenger.");
         return passengerService.editPassenger(id, createUpdatePassengerDto);
     }
