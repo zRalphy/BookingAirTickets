@@ -33,11 +33,11 @@ class PassengerDtoMapperTest {
         passenger1.setTelephone("123456789");
 
         Passenger passenger2 = new Passenger();
-        passenger1.setFirstName("Ala");
-        passenger1.setLastName("Kot");
-        passenger1.setEmail("alakot@gmail.com");
-        passenger1.setCountry("USA");
-        passenger1.setTelephone("222456789");
+        passenger2.setFirstName("Ala");
+        passenger2.setLastName("Kot");
+        passenger2.setEmail("alakot@gmail.com");
+        passenger2.setCountry("USA");
+        passenger2.setTelephone("222456789");
 
         passengerList = Arrays.asList(passenger1, passenger2);
         passengerDtoList = passengerDtoMapper.mapToPassengersDto(passengerList);
