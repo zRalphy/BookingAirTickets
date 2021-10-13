@@ -16,15 +16,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import javax.sql.DataSource;
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalAuthentication
 @RequiredArgsConstructor
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private final DataSource dataSource;
     private final UserDetailsService userDetailsService;
 
     @Override
@@ -40,25 +37,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication()
-                .usersByUsernameQuery("""
-                        SELECT username, password, enabled
-                            FROM user
-                            WHERE username=?
-                                    """)
-                .authoritiesByUsernameQuery("""
-                        SELECT user.username, role.name
-                        FROM 
-                            user
-                                LEFT OUTER JOIN 
-                            user_roles ON user.id = user_roles.user_id
-                                LEFT OUTER JOIN 
-                            role ON user_roles.roles_id = role.id
-                        WHERE username = ?
-                        """)
-                .passwordEncoder(bCryptPasswordEncoder())
-                .dataSource(dataSource)
-                .getUserDetailsService();
+        auth.authenticationProvider(authenticationProvider());
     }
 
     @Bean
