@@ -39,7 +39,7 @@ public class PassengerService {
         return passengerDtoMapper.mapToPassengerDto(passengerFromRepo);
     }
 
-    public Passenger addNewPassenger(CreateUpdatePassengerDto createUpdatePassengerDto) {
+    public CreateUpdatePassengerDto addPassenger(CreateUpdatePassengerDto createUpdatePassengerDto) {
         log.trace("Entering service method addNewPassenger.");
         Optional<Passenger> passengerOptionalEmail = passengerRepository
                 .findByEmail(createUpdatePassengerDtoMapper
@@ -49,12 +49,11 @@ public class PassengerService {
             log.warn("Passenger with this email exist in database.");
             throw new IllegalStateException("Passenger with this email exist in database.");
         }
-        return passengerRepository
-                .save(createUpdatePassengerDtoMapper.mapToPassenger(createUpdatePassengerDto));
-
+        Passenger passenger = passengerRepository.save(createUpdatePassengerDtoMapper.mapToPassenger(createUpdatePassengerDto));
+        return createUpdatePassengerDtoMapper.mapToCreatePassengerDto(passenger);
     }
 
-    public Passenger editPassenger (long id, CreateUpdatePassengerDto createUpdatePassengerDto) {
+    public CreateUpdatePassengerDto editPassenger (long id, CreateUpdatePassengerDto createUpdatePassengerDto) {
         log.trace("Entering service method editPassenger.");
         Passenger passengerToEdit = passengerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Passenger with id " + id + " not found."));
@@ -95,7 +94,8 @@ public class PassengerService {
                 && !Objects.equals(passengerToEdit.getTelephone(), createUpdatePassengerDto.getTelephone())) {
             passengerToEdit.setTelephone(createUpdatePassengerDto.getTelephone());
         }
-        return passengerRepository
-                .save(passengerToEdit);
+        Passenger passengerToSave;
+        passengerToSave = passengerRepository.save(passengerToEdit);
+        return createUpdatePassengerDtoMapper.mapToCreatePassengerDto(passengerToSave);
     }
 }

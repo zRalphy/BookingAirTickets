@@ -17,9 +17,9 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
-   private static final User USER = User.builder()
-           .username("user")
-           .build();
+    private static final User USER = User.builder()
+            .username("user")
+            .build();
     @Mock
     private UserRepository userRepository;
 
@@ -43,7 +43,7 @@ class UserServiceTest {
     void testLoadByUsernameExceptionOccurrence() {
         userService.loadUserByUsername("user");
         Exception exception = assertThrows(UsernameNotFoundException.class, () ->
-            userService.loadUserByUsername("admin"));
+                userService.loadUserByUsername("admin"));
         assertTrue(exception.getMessage().contains("admin"));
     }
 }

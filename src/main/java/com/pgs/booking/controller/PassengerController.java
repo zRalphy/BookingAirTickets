@@ -1,6 +1,5 @@
 package com.pgs.booking.controller;
 
-import com.pgs.booking.model.Passenger;
 import com.pgs.booking.model.dto.CreateUpdatePassengerDto;
 import com.pgs.booking.model.dto.PassengerDto;
 import com.pgs.booking.service.PassengerService;
@@ -36,13 +35,13 @@ public class PassengerController {
     }
 
     @PostMapping("/api/passengers")
-    public Passenger addPassenger(@Valid @RequestBody CreateUpdatePassengerDto createUpdatePassengerDto) {
+    public CreateUpdatePassengerDto addPassenger(@Valid @RequestBody CreateUpdatePassengerDto createUpdatePassengerDto) {
         log.trace("Controller method: addPassenger.");
-        return passengerService.addNewPassenger(createUpdatePassengerDto);
+        return passengerService.addPassenger(createUpdatePassengerDto);
     }
 
     @PutMapping("/api/passengers/{id}")
-    public Passenger editPassenger(@Valid @RequestBody CreateUpdatePassengerDto createUpdatePassengerDto, @PathVariable long id) {
+    public CreateUpdatePassengerDto editPassenger(@Valid @RequestBody CreateUpdatePassengerDto createUpdatePassengerDto, @PathVariable long id) {
         log.trace("Controller method: editPassenger.");
         return passengerService.editPassenger(id, createUpdatePassengerDto);
     }

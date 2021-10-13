@@ -3,13 +3,14 @@ package com.pgs.booking.mappers;
 import com.pgs.booking.model.Passenger;
 import com.pgs.booking.model.dto.CreateUpdatePassengerDto;
 import org.springframework.stereotype.Component;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 public class CreateUpdatePassengerDtoMapper {
 
-    public List<CreateUpdatePassengerDto> mapToPassengersDto(List<Passenger> passengers) {
+    public List<CreateUpdatePassengerDto> mapToCreatePassengersDto(List<Passenger> passengers) {
         return passengers.stream()
                 .map(this::mapToCreatePassengerDto)
                 .collect(Collectors.toList());
