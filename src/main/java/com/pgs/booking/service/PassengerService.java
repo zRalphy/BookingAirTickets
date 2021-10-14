@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -56,6 +57,21 @@ public class PassengerService {
         log.trace("Entering service method editPassenger.");
         Passenger passengerToEdit = passengerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Passenger with id " + id + " not found."));
+
+        passengerToEdit.setFirstName(createUpdatePassengerDto.getFirstName());
+        passengerToEdit.setLastName(createUpdatePassengerDto.getLastName());
+        if(!Objects.equals(passengerToEdit.getEmail(), createUpdatePassengerDto.getEmail())) {
+            Optional<Passenger> passengerOptionalEmail = passengerRepository
+                    .findByEmail(createUpdatePassengerDto
+                            .getEmail());
+            if(passengerOptionalEmail.isPresent()) {
+                log.warn("Passenger with this email exist in database.");
+                throw new IllegalStateException("Email exist in database.");
+            }
+            passengerToEdit.setEmail(createUpdatePassengerDto.getEmail());
+        }
+        passengerToEdit.setCountry(createUpdatePassengerDto.getCountry());
+        passengerToEdit.setTelephone(createUpdatePassengerDto.getTelephone());
         Passenger passengerToSave = passengerRepository.save(passengerToEdit);
         return passengerDtoMapper.mapToPassengerDto(passengerToSave);
     }

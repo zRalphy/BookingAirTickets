@@ -51,9 +51,9 @@ class PassengerControllerTest {
             .build();
 
     private static CreateUpdatePassengerDto CREATE_UPDATE_PASSENGER_DTO = CreateUpdatePassengerDto.builder()
-            .firstName("John")
-            .lastName("Thin")
-            .email("ThinJohn@gmail.com")
+            .firstName("Dwayne")
+            .lastName("Johnson")
+            .email("JohnsonDwayne@gmail.com")
             .country("USA")
             .telephone("123456789")
             .build();
@@ -128,11 +128,11 @@ class PassengerControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value(CREATE_UPDATE_PASSENGER_DTO.getFirstName()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value(CREATE_UPDATE_PASSENGER_DTO.getLastName()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.email").value(CREATE_UPDATE_PASSENGER_DTO.getEmail()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.country").value(CREATE_UPDATE_PASSENGER_DTO.getCountry()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.telephone").value(CREATE_UPDATE_PASSENGER_DTO.getTelephone()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value(PASSENGER_DTO.getFirstName()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value(PASSENGER_DTO.getLastName()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email").value(PASSENGER_DTO.getEmail()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.country").value(PASSENGER_DTO.getCountry()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.telephone").value(PASSENGER_DTO.getTelephone()));
         verify(passengerService).editPassenger(id, CREATE_UPDATE_PASSENGER_DTO);
     }
 
