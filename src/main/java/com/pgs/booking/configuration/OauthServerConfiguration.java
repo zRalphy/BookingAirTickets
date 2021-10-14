@@ -1,9 +1,8 @@
 package com.pgs.booking.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,23 +17,12 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 @Configuration
 @EnableAuthorizationServer
+@RequiredArgsConstructor
 public class OauthServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
-
-    private AuthenticationManager authenticationManager;
-    private TokenStore tokenStore;
-    private UserDetailsService userDetailsService;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @Autowired
-    public OauthServerConfiguration(UserDetailsService userDetailsService,
-                                    AuthenticationManager authenticationManager,
-                                    @Lazy TokenStore tokenStore, BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.userDetailsService = userDetailsService;
-        this.authenticationManager = authenticationManager;
-        this.tokenStore = tokenStore;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }
+    private final AuthenticationManager authenticationManager;
+    private final UserDetailsService userDetailsService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
@@ -55,7 +43,6 @@ public class OauthServerConfiguration extends AuthorizationServerConfigurerAdapt
         endpointsConfigurer
                 .tokenStore(tokenStore())
                 .authenticationManager(authenticationManager)
-                .accessTokenConverter(accessTokenConverter())
                 .userDetailsService(userDetailsService);
     }
 
