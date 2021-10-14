@@ -8,7 +8,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +22,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
 
     @Autowired
-    public CustomAuthenticationProvider(UserService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public CustomAuthenticationProvider(UserService userDetailsService, PasswordEncoder bCryptPasswordEncoder) {
 
         PreAuthenticatedAuthenticationProvider preAuthenticatedAuthenticationProvider = new PreAuthenticatedAuthenticationProvider();
         preAuthenticatedAuthenticationProvider.setPreAuthenticatedUserDetailsService(userDetailsService);
