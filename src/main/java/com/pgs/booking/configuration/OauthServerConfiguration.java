@@ -18,14 +18,14 @@ public class OauthServerConfiguration extends AuthorizationServerConfigurerAdapt
 
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
-    private final PasswordEncoder bCryptPasswordEncoder;
+    private final PasswordEncoder passwordEncoder;
     private final TokenStore tokenStore;
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
                 .withClient("ClientId")
-                .secret(bCryptPasswordEncoder.encode("secret"))
+                .secret(passwordEncoder.encode("secret"))
                 .accessTokenValiditySeconds(60)
                 .scopes("read", "write")
                 .authorizedGrantTypes("password", "authorization_code", "refresh_token");

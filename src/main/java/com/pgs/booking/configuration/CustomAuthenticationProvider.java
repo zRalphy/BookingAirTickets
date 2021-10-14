@@ -22,14 +22,14 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
 
     @Autowired
-    public CustomAuthenticationProvider(UserService userDetailsService, PasswordEncoder bCryptPasswordEncoder) {
+    public CustomAuthenticationProvider(UserService userDetailsService, PasswordEncoder passwordEncoder) {
 
         PreAuthenticatedAuthenticationProvider preAuthenticatedAuthenticationProvider = new PreAuthenticatedAuthenticationProvider();
         preAuthenticatedAuthenticationProvider.setPreAuthenticatedUserDetailsService(userDetailsService);
 
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setUserDetailsService(userDetailsService);
-        daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder);
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
 
         authenticationProviders = ImmutableSet.of(preAuthenticatedAuthenticationProvider,daoAuthenticationProvider);
     }
