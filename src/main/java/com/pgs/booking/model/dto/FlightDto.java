@@ -2,7 +2,7 @@ package com.pgs.booking.model.dto;
 
 import lombok.Builder;
 import lombok.Value;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Value
 @Builder
@@ -11,7 +11,7 @@ public class FlightDto {
     String numberOfPassenger;
     String type;
     String typeOfSeat;
-    Date typeOfLuggage;
-    String departureDate;
-    Date dateOfArrival;
+    String typeOfLuggage;
+    LocalDateTime departureDate;
+    LocalDateTime dateOfArrival;
 }

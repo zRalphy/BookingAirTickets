@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class FlightDtoMapper {
-    public List<FlightDto> mapToPassengersDto(List<Flight> flights) {
+    public List<FlightDto> mapToFlightsDto(List<Flight> flights) {
         return flights.stream()
                 .map(this::mapToFlightDto)
                 .collect(Collectors.toList());
@@ -22,8 +22,8 @@ public class FlightDtoMapper {
                 .type(flight.getType())
                 .typeOfSeat(flight.getTypeOfSeat())
                 .typeOfLuggage(flight.getTypeOfLuggage())
-                .departureDate(flight.getDepartureDate())
-                .dateOfArrival(flight.getDateOfArrival())
+                //.departureDate(flight.getDepartureDate())
+                //.dateOfArrival(flight.getDateOfArrival())
                 .build();
     }
 }

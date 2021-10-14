@@ -3,10 +3,9 @@ package com.pgs.booking.model;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -26,11 +25,9 @@ public class Flight {
     @Column(name = "typeOfSeat")
     private String typeOfSeat;
     @Column(name = "typeOfLuggage")
-    private Date typeOfLuggage;
+    private String typeOfLuggage;
     @Column(name = "departureDate")
-    @DateTimeFormat(pattern="dd/MM/yyyy")
-    private String departureDate;
+    private LocalDateTime departureDate;
     @Column(name = "dateOfArrival")
-    @DateTimeFormat(pattern="dd/MM/yyyy")
-    private Date dateOfArrival;
+    private LocalDateTime dateOfArrival;
 }
