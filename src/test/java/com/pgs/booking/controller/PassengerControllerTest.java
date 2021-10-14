@@ -108,7 +108,12 @@ class PassengerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").exists());
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.firstName").exists())
+                .andExpect(jsonPath("$.lastName").exists())
+                .andExpect(jsonPath("$.email").exists())
+                .andExpect(jsonPath("$.country").exists())
+                .andExpect(jsonPath("$.telephone").exists());
         verify(passengerService).addPassenger(CREATE_UPDATE_PASSENGER_DTO);
     }
 
