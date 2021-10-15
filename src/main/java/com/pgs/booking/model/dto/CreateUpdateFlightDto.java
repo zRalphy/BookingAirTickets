@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Value;
 
 import javax.validation.constraints.NotBlank;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Value
 @Builder
@@ -19,7 +19,7 @@ public class CreateUpdateFlightDto {
     @NotBlank(message = "Please enter your typeOfLuggage.")
     String typeOfLuggage;
     @NotBlank(message = "Please enter your departureDate.")
-    String departureDate;
+    LocalDateTime departureDate;
     @NotBlank(message = "Please enter your dateOfArrival.")
-    Date dateOfArrival;
+    LocalDateTime dateOfArrival;
 }

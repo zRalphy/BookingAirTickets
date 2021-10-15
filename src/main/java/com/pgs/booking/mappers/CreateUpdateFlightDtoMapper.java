@@ -28,8 +28,8 @@ public class CreateUpdateFlightDtoMapper {
                 .type(flight.getType())
                 .typeOfSeat(flight.getTypeOfSeat())
                 .typeOfLuggage(flight.getTypeOfLuggage())
-                //.departureDate(flight.getDepartureDate())
-                //.dateOfArrival(flight.getDateOfArrival())
+                .departureDate(flight.getDepartureDate())
+                .dateOfArrival(flight.getDateOfArrival())
                 .build();
     }
 
@@ -39,8 +39,8 @@ public class CreateUpdateFlightDtoMapper {
         flight.setType(createUpdateFlightDto.getType());
         flight.setTypeOfSeat(createUpdateFlightDto.getTypeOfSeat());
         flight.setTypeOfLuggage(createUpdateFlightDto.getTypeOfLuggage());
-        //flight.setDepartureDate(createUpdateFlightDto.getDepartureDate());
-        //flight.setDateOfArrival(createUpdateFlightDto.getDateOfArrival());
+        flight.setDepartureDate(createUpdateFlightDto.getDepartureDate());
+        flight.setDateOfArrival(createUpdateFlightDto.getDateOfArrival());
         return flight;
     }
 }
