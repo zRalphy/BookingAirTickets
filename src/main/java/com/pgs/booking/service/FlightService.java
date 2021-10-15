@@ -33,11 +33,22 @@ public class FlightService {
     }
 
     public FlightDto addFlight(CreateUpdateFlightDto createUpdateFlightDto) {
-        return null;
+        Flight flight = flightRepository.save(createUpdateFlightDtoMapper.mapToFlight(createUpdateFlightDto));
+        return flightDtoMapper.mapToFlightDto(flight);
     }
 
-    public FlightDto editFlight(long id,CreateUpdateFlightDto createUpdateFlightDto) {
-        return null;
+    public FlightDto editFlight(long id, CreateUpdateFlightDto createUpdateFlightDto) {
+        Flight flightToEdit = flightRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Passenger with id " + id + " not found."));
+
+        flightToEdit.setNumberOfPassenger(createUpdateFlightDto.getNumberOfPassenger());
+        flightToEdit.setType(createUpdateFlightDto.getType());
+        flightToEdit.setTypeOfSeat(createUpdateFlightDto.getTypeOfSeat());
+        flightToEdit.setTypeOfLuggage(createUpdateFlightDto.getTypeOfLuggage());
+        flightToEdit.setDepartureDate(createUpdateFlightDto.getDepartureDate());
+        flightToEdit.setDateOfArrival(createUpdateFlightDto.getDateOfArrival());
+        Flight flightToSave = flightRepository.save(flightToEdit);
+        return flightDtoMapper.mapToFlightDto(flightToSave);
     }
 
     public void deleteFlight(long id) {
