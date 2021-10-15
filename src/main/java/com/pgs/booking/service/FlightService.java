@@ -42,8 +42,6 @@ public class FlightService {
                 .orElseThrow(() -> new ResourceNotFoundException("Flight with id " + id + " not found."));
 
         flightToEdit.setType(createUpdateFlightDto.getType());
-        flightToEdit.setDepartureAirport(createUpdateFlightDto.getDepartureAirport());
-        flightToEdit.setArrivalAirport(createUpdateFlightDto.getArrivalAirport());
         flightToEdit.setDepartureDate(createUpdateFlightDto.getDepartureDate());
         flightToEdit.setArrivalDate(createUpdateFlightDto.getArrivalDate());
         Flight flightToSave = flightRepository.save(flightToEdit);

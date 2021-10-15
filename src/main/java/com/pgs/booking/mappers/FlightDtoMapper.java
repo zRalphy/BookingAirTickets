@@ -3,7 +3,6 @@ package com.pgs.booking.mappers;
 import com.pgs.booking.model.Flight;
 import com.pgs.booking.model.dto.FlightDto;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,8 +18,6 @@ public class FlightDtoMapper {
         return FlightDto.builder()
                 .id(flight.getId())
                 .type(flight.getType())
-                .departureAirport(flight.getDepartureAirport())
-                .arrivalAirport(flight.getArrivalAirport())
                 .departureDate(flight.getDepartureDate())
                 .arrivalDate(flight.getArrivalDate())
                 .build();

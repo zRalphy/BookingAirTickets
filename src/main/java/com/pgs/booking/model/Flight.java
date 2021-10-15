@@ -19,14 +19,11 @@ public class Flight {
     @Column(name = "id")
     private final Long id = null;
     @Column(name = "type")
+    @Enumerated(EnumType.STRING)
     private TypeOfFlight type;
-    @Column(name = "departureAirport")
-    private String departureAirport;
-    @Column(name = "arrivalAirport")
-    private String arrivalAirport;
     @Column(name = "departureDate")
     private LocalDateTime departureDate;
-    @Column(name = "dateOfArrival")
+    @Column(name = "arrivalDate")
     private LocalDateTime arrivalDate;
 
     public enum TypeOfFlight {

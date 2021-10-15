@@ -11,8 +11,6 @@ import java.time.LocalDateTime;
 public class FlightDto {
     Long id;
     Flight.TypeOfFlight type;
-    String departureAirport;
-    String arrivalAirport;
     LocalDateTime departureDate;
     LocalDateTime arrivalDate;
 }

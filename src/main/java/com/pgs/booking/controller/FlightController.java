@@ -5,8 +5,6 @@ import com.pgs.booking.model.dto.FlightDto;
 import com.pgs.booking.service.FlightService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -27,12 +25,12 @@ public class FlightController {
     }
 
     @PostMapping
-    public FlightDto addFlight(@Valid @RequestBody CreateUpdateFlightDto createUpdateFlightDto) {
+    public FlightDto addFlight(@RequestBody CreateUpdateFlightDto createUpdateFlightDto) {
         return flightService.addFlight(createUpdateFlightDto);
     }
 
     @PutMapping("/{id}")
-    public FlightDto editFlight(@Valid @RequestBody CreateUpdateFlightDto createUpdateFlightDto, @PathVariable long id) {
+    public FlightDto editFlight(@RequestBody CreateUpdateFlightDto createUpdateFlightDto, @PathVariable long id) {
         return flightService.editFlight(id, createUpdateFlightDto);
     }
 
