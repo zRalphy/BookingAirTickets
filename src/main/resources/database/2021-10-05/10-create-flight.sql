@@ -5,11 +5,11 @@ CREATE TABLE flight(
     type VARCHAR(45) NOT NULL,
     typeOfSeat VARCHAR(45) NOT NULL,
     typeOfLuggage VARCHAR(45) NOT NULL,
-    departureDate TIMESTAMP, NOT NULL
-    dateOfArrival TIMESTAMP, NOT NULL
+    departureDate TIMESTAMP,
+    dateOfArrival TIMESTAMP
+);
 
     ALTER TABLE reservation
              ADD CONSTRAINT reservation_id
              FOREIGN KEY (id) REFERENCES flight(id)
-    );
-);
+
