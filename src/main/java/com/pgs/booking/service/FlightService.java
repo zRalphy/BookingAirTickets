@@ -21,8 +21,8 @@ public class FlightService {
 
 
     public List<FlightDto> getFlights() {
-        List<Flight> findAll = flightRepository.findAll();
-        return flightDtoMapper.mapToFlightsDto(findAll);
+        List<Flight> allFlights = flightRepository.findAll();
+        return flightDtoMapper.mapToFlightsDto(allFlights);
     }
 
     public FlightDto getSingleFlight(long id) {
@@ -39,14 +39,13 @@ public class FlightService {
 
     public FlightDto editFlight(long id, CreateUpdateFlightDto createUpdateFlightDto) {
         Flight flightToEdit = flightRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Passenger with id " + id + " not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("Flight with id " + id + " not found."));
 
-        flightToEdit.setNumberOfPassenger(createUpdateFlightDto.getNumberOfPassenger());
         flightToEdit.setType(createUpdateFlightDto.getType());
-        flightToEdit.setTypeOfSeat(createUpdateFlightDto.getTypeOfSeat());
-        flightToEdit.setTypeOfLuggage(createUpdateFlightDto.getTypeOfLuggage());
+        flightToEdit.setDepartureAirport(createUpdateFlightDto.getDepartureAirport());
+        flightToEdit.setArrivalAirport(createUpdateFlightDto.getArrivalAirport());
         flightToEdit.setDepartureDate(createUpdateFlightDto.getDepartureDate());
-        flightToEdit.setDateOfArrival(createUpdateFlightDto.getDateOfArrival());
+        flightToEdit.setArrivalDate(createUpdateFlightDto.getArrivalDate());
         Flight flightToSave = flightRepository.save(flightToEdit);
         return flightDtoMapper.mapToFlightDto(flightToSave);
     }
@@ -54,8 +53,7 @@ public class FlightService {
     public void deleteFlight(long id) {
         boolean exists = flightRepository.existsById(id);
         if(!exists) {
-            throw new IllegalStateException(
-                    " Flight with id " + id+ " does not exists ");
+            throw new ResourceNotFoundException("Flight with id " + id + " not found.");
         }
         flightRepository.deleteById(id);
     }

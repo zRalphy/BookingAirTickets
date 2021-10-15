@@ -18,12 +18,11 @@ public class FlightDtoMapper {
     public FlightDto mapToFlightDto(Flight flight) {
         return FlightDto.builder()
                 .id(flight.getId())
-                .numberOfPassenger(flight.getNumberOfPassenger())
                 .type(flight.getType())
-                .typeOfSeat(flight.getTypeOfSeat())
-                .typeOfLuggage(flight.getTypeOfLuggage())
+                .departureAirport(flight.getDepartureAirport())
+                .arrivalAirport(flight.getArrivalAirport())
                 .departureDate(flight.getDepartureDate())
-                .dateOfArrival(flight.getDateOfArrival())
+                .arrivalDate(flight.getArrivalDate())
                 .build();
     }
 }

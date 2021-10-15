@@ -18,16 +18,18 @@ public class Flight {
     @GeneratedValue
     @Column(name = "id")
     private final Long id = null;
-    @Column(name = "numberOfPassenger")
-    private String numberOfPassenger;
     @Column(name = "type")
-    private String type;
-    @Column(name = "typeOfSeat")
-    private String typeOfSeat;
-    @Column(name = "typeOfLuggage")
-    private String typeOfLuggage;
+    private TypeOfFlight type;
+    @Column(name = "departureAirport")
+    private String departureAirport;
+    @Column(name = "arrivalAirport")
+    private String arrivalAirport;
     @Column(name = "departureDate")
     private LocalDateTime departureDate;
     @Column(name = "dateOfArrival")
-    private LocalDateTime dateOfArrival;
+    private LocalDateTime arrivalDate;
+
+    public enum TypeOfFlight {
+        ECONOMY, PREMIUM, BUSINESS
+    }
 }

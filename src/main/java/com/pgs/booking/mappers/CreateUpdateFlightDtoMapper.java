@@ -16,31 +16,23 @@ public class CreateUpdateFlightDtoMapper {
                 .collect(Collectors.toList());
     }
 
-    public List<Flight> mapToFlights(List<CreateUpdateFlightDto> createUpdateFlightsDto) {
-        return createUpdateFlightsDto.stream()
-                .map(this::mapToFlight)
-                .collect(Collectors.toList());
-    }
-
     public CreateUpdateFlightDto mapToCreateFlightDto(Flight flight) {
         return CreateUpdateFlightDto.builder()
-                .numberOfPassenger(flight.getNumberOfPassenger())
                 .type(flight.getType())
-                .typeOfSeat(flight.getTypeOfSeat())
-                .typeOfLuggage(flight.getTypeOfLuggage())
+                .departureAirport(flight.getDepartureAirport())
+                .arrivalAirport(flight.getArrivalAirport())
                 .departureDate(flight.getDepartureDate())
-                .dateOfArrival(flight.getDateOfArrival())
+                .arrivalDate(flight.getArrivalDate())
                 .build();
     }
 
     public Flight mapToFlight(CreateUpdateFlightDto createUpdateFlightDto) {
         Flight flight = new Flight();
-        flight.setNumberOfPassenger(createUpdateFlightDto.getNumberOfPassenger());
         flight.setType(createUpdateFlightDto.getType());
-        flight.setTypeOfSeat(createUpdateFlightDto.getTypeOfSeat());
-        flight.setTypeOfLuggage(createUpdateFlightDto.getTypeOfLuggage());
+        flight.setDepartureAirport(createUpdateFlightDto.getDepartureAirport());
+        flight.setArrivalAirport(createUpdateFlightDto.getArrivalAirport());
         flight.setDepartureDate(createUpdateFlightDto.getDepartureDate());
-        flight.setDateOfArrival(createUpdateFlightDto.getDateOfArrival());
+        flight.setArrivalDate(createUpdateFlightDto.getArrivalDate());
         return flight;
     }
 }

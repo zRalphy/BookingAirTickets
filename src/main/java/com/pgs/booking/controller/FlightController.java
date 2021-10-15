@@ -22,7 +22,7 @@ public class FlightController {
     }
 
     @GetMapping("/{id}")
-    public FlightDto getSingleFlight(@Valid @PathVariable long id)  {
+    public FlightDto getFlight(@PathVariable long id)  {
         return flightService.getSingleFlight(id);
     }
 
