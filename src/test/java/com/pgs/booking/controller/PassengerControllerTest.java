@@ -1,5 +1,7 @@
 package com.pgs.booking.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pgs.booking.model.dto.CreateUpdatePassengerDto;
 import com.pgs.booking.model.dto.PassengerDto;
 import com.pgs.booking.service.PassengerService;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,8 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -18,8 +22,9 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -28,6 +33,10 @@ class PassengerControllerTest {
 
     @Autowired
     private WebApplicationContext wac;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @MockBean
     private PassengerService passengerService;
     private MockMvc mockMvc;
@@ -37,6 +46,14 @@ class PassengerControllerTest {
             .firstName("John")
             .lastName("Thin")
             .email("ThinJohn@gmail.com")
+            .country("USA")
+            .telephone("123456789")
+            .build();
+
+    private static CreateUpdatePassengerDto CREATE_UPDATE_PASSENGER_DTO = CreateUpdatePassengerDto.builder()
+            .firstName("Dwayne")
+            .lastName("Johnson")
+            .email("JohnsonDwayne@gmail.com")
             .country("USA")
             .telephone("123456789")
             .build();
@@ -80,6 +97,43 @@ class PassengerControllerTest {
                 .andExpect(jsonPath("country", equalTo(PASSENGER_DTO.getCountry())))
                 .andExpect(jsonPath("telephone", equalTo(PASSENGER_DTO.getTelephone())));
         verify(passengerService).getSinglePassenger(5L);
+    }
+
+    @WithMockUser
+    @Test
+    void testAddPassenger() throws Exception {
+        when(passengerService.addPassenger(CREATE_UPDATE_PASSENGER_DTO)).thenReturn(PASSENGER_DTO);
+        mockMvc.perform(post("/api/passengers")
+                        .content(objectMapper.writeValueAsString(CREATE_UPDATE_PASSENGER_DTO))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.firstName").exists())
+                .andExpect(jsonPath("$.lastName").exists())
+                .andExpect(jsonPath("$.email").exists())
+                .andExpect(jsonPath("$.country").exists())
+                .andExpect(jsonPath("$.telephone").exists());
+        verify(passengerService).addPassenger(CREATE_UPDATE_PASSENGER_DTO);
+    }
+
+    @WithMockUser
+    @Test
+    void testEditPassenger() throws Exception {
+        long id = 5L;
+        when(passengerService.editPassenger(id, CREATE_UPDATE_PASSENGER_DTO)).thenReturn(PASSENGER_DTO);
+        mockMvc.perform(put("/api/passengers/" + id)
+                .content(objectMapper.writeValueAsString(CREATE_UPDATE_PASSENGER_DTO))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value(PASSENGER_DTO.getFirstName()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value(PASSENGER_DTO.getLastName()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email").value(PASSENGER_DTO.getEmail()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.country").value(PASSENGER_DTO.getCountry()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.telephone").value(PASSENGER_DTO.getTelephone()));
+        verify(passengerService).editPassenger(id, CREATE_UPDATE_PASSENGER_DTO);
     }
 
     @Test
