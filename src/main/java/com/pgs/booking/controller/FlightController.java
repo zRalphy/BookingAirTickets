@@ -11,31 +11,32 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/flights")
 public class FlightController {
 
     private final FlightService flightService;
 
-    @GetMapping("/api/flights")
+    @GetMapping
     public List<FlightDto> getFlights() {
         return flightService.getFlights();
     }
 
-    @GetMapping("/api/flights/{id}")
+    @GetMapping("/{id}")
     public FlightDto getSingleFlight(@Valid @PathVariable long id)  {
         return flightService.getSingleFlight(id);
     }
 
-    @PostMapping("/api/flights")
+    @PostMapping
     public FlightDto addFlight(@Valid @RequestBody CreateUpdateFlightDto createUpdateFlightDto) {
         return flightService.addFlight(createUpdateFlightDto);
     }
 
-    @PutMapping("/api/flights/{id}")
+    @PutMapping("/{id}")
     public FlightDto editFlight(@Valid @RequestBody CreateUpdateFlightDto createUpdateFlightDto, @PathVariable long id) {
         return flightService.editFlight(id, createUpdateFlightDto);
     }
 
-    @DeleteMapping("/api/flights/{id}")
+    @DeleteMapping("/{id}")
     public void deleteFlight(@PathVariable("id") long id) {
         flightService.deleteFlight(id);
     }
