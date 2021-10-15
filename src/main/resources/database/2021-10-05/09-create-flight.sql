@@ -1,5 +1,5 @@
---liquibase formatted sql
---changeset rmecwaldowski:2
+-- liquibase formatted sql
+-- changeset rmecwaldowski:2
 CREATE TABLE flight(
 	id BIGINT AUTO_INCREMENT PRIMARY KEY,
     type VARCHAR(45) NOT NULL,
@@ -9,7 +9,4 @@ CREATE TABLE flight(
     dateOfArrival TIMESTAMP
 );
 
-    ALTER TABLE reservation
-             ADD CONSTRAINT reservation_id
-             FOREIGN KEY (id) REFERENCES flight(id)
 
