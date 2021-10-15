@@ -4,6 +4,7 @@ import com.pgs.booking.exception.ResourceNotFoundException;
 import com.pgs.booking.mappers.CreateUpdateFlightDtoMapper;
 import com.pgs.booking.mappers.FlightDtoMapper;
 import com.pgs.booking.model.Flight;
+import com.pgs.booking.model.dto.CreateUpdateFlightDto;
 import com.pgs.booking.model.dto.FlightDto;
 import com.pgs.booking.repository.FlightRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,16 +31,21 @@ public class FlightService {
                 .orElseThrow(() -> new ResourceNotFoundException("Flight with id " + id + " not found."));
         return flightDtoMapper.mapToFlightDto(flightFromRepo);
     }
-/*
+
     public FlightDto addFlight(CreateUpdateFlightDto createUpdateFlightDto) {
-        return flightRepository
-                .save(createUpdateFlightDtoMapper.mapToFlight(createUpdateFlightDto));
+        return null;
     }
 
     public FlightDto editFlight(long id,CreateUpdateFlightDto createUpdateFlightDto) {
-        return flightRepository
-                .save(createUpdateFlightDtoMapper.mapToFlight(createUpdateFlightDto));
+        return null;
     }
 
- */
+    public void deleteFlight(long id) {
+        boolean exists = flightRepository.existsById(id);
+        if(!exists) {
+            throw new IllegalStateException(
+                    " Flight with id " + id+ " does not exists ");
+        }
+        flightRepository.deleteById(id);
+    }
 }

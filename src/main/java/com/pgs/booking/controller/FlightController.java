@@ -1,11 +1,10 @@
 package com.pgs.booking.controller;
 
+import com.pgs.booking.model.dto.CreateUpdateFlightDto;
 import com.pgs.booking.model.dto.FlightDto;
 import com.pgs.booking.service.FlightService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -25,7 +24,7 @@ public class FlightController {
     public FlightDto getSingleFlight(@Valid @PathVariable long id)  {
         return flightService.getSingleFlight(id);
     }
-/*
+
     @PostMapping("/api/flights")
     public FlightDto addFlight(@Valid @RequestBody CreateUpdateFlightDto createUpdateFlightDto) {
         return flightService.addFlight(createUpdateFlightDto);
@@ -40,6 +39,4 @@ public class FlightController {
     public void deleteFlight(@PathVariable("id") long id) {
         flightService.deleteFlight(id);
     }
-
- */
 }
