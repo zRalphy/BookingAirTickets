@@ -19,13 +19,12 @@ public class FlightService {
     private final FlightDtoMapper flightDtoMapper;
     private final CreateUpdateFlightDtoMapper createUpdateFlightDtoMapper;
 
-
     public List<FlightDto> getFlights() {
         List<Flight> allFlights = flightRepository.findAll();
         return flightDtoMapper.mapToFlightsDto(allFlights);
     }
 
-    public FlightDto getSingleFlight(long id) {
+    public FlightDto getFlight(long id) {
         Flight flightFromRepo = flightRepository
                 .findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Flight with id " + id + " not found."));
@@ -49,8 +48,7 @@ public class FlightService {
     }
 
     public void deleteFlight(long id) {
-        boolean exists = flightRepository.existsById(id);
-        if(!exists) {
+        if(!flightRepository.existsById(id)) {
             throw new ResourceNotFoundException("Flight with id " + id + " not found.");
         }
         flightRepository.deleteById(id);

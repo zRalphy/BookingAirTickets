@@ -21,7 +21,7 @@ public class FlightController {
 
     @GetMapping("/{id}")
     public FlightDto getFlight(@PathVariable long id)  {
-        return flightService.getSingleFlight(id);
+        return flightService.getFlight(id);
     }
 
     @PostMapping
