@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import java.util.Date;
+
+import java.time.LocalDateTime;
+
 import static java.util.stream.Collectors.*;
 
 @Slf4j
@@ -20,7 +22,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public final ResponseEntity<ErrorResponse> handleAllExceptions(ResourceNotFoundException ex, WebRequest request) {
-        ErrorResponse error = new ErrorResponse(new Date(), ex.getMessage(), request.getDescription(false));
+        ErrorResponse error = new ErrorResponse(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
         log.error("Resource was not found.", ex);
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }

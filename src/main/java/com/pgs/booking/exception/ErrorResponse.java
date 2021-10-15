@@ -1,11 +1,12 @@
 package com.pgs.booking.exception;
 
-import java.util.Date;
 import lombok.Value;
+
+import java.time.LocalDateTime;
 
 @Value
 public class ErrorResponse {
-    Date timestamp;
+    LocalDateTime timestamp;
     String message;
     String details;
 }
