@@ -1,8 +1,8 @@
 package com.pgs.booking.service;
 
+import com.pgs.booking.exception.ResourceNotFoundException;
 import com.pgs.booking.mappers.CreateUpdatePassengerDtoMapper;
 import com.pgs.booking.mappers.PassengerDtoMapper;
-import com.pgs.booking.exception.ResourceNotFoundException;
 import com.pgs.booking.model.Passenger;
 import com.pgs.booking.model.dto.CreateUpdatePassengerDto;
 import com.pgs.booking.model.dto.PassengerDto;
@@ -39,7 +39,7 @@ public class PassengerService {
         return passengerDtoMapper.mapToPassengerDto(passengerFromRepo);
     }
 
-    public Passenger addNewPassenger(CreateUpdatePassengerDto createUpdatePassengerDto) {
+    public PassengerDto addPassenger(CreateUpdatePassengerDto createUpdatePassengerDto) {
         log.trace("Entering service method addNewPassenger.");
         Optional<Passenger> passengerOptionalEmail = passengerRepository
                 .findByEmail(createUpdatePassengerDtoMapper
@@ -49,31 +49,18 @@ public class PassengerService {
             log.warn("Passenger with this email exist in database.");
             throw new IllegalStateException("Passenger with this email exist in database.");
         }
-        return passengerRepository
-                .save(createUpdatePassengerDtoMapper.mapToPassenger(createUpdatePassengerDto));
-
+        Passenger passenger = passengerRepository.save(createUpdatePassengerDtoMapper.mapToPassenger(createUpdatePassengerDto));
+        return passengerDtoMapper.mapToPassengerDto(passenger);
     }
 
-    public Passenger editPassenger (long id, CreateUpdatePassengerDto createUpdatePassengerDto) {
+    public PassengerDto editPassenger (long id, CreateUpdatePassengerDto createUpdatePassengerDto) {
         log.trace("Entering service method editPassenger.");
         Passenger passengerToEdit = passengerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Passenger with id " + id + " not found."));
 
-        if(passengerToEdit.getFirstName() != null &&
-                passengerToEdit.getFirstName().length() > 0
-                && !Objects.equals(passengerToEdit.getFirstName(), createUpdatePassengerDto.getFirstName())) {
-            passengerToEdit.setFirstName(createUpdatePassengerDto.getFirstName());
-        }
-
-        if(passengerToEdit.getLastName() != null &&
-                passengerToEdit.getLastName().length() > 0
-                && !Objects.equals(passengerToEdit.getLastName(), createUpdatePassengerDto.getLastName())) {
-            passengerToEdit.setLastName(createUpdatePassengerDto.getLastName());
-        }
-
-        if(passengerToEdit.getEmail() != null &&
-                passengerToEdit.getEmail().length() > 0
-                && !Objects.equals(passengerToEdit.getEmail(), createUpdatePassengerDto.getEmail())) {
+        passengerToEdit.setFirstName(createUpdatePassengerDto.getFirstName());
+        passengerToEdit.setLastName(createUpdatePassengerDto.getLastName());
+        if(!Objects.equals(passengerToEdit.getEmail(), createUpdatePassengerDto.getEmail())) {
             Optional<Passenger> passengerOptionalEmail = passengerRepository
                     .findByEmail(createUpdatePassengerDto
                             .getEmail());
@@ -83,19 +70,9 @@ public class PassengerService {
             }
             passengerToEdit.setEmail(createUpdatePassengerDto.getEmail());
         }
-
-        if(passengerToEdit.getCountry() != null &&
-                passengerToEdit.getCountry().length() > 0
-                && !Objects.equals(passengerToEdit.getCountry(), createUpdatePassengerDto.getCountry())) {
-            passengerToEdit.setCountry(createUpdatePassengerDto.getCountry());
-        }
-
-        if(passengerToEdit.getTelephone() != null &&
-                passengerToEdit.getTelephone().length() > 0
-                && !Objects.equals(passengerToEdit.getTelephone(), createUpdatePassengerDto.getTelephone())) {
-            passengerToEdit.setTelephone(createUpdatePassengerDto.getTelephone());
-        }
-        return passengerRepository
-                .save(passengerToEdit);
+        passengerToEdit.setCountry(createUpdatePassengerDto.getCountry());
+        passengerToEdit.setTelephone(createUpdatePassengerDto.getTelephone());
+        Passenger passengerToSave = passengerRepository.save(passengerToEdit);
+        return passengerDtoMapper.mapToPassengerDto(passengerToSave);
     }
 }

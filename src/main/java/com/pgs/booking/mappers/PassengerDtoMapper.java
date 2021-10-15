@@ -3,6 +3,7 @@ package com.pgs.booking.mappers;
 import com.pgs.booking.model.Passenger;
 import com.pgs.booking.model.dto.PassengerDto;
 import org.springframework.stereotype.Component;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,3 +27,4 @@ public class PassengerDtoMapper {
 				.build();
 	}
 }
+

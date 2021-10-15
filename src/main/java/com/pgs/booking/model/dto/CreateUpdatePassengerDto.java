@@ -1,27 +1,32 @@
 package com.pgs.booking.model.dto;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-@Value
+@Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CreateUpdatePassengerDto {
     @NotBlank(message = "Please enter your firstName.")
-    @Size(min = 3, max = 45, message = "Passenger firstName should have at least 3 characters.")
-    String firstName;
+    @Size(min = 3, max = 45, message = "Passenger firstName should have at least 3 and at most 45 characters.")
+    private String firstName;
     @NotBlank(message = "Please enter your lastName.")
-    @Size(min = 3, max = 45, message = "Passenger lastName should have at least 3 characters.")
-    String lastName;
+    @Size(min = 3, max = 45, message = "Passenger lastName should have at least 3 and at most 45 characters.")
+    private String lastName;
     @NotBlank(message = "Please enter your email.")
     @Email
-    String email;
+    private String email;
     @NotBlank(message = "Please enter your country.")
-    @Size(min = 3, max = 45, message = "Passenger country should have at least 3 characters.")
-    String country;
+    @Size(min = 3, max = 45, message = "Passenger country should have at least 3 and at most 45 characters.")
+    private String country;
     @NotBlank(message = "Please enter your phoneNumber.")
-    @Size(min = 9, max = 45, message = "Passenger telephone should have at least 9 characters.")
-    String telephone;
+    @Size(min = 9, max = 45, message = "Passenger telephone should have at least 9 and at most 45 characters.")
+    private String telephone;
 }
