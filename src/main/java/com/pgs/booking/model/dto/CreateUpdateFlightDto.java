@@ -2,8 +2,7 @@ package com.pgs.booking.model.dto;
 
 import com.pgs.booking.model.Flight;
 import lombok.*;
-
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
@@ -13,11 +12,10 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class CreateUpdateFlightDto {
-
-    @NotBlank(message = "Please enter your type.")
+    @NotNull(message = "Please enter your type.")
     Flight.TypeOfFlight type;
-    @NotBlank(message = "Please enter your departureDate.")
+    @NotNull(message = "Please enter your departureDate.")
     LocalDateTime departureDate;
-    @NotBlank(message = "Please enter your dateOfArrival.")
+    @NotNull(message = "Please enter your dateOfArrival.")
     LocalDateTime arrivalDate;
 }
