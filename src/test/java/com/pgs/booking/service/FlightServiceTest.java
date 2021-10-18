@@ -1,5 +1,6 @@
 package com.pgs.booking.service;
 
+import com.pgs.booking.exception.ResourceNotFoundException;
 import com.pgs.booking.mappers.CreateUpdateFlightDtoMapper;
 import com.pgs.booking.mappers.FlightDtoMapper;
 import com.pgs.booking.model.Flight;
@@ -10,17 +11,17 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import java.util.Optional;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class FlightServiceTest {
@@ -37,32 +38,39 @@ class FlightServiceTest {
     @BeforeEach
     void setUp() {
         underTest = new FlightService(flightRepository, flightDtoMapper, createUpdateFlightDtoMapper);
-
-        when(flightRepository.findAll())
-                .thenReturn(List.of(new Flight(), new Flight(), new Flight(), new Flight()));
     }
 
     private static Flight FLIGHT = Flight.builder()
+            .id(1L)
             .type(Flight.TypeOfFlight.ECONOMY)
-            .departureDate(LocalDateTime.now())
-            .arrivalDate(LocalDateTime.now())
+            .departureDate(LocalDateTime.of(2021, Month.DECEMBER, 9, 18, 30))
+            .arrivalDate(LocalDateTime.of(2021, Month.DECEMBER, 9, 23, 30))
+            .build();
+
+    private static Flight FLIGHT_1 = Flight.builder()
+            .id(1L)
+            .type(Flight.TypeOfFlight.BUSINESS)
+            .departureDate(LocalDateTime.of(2021, Month.JULY, 9, 11, 30))
+            .arrivalDate(LocalDateTime.of(2021, Month.JULY, 9, 14, 30))
             .build();
 
     private static FlightDto FLIGHT_DTO = FlightDto.builder()
             .id(1L)
-            .type(Flight.TypeOfFlight.ECONOMY)
-            .departureDate(LocalDateTime.now())
-            .arrivalDate(LocalDateTime.now())
+            .type(Flight.TypeOfFlight.PREMIUM)
+            .departureDate(LocalDateTime.of(2021, Month.NOVEMBER, 12, 10, 30))
+            .arrivalDate(LocalDateTime.of(2021, Month.NOVEMBER, 12, 16, 30))
             .build();
 
     private static CreateUpdateFlightDto CREATE_UPDATE_FLIGHT_DTO = CreateUpdateFlightDto.builder()
             .type(Flight.TypeOfFlight.BUSINESS)
-            .departureDate(LocalDateTime.now())
-            .arrivalDate(LocalDateTime.now())
+            .departureDate(LocalDateTime.of(2021, Month.SEPTEMBER, 10, 8, 30))
+            .arrivalDate(LocalDateTime.of(2021, Month.SEPTEMBER, 10, 11, 30))
             .build();
 
     @Test
     void testGetFlights() {
+        given(flightRepository.findAll())
+                .willReturn(List.of(new Flight(), new Flight(), new Flight(), new Flight()));
         //when
         var flights = underTest.getFlights();
         //then
@@ -74,50 +82,81 @@ class FlightServiceTest {
     void testGetFlight() {
         //given
         long id = 1L;
-        when(flightRepository.findById(id)).thenReturn(java.util.Optional.ofNullable(FLIGHT));
+        given(flightRepository.findById(id))
+                .willReturn(java.util.Optional.ofNullable(FLIGHT_1));
         //when
         var flight = underTest.getFlight(id);
         //then
-        Assertions.assertEquals(id, flight.getId());
+        Assertions.assertEquals(Flight.TypeOfFlight.BUSINESS, flight.getType());
+        Assertions.assertEquals(LocalDateTime.of(2021, Month.JULY, 9, 11, 30), flight.getDepartureDate());
+        Assertions.assertEquals(LocalDateTime.of(2021, Month.JULY, 9, 14, 30), flight.getArrivalDate());
         verify(flightRepository).findById(id);
     }
 
     @Test
     void testAddFlight() {
-
-        when(flightRepository.save(createUpdateFlightDtoMapper.mapToFlight(CREATE_UPDATE_FLIGHT_DTO))).thenAnswer(invocationOnMock -> {
-            Flight f = invocationOnMock.getArgument(0);
-            f.setId(1L);
-            return f;
-        });
-
+        //given
+        given(flightRepository.save(any(Flight.class))).willReturn(FLIGHT);
         //when
-        underTest.addFlight(CREATE_UPDATE_FLIGHT_DTO);
-
+        var flight = underTest.addFlight(CREATE_UPDATE_FLIGHT_DTO);
         //then
-        ArgumentCaptor<Flight> flightArgumentCaptor = ArgumentCaptor.forClass(Flight.class);
-        verify(flightRepository).save(flightArgumentCaptor.capture());
-
-        Flight capturedFlight = flightArgumentCaptor.getValue();
-        assertThat(capturedFlight).isEqualTo(CREATE_UPDATE_FLIGHT_DTO.getType());
-        assertThat(capturedFlight).isEqualTo(CREATE_UPDATE_FLIGHT_DTO.getDepartureDate());
-        assertThat(capturedFlight).isEqualTo(CREATE_UPDATE_FLIGHT_DTO.getArrivalDate());
+        Assertions.assertEquals(flight.getId(), FLIGHT.getId());
+        Assertions.assertEquals(flight.getType(), FLIGHT.getType());
+        Assertions.assertEquals(flight.getDepartureDate(), FLIGHT.getDepartureDate());
+        Assertions.assertEquals(flight.getArrivalDate(), FLIGHT.getArrivalDate());
+        verify(flightRepository).save(any(Flight.class));
     }
 
     @Test
-    void testEditFlight() {
+    void testEditFlightIfIdExist() {
+        long id = 1L;
+        //given
+        given(flightRepository.findById(id))
+                .willReturn(java.util.Optional.ofNullable(FLIGHT));
+        given(flightRepository.save(any(Flight.class))).willReturn(FLIGHT);
+        //when
+        var flight = underTest.editFlight(id, CREATE_UPDATE_FLIGHT_DTO);
+        //then
+        Assertions.assertEquals(flight.getType(), FLIGHT.getType());
+        Assertions.assertEquals(flight.getDepartureDate(), FLIGHT.getDepartureDate());
+        Assertions.assertEquals(flight.getArrivalDate(), FLIGHT.getArrivalDate());
+        verify(flightRepository).save(any(Flight.class));
     }
 
     @Test
-    void testDeleteFlight() {
+    void testEditFlightIfIdNotExist() {
+        long id = 1L;
+        //given
+        given(flightRepository.findById(id))
+                .willReturn(Optional.empty());
+        //when
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> underTest
+                .editFlight(id, CREATE_UPDATE_FLIGHT_DTO));
+        //then
+        Mockito.verify(flightRepository, times(0)).save(any(Flight.class));
+    }
+
+    @Test
+    void testDeleteFlightIfIdExist() {
         //given
         long id = 1L;
+        given(flightRepository.existsById(id)).willReturn(Boolean.TRUE);
+        Mockito.doNothing().when(flightRepository).deleteById(id);
         //when
-        var flight = underTest.getFlight(id);
         underTest.deleteFlight(id);
         //then
-        Assertions.assertEquals(null, flight.getId());
+        Mockito.verify(flightRepository).deleteById(id);
     }
 
-
+    @Test
+    void testDeleteFlightIfIdNotExist() {
+        //given
+        long id = 1L;
+        given(flightRepository.existsById(id)).willReturn(Boolean.FALSE);
+        //when
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> underTest
+                .deleteFlight(id));
+        //then
+        Mockito.verify(flightRepository, times(0)).deleteById(id);
+    }
 }
