@@ -5,7 +5,6 @@ import com.pgs.booking.mappers.CreateUpdateFlightDtoMapper;
 import com.pgs.booking.mappers.FlightDtoMapper;
 import com.pgs.booking.model.Flight;
 import com.pgs.booking.model.dto.CreateUpdateFlightDto;
-import com.pgs.booking.model.dto.FlightDto;
 import com.pgs.booking.repository.FlightRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,20 +44,6 @@ class FlightServiceTest {
             .arrivalDate(LocalDateTime.of(2021, Month.DECEMBER, 9, 23, 30))
             .build();
 
-    private static Flight FLIGHT_1 = Flight.builder()
-            .id(1L)
-            .type(Flight.TypeOfFlight.BUSINESS)
-            .departureDate(LocalDateTime.of(2021, Month.JULY, 9, 11, 30))
-            .arrivalDate(LocalDateTime.of(2021, Month.JULY, 9, 14, 30))
-            .build();
-
-    private static FlightDto FLIGHT_DTO = FlightDto.builder()
-            .id(1L)
-            .type(Flight.TypeOfFlight.PREMIUM)
-            .departureDate(LocalDateTime.of(2021, Month.NOVEMBER, 12, 10, 30))
-            .arrivalDate(LocalDateTime.of(2021, Month.NOVEMBER, 12, 16, 30))
-            .build();
-
     private static CreateUpdateFlightDto CREATE_UPDATE_FLIGHT_DTO = CreateUpdateFlightDto.builder()
             .type(Flight.TypeOfFlight.BUSINESS)
             .departureDate(LocalDateTime.of(2021, Month.SEPTEMBER, 10, 8, 30))
@@ -81,13 +66,13 @@ class FlightServiceTest {
         //given
         long id = 1L;
         given(flightRepository.findById(id))
-                .willReturn(java.util.Optional.ofNullable(FLIGHT_1));
+                .willReturn(java.util.Optional.ofNullable(FLIGHT));
         //when
         var flight = underTest.getFlight(id);
         //then
-        Assertions.assertEquals(Flight.TypeOfFlight.BUSINESS, flight.getType());
-        Assertions.assertEquals(LocalDateTime.of(2021, Month.JULY, 9, 11, 30), flight.getDepartureDate());
-        Assertions.assertEquals(LocalDateTime.of(2021, Month.JULY, 9, 14, 30), flight.getArrivalDate());
+        Assertions.assertEquals(FLIGHT.getType(), flight.getType());
+        Assertions.assertEquals(FLIGHT.getDepartureDate(), flight.getDepartureDate());
+        Assertions.assertEquals(FLIGHT.getArrivalDate(), flight.getArrivalDate());
         verify(flightRepository).findById(id);
     }
 
