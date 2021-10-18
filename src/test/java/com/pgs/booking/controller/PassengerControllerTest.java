@@ -63,13 +63,15 @@ class PassengerControllerTest {
                 .build();
     }
 
+    @SneakyThrows
     @Test
-    void testGetPassengers() throws Exception {
+    void testGetPassengers() {
         String accessToken = obtainAccessToken();
         var passengerDtoList = List.of(PASSENGER_DTO);
         given(passengerService.getPassengers()).willReturn(passengerDtoList);
         mockMvc.perform(get("/api/passengers")
-                        .header("Authorization", "Bearer " + accessToken))
+                        .header("Authorization", "Bearer " + accessToken)
+                        .accept("application/json;charset=UTF-8"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].id", equalTo(PASSENGER_DTO.getId().intValue())))
@@ -81,13 +83,16 @@ class PassengerControllerTest {
         verify(passengerService).getPassengers();
     }
 
+    @SneakyThrows
     @Test
-    void testGetSinglePassenger() throws Exception {
+    void testGetSinglePassenger() {
         String accessToken = obtainAccessToken();
         given(passengerService.getSinglePassenger(5L)).willReturn(PASSENGER_DTO);
         mockMvc.perform(get("/api/passengers/5")
-                        .header("Authorization", "Bearer " + accessToken))
+                        .header("Authorization", "Bearer " + accessToken)
+                        .accept("application/json;charset=UTF-8"))
                 .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("id", equalTo(PASSENGER_DTO.getId().intValue())))
                 .andExpect(jsonPath("firstName", equalTo(PASSENGER_DTO.getFirstName())))
                 .andExpect(jsonPath("lastName", equalTo(PASSENGER_DTO.getLastName())))
@@ -97,27 +102,42 @@ class PassengerControllerTest {
         verify(passengerService).getSinglePassenger(5L);
     }
 
+    @SneakyThrows
     @Test
-    void testGetPassengersUnauthenticated() throws Exception {
+    void testGetPassengersUnauthenticated() {
         var passengerDtoList = List.of(PASSENGER_DTO);
         given(passengerService.getPassengers()).willReturn(passengerDtoList);
         mockMvc.perform(get("/api/passengers"))
                 .andExpect(status().isUnauthorized());
     }
 
+    @SneakyThrows
     @Test
-    void testGetSinglePassengerUnauthenticated() throws Exception {
+    void testGetSinglePassengerUnauthenticated() {
         given(passengerService.getSinglePassenger(5L)).willReturn(PASSENGER_DTO);
         mockMvc.perform(get("/api/passengers/5"))
                 .andExpect(status().isUnauthorized());
     }
 
-    private String obtainAccessToken() throws Exception {
+    @SneakyThrows
+    private String obtainAccessToken() {
         ResultActions resultActions = performActionForOauthToken();
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
         JacksonJsonParser jsonParser = new JacksonJsonParser();
         return jsonParser.parseMap(resultString).get("access_token").toString();
     }
+
+    @SneakyThrows
+    private ResultActions performActionForOauthToken() {
+        return mockMvc
+                .perform(post("/oauth/token")
+                        .content(setParamsForRequest("user", "user"))
+                        .with(httpBasic("ClientId", "secret"))
+                        .accept("application/json;charset=UTF-8"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"));
+    }
+
     @SneakyThrows
     private String setParamsForRequest(String username, String password) {
         Map<String, String> params = new HashMap<>();
@@ -126,15 +146,5 @@ class PassengerControllerTest {
         params.put("password", password);
 
         return objectMapper.writeValueAsString(params);
-    }
-
-    private ResultActions performActionForOauthToken() throws Exception {
-        return mockMvc
-                .perform(post("/oauth/token")
-                        .content(setParamsForRequest("user", "user"))
-                        .with(httpBasic("Client_id", "secret"))
-                        .accept("application/json;charset=UTF-8"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json;charset=UTF-8"));
     }
 }
