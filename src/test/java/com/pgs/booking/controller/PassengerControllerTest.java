@@ -65,7 +65,7 @@ class PassengerControllerTest {
 
     @Test
     void testGetPassengers() throws Exception {
-        String accessToken = obtainAccessToken("user1", "pass1");
+        String accessToken = obtainAccessToken();
         var passengerDtoList = List.of(PASSENGER_DTO);
         given(passengerService.getPassengers()).willReturn(passengerDtoList);
         mockMvc.perform(get("/api/passengers")
@@ -83,7 +83,7 @@ class PassengerControllerTest {
 
     @Test
     void testGetSinglePassenger() throws Exception {
-        String accessToken = obtainAccessToken("user2", "pass2");
+        String accessToken = obtainAccessToken();
         given(passengerService.getSinglePassenger(5L)).willReturn(PASSENGER_DTO);
         mockMvc.perform(get("/api/passengers/5")
                         .header("Authorization", "Bearer " + accessToken))
@@ -112,8 +112,7 @@ class PassengerControllerTest {
                 .andExpect(status().isUnauthorized());
     }
 
-    private String obtainAccessToken(String username, String password) throws Exception {
-        var params = setParamsForRequest(username, password);
+    private String obtainAccessToken() throws Exception {
         ResultActions resultActions = performActionForOauthToken();
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
         JacksonJsonParser jsonParser = new JacksonJsonParser();
