@@ -1,8 +1,10 @@
 package com.pgs.booking.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pgs.booking.BookingAirTicketsApplication;
 import com.pgs.booking.model.dto.PassengerDto;
 import com.pgs.booking.service.PassengerService;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -10,17 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
@@ -39,6 +40,8 @@ class PassengerControllerTest {
 
     @Autowired
     private WebApplicationContext wac;
+    @Autowired
+    private ObjectMapper objectMapper;
     @MockBean
     private PassengerService passengerService;
     private MockMvc mockMvc;
@@ -62,10 +65,11 @@ class PassengerControllerTest {
 
     @Test
     void testGetPassengers() throws Exception {
-        String accessToken = obtainAccessToken("ala", "kot");
+        String accessToken = obtainAccessToken("user1", "pass1");
         var passengerDtoList = List.of(PASSENGER_DTO);
         given(passengerService.getPassengers()).willReturn(passengerDtoList);
-        mockMvc.perform(get("/api/passengers").header("Authorization", "Bearer " + accessToken))
+        mockMvc.perform(get("/api/passengers")
+                        .header("Authorization", "Bearer " + accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].id", equalTo(PASSENGER_DTO.getId().intValue())))
@@ -77,11 +81,12 @@ class PassengerControllerTest {
         verify(passengerService).getPassengers();
     }
 
-    @WithMockUser
     @Test
     void testGetSinglePassenger() throws Exception {
+        String accessToken = obtainAccessToken("user2", "pass2");
         given(passengerService.getSinglePassenger(5L)).willReturn(PASSENGER_DTO);
-        mockMvc.perform(get("/api/passengers/5"))
+        mockMvc.perform(get("/api/passengers/5")
+                        .header("Authorization", "Bearer " + accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id", equalTo(PASSENGER_DTO.getId().intValue())))
                 .andExpect(jsonPath("firstName", equalTo(PASSENGER_DTO.getFirstName())))
@@ -109,25 +114,25 @@ class PassengerControllerTest {
 
     private String obtainAccessToken(String username, String password) throws Exception {
         var params = setParamsForRequest(username, password);
-        ResultActions resultActions = performActionForOauthToken(params);
+        ResultActions resultActions = performActionForOauthToken();
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
         JacksonJsonParser jsonParser = new JacksonJsonParser();
         return jsonParser.parseMap(resultString).get("access_token").toString();
     }
+    @SneakyThrows
+    private String setParamsForRequest(String username, String password) {
+        Map<String, String> params = new HashMap<>();
+        params.put("grant_type", "password");
+        params.put("username", username);
+        params.put("password", password);
 
-    private MultiValueMap<String, String> setParamsForRequest(String username, String password) {
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("grant_type", "password");
-        params.add("client_id", "Client_id");
-        params.add("username", username);
-        params.add("password", password);
-        return params;
+        return objectMapper.writeValueAsString(params);
     }
 
-    private ResultActions performActionForOauthToken(MultiValueMap<String, String> params) throws Exception {
+    private ResultActions performActionForOauthToken() throws Exception {
         return mockMvc
                 .perform(post("/oauth/token")
-                        .params(params)
+                        .content(setParamsForRequest("user", "user"))
                         .with(httpBasic("Client_id", "secret"))
                         .accept("application/json;charset=UTF-8"))
                 .andExpect(status().isOk())
