@@ -1,8 +1,6 @@
 package com.pgs.booking.model;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,6 +8,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @RequiredArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "flight")
 public class Flight {
@@ -17,7 +17,7 @@ public class Flight {
     @Id
     @GeneratedValue
     @Column(name = "id")
-    private final Long id = null;
+    private Long id;
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private TypeOfFlight type;

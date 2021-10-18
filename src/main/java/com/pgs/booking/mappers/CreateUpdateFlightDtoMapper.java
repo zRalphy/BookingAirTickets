@@ -24,10 +24,10 @@ public class CreateUpdateFlightDtoMapper {
     }
 
     public Flight mapToFlight(CreateUpdateFlightDto createUpdateFlightDto) {
-        Flight flight = new Flight();
-        flight.setType(createUpdateFlightDto.getType());
-        flight.setDepartureDate(createUpdateFlightDto.getDepartureDate());
-        flight.setArrivalDate(createUpdateFlightDto.getArrivalDate());
-        return flight;
+        return Flight.builder()
+                .type(createUpdateFlightDto.getType())
+                .departureDate(createUpdateFlightDto.getDepartureDate())
+                .arrivalDate(createUpdateFlightDto.getArrivalDate())
+                .build();
     }
 }
