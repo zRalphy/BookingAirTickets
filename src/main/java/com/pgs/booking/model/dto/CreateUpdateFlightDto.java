@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 @Setter
 public class CreateUpdateFlightDto {
     @NotNull(message = "Please enter your type.")
-    Flight.TypeOfFlight type;
+    private Flight.TypeOfFlight type;
     @NotNull(message = "Please enter your departureDate.")
-    LocalDateTime departureDate;
+    private LocalDateTime departureDate;
     @NotNull(message = "Please enter your dateOfArrival.")
-    LocalDateTime arrivalDate;
+    private LocalDateTime arrivalDate;
 }
