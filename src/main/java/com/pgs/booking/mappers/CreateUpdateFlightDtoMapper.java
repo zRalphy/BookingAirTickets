@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 @Component
 public class CreateUpdateFlightDtoMapper {
 
-    public List<CreateUpdateFlightDto> mapToPassengersDto(List<Flight> flights) {
+    public List<CreateUpdateFlightDto> mapToCreateFlightsDto(List<Flight> flights) {
         return flights.stream()
                 .map(this::mapToCreateFlightDto)
                 .collect(Collectors.toList());

@@ -1,10 +1,11 @@
 package com.pgs.booking.service;
 
 import com.pgs.booking.exception.ResourceNotFoundException;
-import com.pgs.booking.mappers.CreateUpdateFlightDtoMapper;
-import com.pgs.booking.mappers.FlightDtoMapper;
+import com.pgs.booking.mappers.CreateUpdatePassengerDtoMapper;
+import com.pgs.booking.mappers.PassengerDtoMapper;
+import com.pgs.booking.mappers.ReservationDtoMapper;
 import com.pgs.booking.model.Reservation;
-import com.pgs.booking.model.dto.CreateUpdateFlightDto;
+import com.pgs.booking.model.dto.CreateUpdateReservationDto;
 import com.pgs.booking.model.dto.ReservationDto;
 import com.pgs.booking.repository.FlightRepository;
 import com.pgs.booking.repository.PassengerRepository;
@@ -21,8 +22,11 @@ public class ReservationService {
     private final FlightRepository flightRepository;
     private final ReservationRepository reservationRepository;
     private final PassengerRepository passengerRepository;
-    private final FlightDtoMapper flightDtoMapper;
-    private final CreateUpdateFlightDtoMapper createUpdateFlightDtoMapper;
+    private final ReservationDtoMapper reservationDtoMapper;
+    private final CreateUpdateReservationDto createUpdateReservationDto;
+    private final PassengerService passengerService;
+    private final CreateUpdatePassengerDtoMapper createUpdatePassengerDtoMapper;
+    private final PassengerDtoMapper passengerDtoMapper;
 
     public List<ReservationDto> getReservations() {
         return null;
@@ -32,8 +36,18 @@ public class ReservationService {
         return null;
     }
 
-    public ReservationDto addReservation(CreateUpdateFlightDto createUpdateFlightDto) {
-        return null;
+    public ReservationDto addReservation(CreateUpdateReservationDto createUpdateReservationDto) {
+
+        var flight_id = createUpdateReservationDto.getFlight_id();
+        var passengersDtoList = passengerService.getPassengers();
+        //var passengersList = createUpdatePassengerDtoMapper.mapToPassengers(passengersDtoList);
+
+        Reservation reservation = new Reservation();
+        //reservation.setStatus();
+        //reservation.setFlight_id();
+        //reservation.setPassengers();
+        reservationRepository.save(reservation);
+        return reservationDtoMapper.mapToReservationDto(reservation);
     }
 
     public Reservation.ReservationStatus setReservationStatusCanceled(Reservation.ReservationStatus reservationStatus) {
