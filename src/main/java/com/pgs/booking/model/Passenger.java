@@ -3,6 +3,7 @@ package com.pgs.booking.model;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+
 import javax.persistence.*;
 
 @Getter
@@ -25,5 +26,9 @@ public class Passenger {
     private String country;
     @Column(name = "telephone")
     private String telephone;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "reservation_id", nullable = false)
+    private Reservation reservation;
 }
 

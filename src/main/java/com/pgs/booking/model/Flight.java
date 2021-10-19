@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,4 +30,8 @@ public class Flight {
     public enum TypeOfFlight {
         ECONOMY, PREMIUM, BUSINESS
     }
+
+    @OneToMany(mappedBy = "reservation", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private List<Reservation> reservations;
 }

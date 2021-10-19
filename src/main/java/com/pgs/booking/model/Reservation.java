@@ -1,7 +1,9 @@
 package com.pgs.booking.model;
 
 import lombok.*;
+
 import javax.persistence.*;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -21,12 +23,12 @@ public class Reservation {
     public enum TypeOfReservation {
         REALIZED, IN_PROGRESS, CANCELED
     }
-    /*
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Flight flight;
-     */
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private Passenger passenger;
-    
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "flight_id", nullable = false)
+    private Flight flight;
+
+    @OneToMany(mappedBy = "passenger", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private Set<Passenger> passengers;
 }
