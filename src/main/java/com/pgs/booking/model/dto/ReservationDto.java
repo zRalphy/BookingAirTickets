@@ -4,13 +4,13 @@ import com.pgs.booking.model.Reservation;
 import lombok.Builder;
 import lombok.Value;
 
-import java.util.Set;
+import java.util.List;
 
 @Value
 @Builder
 public class ReservationDto {
     Long id;
     Reservation.ReservationStatus status;
-    FlightDto flightDto;
-    Set<CreateUpdatePassengerDto> passengers;
+    Long flight_id;
+    List<PassengerDto> passengers;
 }

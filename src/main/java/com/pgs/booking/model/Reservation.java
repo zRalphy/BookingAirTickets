@@ -1,11 +1,10 @@
 package com.pgs.booking.model;
 
-import com.pgs.booking.model.dto.CreateUpdatePassengerDto;
-import com.pgs.booking.model.dto.FlightDto;
 import lombok.*;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,11 +23,11 @@ public class Reservation implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "flight_id", nullable = false)
-    private FlightDto flight;
+    private Long flight_id;
 
     @OneToMany(mappedBy = "passenger", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
-    private Set<CreateUpdatePassengerDto> passengers;
+    private List<Passenger> passengers;
 
     public enum ReservationStatus {
         IN_PROGRESS, REALIZED, CANCELED
