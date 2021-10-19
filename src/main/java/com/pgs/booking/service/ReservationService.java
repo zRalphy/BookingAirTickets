@@ -3,6 +3,7 @@ package com.pgs.booking.service;
 import com.pgs.booking.exception.ResourceNotFoundException;
 import com.pgs.booking.mappers.CreateUpdateFlightDtoMapper;
 import com.pgs.booking.mappers.FlightDtoMapper;
+import com.pgs.booking.model.Reservation;
 import com.pgs.booking.model.dto.CreateUpdateFlightDto;
 import com.pgs.booking.model.dto.ReservationDto;
 import com.pgs.booking.repository.FlightRepository;
@@ -35,8 +36,12 @@ public class ReservationService {
         return null;
     }
 
-    public ReservationDto editReservation(long id, CreateUpdateFlightDto createUpdateFlightDto) {
-        return null;
+    public Reservation.ReservationStatus setReservationStatusCanceled(Reservation.ReservationStatus reservationStatus) {
+        return reservationStatus;
+    }
+
+    public Reservation.ReservationStatus setReservationStatusRealized(Reservation.ReservationStatus reservationStatus) {
+        return reservationStatus;
     }
 
     public void deleteReservation(long id) {
