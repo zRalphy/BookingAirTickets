@@ -94,8 +94,9 @@ class PassengerControllerTest {
         verify(passengerService).getSinglePassenger(5L);
     }
 
+    @SneakyThrows
     @Test
-    void testAddPassenger() throws Exception {
+    void testAddPassenger() {
         when(passengerService.addPassenger(CREATE_UPDATE_PASSENGER_DTO)).thenReturn(PASSENGER_DTO);
         mockMvc.perform(post("/api/passengers")
                         .content(objectMapper.writeValueAsString(CREATE_UPDATE_PASSENGER_DTO))
@@ -111,8 +112,9 @@ class PassengerControllerTest {
         verify(passengerService).addPassenger(CREATE_UPDATE_PASSENGER_DTO);
     }
 
+    @SneakyThrows
     @Test
-    void testEditPassenger() throws Exception {
+    void testEditPassenger() {
         long id = 5L;
         when(passengerService.editPassenger(id, CREATE_UPDATE_PASSENGER_DTO)).thenReturn(PASSENGER_DTO);
         mockMvc.perform(put("/api/passengers/" + id)
