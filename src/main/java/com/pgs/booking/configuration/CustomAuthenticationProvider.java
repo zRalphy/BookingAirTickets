@@ -1,6 +1,5 @@
 package com.pgs.booking.configuration;
 
-import com.google.common.collect.ImmutableSet;
 import com.pgs.booking.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         daoAuthenticationProvider.setUserDetailsService(userDetailsService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
 
-        authenticationProviders = ImmutableSet.of(preAuthenticatedAuthenticationProvider,daoAuthenticationProvider);
+        authenticationProviders = Set.of(preAuthenticatedAuthenticationProvider,daoAuthenticationProvider);
     }
 
     @Override
