@@ -1,4 +1,4 @@
-package com.pgs.booking.mappers;
+package com.pgs.booking.mappers.dto;
 
 import com.pgs.booking.model.Flight;
 import com.pgs.booking.model.dto.CreateUpdateFlightDto;
