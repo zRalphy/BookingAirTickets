@@ -4,13 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pgs.booking.model.dto.CreateUpdatePassengerDto;
 import com.pgs.booking.model.dto.PassengerDto;
 import com.pgs.booking.service.PassengerService;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -23,7 +23,6 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,10 +32,8 @@ class PassengerControllerTest {
 
     @Autowired
     private WebApplicationContext wac;
-
     @Autowired
     private ObjectMapper objectMapper;
-
     @MockBean
     private PassengerService passengerService;
     private MockMvc mockMvc;
@@ -62,14 +59,12 @@ class PassengerControllerTest {
     public void setUP() {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(wac)
-                .apply(springSecurity())
                 .build();
     }
 
-    @WithMockUser
+    @SneakyThrows
     @Test
-    void testGetPassengers() throws Exception {
-
+    void testGetPassengers() {
         var passengerDtoList = List.of(PASSENGER_DTO);
         given(passengerService.getPassengers()).willReturn(passengerDtoList);
         mockMvc.perform(get("/api/passengers"))
@@ -84,9 +79,9 @@ class PassengerControllerTest {
         verify(passengerService).getPassengers();
     }
 
-    @WithMockUser
+    @SneakyThrows
     @Test
-    void testGetSinglePassenger() throws Exception {
+    void testGetSinglePassenger() {
         given(passengerService.getSinglePassenger(5L)).willReturn(PASSENGER_DTO);
         mockMvc.perform(get("/api/passengers/5"))
                 .andExpect(status().isOk())
@@ -99,9 +94,9 @@ class PassengerControllerTest {
         verify(passengerService).getSinglePassenger(5L);
     }
 
-    @WithMockUser
+    @SneakyThrows
     @Test
-    void testAddPassenger() throws Exception {
+    void testAddPassenger() {
         when(passengerService.addPassenger(CREATE_UPDATE_PASSENGER_DTO)).thenReturn(PASSENGER_DTO);
         mockMvc.perform(post("/api/passengers")
                         .content(objectMapper.writeValueAsString(CREATE_UPDATE_PASSENGER_DTO))
@@ -117,15 +112,15 @@ class PassengerControllerTest {
         verify(passengerService).addPassenger(CREATE_UPDATE_PASSENGER_DTO);
     }
 
-    @WithMockUser
+    @SneakyThrows
     @Test
-    void testEditPassenger() throws Exception {
+    void testEditPassenger() {
         long id = 5L;
         when(passengerService.editPassenger(id, CREATE_UPDATE_PASSENGER_DTO)).thenReturn(PASSENGER_DTO);
         mockMvc.perform(put("/api/passengers/" + id)
-                .content(objectMapper.writeValueAsString(CREATE_UPDATE_PASSENGER_DTO))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+                        .content(objectMapper.writeValueAsString(CREATE_UPDATE_PASSENGER_DTO))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value(PASSENGER_DTO.getFirstName()))
@@ -134,20 +129,5 @@ class PassengerControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.country").value(PASSENGER_DTO.getCountry()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.telephone").value(PASSENGER_DTO.getTelephone()));
         verify(passengerService).editPassenger(id, CREATE_UPDATE_PASSENGER_DTO);
-    }
-
-    @Test
-    void testGetPassengersUnauthenticated() throws Exception {
-        var passengerDtoList = List.of(PASSENGER_DTO);
-        given(passengerService.getPassengers()).willReturn(passengerDtoList);
-        mockMvc.perform(get("/api/passengers"))
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    void testGetSinglePassengerUnauthenticated() throws Exception {
-        given(passengerService.getSinglePassenger(5L)).willReturn(PASSENGER_DTO);
-        mockMvc.perform(get("/api/passengers/5"))
-                .andExpect(status().isUnauthorized());
     }
 }
