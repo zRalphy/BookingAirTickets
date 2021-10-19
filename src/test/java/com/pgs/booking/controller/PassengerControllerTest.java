@@ -1,13 +1,17 @@
 package com.pgs.booking.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pgs.booking.BookingAirTicketsApplication;
 import com.pgs.booking.model.dto.PassengerDto;
 import com.pgs.booking.service.PassengerService;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -18,16 +22,18 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = BookingAirTicketsApplication.class)
 class PassengerControllerTest {
 
     @Autowired
     private WebApplicationContext wac;
+    @Autowired
+    private ObjectMapper objectMapper;
     @MockBean
     private PassengerService passengerService;
     private MockMvc mockMvc;
@@ -41,26 +47,16 @@ class PassengerControllerTest {
             .telephone("123456789")
             .build();
 
-    private static CreateUpdatePassengerDto CREATE_UPDATE_PASSENGER_DTO = CreateUpdatePassengerDto.builder()
-            .firstName("Dwayne")
-            .lastName("Johnson")
-            .email("JohnsonDwayne@gmail.com")
-            .country("USA")
-            .telephone("123456789")
-            .build();
-
     @BeforeEach
     public void setUP() {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(wac)
-                .apply(springSecurity())
                 .build();
     }
 
-    @WithMockUser
+    @SneakyThrows
     @Test
-    void testGetPassengers() throws Exception {
-
+    void testGetPassengers() {
         var passengerDtoList = List.of(PASSENGER_DTO);
         given(passengerService.getPassengers()).willReturn(passengerDtoList);
         mockMvc.perform(get("/api/passengers"))
@@ -75,9 +71,9 @@ class PassengerControllerTest {
         verify(passengerService).getPassengers();
     }
 
-    @WithMockUser
+    @SneakyThrows
     @Test
-    void testGetSinglePassenger() throws Exception {
+    void testGetSinglePassenger() {
         given(passengerService.getSinglePassenger(5L)).willReturn(PASSENGER_DTO);
         mockMvc.perform(get("/api/passengers/5"))
                 .andExpect(status().isOk())
@@ -88,20 +84,5 @@ class PassengerControllerTest {
                 .andExpect(jsonPath("country", equalTo(PASSENGER_DTO.getCountry())))
                 .andExpect(jsonPath("telephone", equalTo(PASSENGER_DTO.getTelephone())));
         verify(passengerService).getSinglePassenger(5L);
-    }
-
-    @Test
-    void testGetPassengersUnauthenticated() throws Exception {
-        var passengerDtoList = List.of(PASSENGER_DTO);
-        given(passengerService.getPassengers()).willReturn(passengerDtoList);
-        mockMvc.perform(get("/api/passengers"))
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    void testGetSinglePassengerUnauthenticated() throws Exception {
-        given(passengerService.getSinglePassenger(5L)).willReturn(PASSENGER_DTO);
-        mockMvc.perform(get("/api/passengers/5"))
-                .andExpect(status().isUnauthorized());
     }
 }
