@@ -1,6 +1,7 @@
 package com.pgs.booking.configuration;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,12 +22,18 @@ public class OauthServerConfiguration extends AuthorizationServerConfigurerAdapt
     private final PasswordEncoder passwordEncoder;
     private final TokenStore tokenStore;
 
+    @Value("${security.client.clientId}")
+    private String clientId;
+    @Value("${security.client.secret}")
+    private String secret;
+    @Value("${security.token.ttl}")
+    private int tokenTtl;
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
-                .withClient("ClientId")
-                .secret(passwordEncoder.encode("secret"))
-                .accessTokenValiditySeconds(60)
+                .withClient(clientId)
+                .secret(passwordEncoder.encode(secret))
+                .accessTokenValiditySeconds(tokenTtl)
                 .scopes("read", "write")
                 .authorizedGrantTypes("password", "authorization_code", "refresh_token");
     }
