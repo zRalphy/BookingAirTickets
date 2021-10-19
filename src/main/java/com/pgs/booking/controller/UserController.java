@@ -1,6 +1,6 @@
 package com.pgs.booking.controller;
 
-import com.pgs.booking.model.dto.CreateUpdateUserDto;
+import com.pgs.booking.model.dto.CreateUserDto;
 import com.pgs.booking.model.dto.UserDto;
 import com.pgs.booking.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public UserDto addUser(@Valid @RequestBody CreateUpdateUserDto createUpdateUserDto) {
-        return userService.addUser(createUpdateUserDto);
+    public UserDto addUser(@Valid @RequestBody CreateUserDto createUserDto) {
+        return userService.addUser(createUserDto);
     }
 }
