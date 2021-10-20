@@ -1,6 +1,6 @@
 package com.pgs.booking.mappers.entity;
 
-import com.pgs.booking.model.Role;
+import com.pgs.booking.model.entity.Role;
 import com.pgs.booking.model.dto.RoleDto;
 import org.springframework.stereotype.Component;
 

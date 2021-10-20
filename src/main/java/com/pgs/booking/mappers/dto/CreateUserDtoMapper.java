@@ -1,7 +1,7 @@
 package com.pgs.booking.mappers.dto;
 
 import com.pgs.booking.mappers.entity.RoleEntityMapper;
-import com.pgs.booking.model.User;
+import com.pgs.booking.model.entity.User;
 import com.pgs.booking.model.dto.CreateUserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

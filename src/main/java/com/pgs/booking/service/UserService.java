@@ -2,7 +2,7 @@ package com.pgs.booking.service;
 
 import com.pgs.booking.mappers.dto.CreateUserDtoMapper;
 import com.pgs.booking.mappers.dto.UserDtoMapper;
-import com.pgs.booking.model.User;
+import com.pgs.booking.model.entity.User;
 import com.pgs.booking.model.dto.CreateUserDto;
 import com.pgs.booking.model.dto.UserDto;
 import com.pgs.booking.repository.UserRepository;
@@ -26,7 +26,7 @@ public class UserService implements UserDetailsService, AuthenticationUserDetail
     private final UserRepository userRepository;
     private final TokenStore tokenStore;
     private final CreateUserDtoMapper createUserDtoMapper;
-    private final UserDtoMapper userDtoMapper
+    private final UserDtoMapper userDtoMapper;
 
     public UserDto addUser(CreateUserDto createUserDto){
         var user = createUserDtoMapper.mapToUser(createUserDto);

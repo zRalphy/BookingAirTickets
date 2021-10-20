@@ -1,6 +1,6 @@
 package com.pgs.booking.mappers.dto;
 
-import com.pgs.booking.model.Flight;
+import com.pgs.booking.model.entity.Flight;
 import com.pgs.booking.model.dto.FlightDto;
 import org.springframework.stereotype.Component;
 import java.util.List;

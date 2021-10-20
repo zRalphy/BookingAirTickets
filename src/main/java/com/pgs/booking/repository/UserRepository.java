@@ -1,6 +1,6 @@
 package com.pgs.booking.repository;
 
-import com.pgs.booking.model.User;
+import com.pgs.booking.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
