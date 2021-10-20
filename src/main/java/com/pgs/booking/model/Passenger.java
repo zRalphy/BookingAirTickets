@@ -1,21 +1,21 @@
 package com.pgs.booking.model;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Getter
-@Setter
-@RequiredArgsConstructor
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "passenger")
 public class Passenger {
     @Id
     @GeneratedValue
     @Column(name = "id")
-    private final Long id = null;
+    private Long id;
     @Column(name = "firstName")
     private String firstName;
     @Column(name = "lastName")
@@ -26,10 +26,12 @@ public class Passenger {
     private String country;
     @Column(name = "telephone")
     private String telephone;
-
+/*
     @ManyToOne
     @JoinColumn(name = "reservationId", nullable = false)
     private Reservation reservation;
+
+ */
 }
 
 

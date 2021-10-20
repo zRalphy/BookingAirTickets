@@ -2,7 +2,7 @@
 --changeset rmecwaldowski:4
 
     ALTER TABLE passenger
-         ADD reservationId BIGINT NOT NULL;
+         ADD reservationId BIGINT;
 
    ALTER TABLE passenger
          ADD CONSTRAINT passengerReservationId

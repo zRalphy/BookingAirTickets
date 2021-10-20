@@ -31,7 +31,7 @@ public class Flight {
         ECONOMY, PREMIUM, BUSINESS
     }
 
-    @OneToMany(mappedBy = "reservation", fetch = FetchType.LAZY,
+    @OneToMany(mappedBy = "flight", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     private List<Reservation> reservations;
 }
