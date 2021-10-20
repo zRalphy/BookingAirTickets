@@ -10,7 +10,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/user")
+@RequestMapping("api/users")
 public class UserController {
 
     private final UserService userService;
@@ -19,8 +19,8 @@ public class UserController {
     public UserDto addUser(@Valid @RequestBody CreateUserDto createUserDto) {
         return userService.addUser(createUserDto);
     }
-    @PutMapping
-    public UserDto activateAndDeactivateUser(@PathVariable Long id , @PathVariable boolean isEnabled) {
-        return userService.activateAndDeactivateUser(id, isEnabled);
+    @PutMapping("/{id}")
+    public UserDto activateOrDeactivateUser(@PathVariable Long id , @RequestParam boolean isEnabled) {
+        return userService.activateOrDeactivateUser(id, isEnabled);
     }
 }

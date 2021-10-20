@@ -34,7 +34,7 @@ public class UserService implements UserDetailsService, AuthenticationUserDetail
         return userDtoMapper.mapToUserDto(savedUser);
     }
 
-    public UserDto activateAndDeactivateUser(Long id, boolean isEnabled) {
+    public UserDto activateOrDeactivateUser(Long id, boolean isEnabled) {
         var user = userRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("User with id " + id + "not found"));
         user.setEnabled(isEnabled);

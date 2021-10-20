@@ -90,7 +90,7 @@ class UserServiceTest {
                 .roles(ROLE_LIST)
                 .build();
         when(userRepository.save(any(User.class))).thenReturn(user);
-        var userDto = userService.activateAndDeactivateUser(2L, true);
+        var userDto = userService.activateOrDeactivateUser(2L, true);
         verify(userRepository).findById(2L);
         verify(userRepository).save(any(User.class));
         assertEquals(userDto.isEnabled(), user.isEnabled());
