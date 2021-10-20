@@ -8,6 +8,7 @@ import com.pgs.booking.model.dto.CreateUserDto;
 import com.pgs.booking.model.dto.RoleDto;
 import com.pgs.booking.model.entity.Role;
 import com.pgs.booking.model.entity.User;
+import com.pgs.booking.repository.RoleRepository;
 import com.pgs.booking.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -33,19 +34,27 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
-    private static final Role ROLE = Role.builder()
-            .id(3L)
+    private static final Role ROLE_1 = Role.builder()
             .name("USER")
+            .build();
+    private static final Role ROLE_2 = Role.builder()
+            .name("ADMIN")
             .build();
     private static final RoleDto ROLE_DTO = RoleDto.builder()
             .id(3L)
             .name("USER")
             .build();
-    private static final List<Role> ROLE_LIST = List.of(ROLE);
+    private static final List<Role> ROLE_LIST = List.of(ROLE_1);
     private static final List<RoleDto> ROLE_DTO_LIST = List.of(ROLE_DTO);
     private static final User USER_1 = User.builder()
             .id(2L)
-            .username("user")
+            .username("user1")
+            .roles(ROLE_LIST)
+            .build();
+    private static final User USER_2 = User.builder()
+            .id(3L)
+            .username("user2")
+            .enabled(true)
             .roles(ROLE_LIST)
             .build();
     private static final CreateUserDto CREATE_USER_DTO = CreateUserDto.builder()
@@ -54,6 +63,8 @@ class UserServiceTest {
             .build();
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private RoleRepository roleRepository;
     private UserService userService;
 
     private RoleEntityMapper roleEntityMapper = new RoleEntityMapper();
@@ -65,12 +76,30 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        userService = new UserService(userRepository, tokenStore, createUserDtoMapper, userDtoMapper);
+        userService = new UserService(userRepository,
+                userDtoMapper,
+                createUserDtoMapper,
+                roleRepository,
+                tokenStore);
+    }
+
+    @Test
+    void testGetSingleUser() {
+        var optionalUser = Optional.of(USER_1);
+        when(userRepository.findById(2L)).thenReturn(optionalUser);
+        var userDto = userService.getSingleUser(2L);
+        verify(userRepository).findById(2L);
+        assertEquals(userDto.getUsername(), USER_1.getUsername());
+        assertEquals(userDto.isEnabled(), USER_1.isEnabled());
+        assertEquals(userDto.isAccountNonExpired(), USER_1.isAccountNonExpired());
+        assertEquals(userDto.isCredentialsNonExpired(), USER_1.isCredentialsNonExpired());
+        assertEquals(userDto.isAccountNonLocked(), USER_1.isAccountNonLocked());
     }
 
     @Test
     void testAddUser() {
-        when(userRepository.save(any(User.class))).thenReturn(USER_1);
+        when(userRepository.save(any(User.class)))
+                .thenReturn(USER_1);
         var userDto = userService.addUser(CREATE_USER_DTO);
         verify(userRepository).save(any(User.class));
         assertEquals(userDto.getId(), USER_1.getId());
@@ -78,31 +107,52 @@ class UserServiceTest {
         assertEquals(userDto.getRoles().get(0).getId(), USER_1.getRoles().get(0).getId());
         assertEquals(userDto.getRoles().get(0).getName(), USER_1.getRoles().get(0).getName());
     }
+    @Test
+    void testActivateUser() {
+        var optionalUser = Optional.of(USER_2);
+        when(userRepository.findById(3L)).thenReturn(optionalUser);
+        when(userRepository.save(any(User.class))).thenReturn(USER_2);
+        var userDto = userService.activateUser(3L);
+        verify(userRepository).findById(3L);
+        verify(userRepository).save(any(User.class));
+        assertEquals(userDto.isEnabled(), USER_2.isEnabled());
+    }
 
     @Test
-    void testActivateAndDeactivateUser() {
+    void testDeactivateUser() {
         var optionalUser = Optional.of(USER_1);
         when(userRepository.findById(2L)).thenReturn(optionalUser);
-        var user = User.builder()
-                .id(2L)
-                .username("user")
-                .enabled(true)
-                .roles(ROLE_LIST)
-                .build();
-        when(userRepository.save(any(User.class))).thenReturn(user);
-        var userDto = userService.activateOrDeactivateUser(2L, true);
+        when(userRepository.save(any(User.class))).thenReturn(USER_1);
+        var userDto = userService.activateUser(2L);
         verify(userRepository).findById(2L);
         verify(userRepository).save(any(User.class));
-        assertEquals(userDto.isEnabled(), user.isEnabled());
+        assertEquals(userDto.isEnabled(), USER_1.isEnabled());
+    }
+
+    @Test
+    void testSetUserRoles() {
+        var optionalUser = Optional.of(USER_1);
+        when(userRepository.findById(2L))
+                .thenReturn(optionalUser);
+        when(roleRepository.findByName(any(String.class)))
+                .thenReturn(ROLE_2);
+        when(userRepository.save(any(User.class)))
+                .thenReturn(USER_1);
+        List<String> userRoleList = List.of("ADMIN");
+        var userDto = userService.setUserRoles(2L, userRoleList);
+        verify(roleRepository).findByName(any(String.class));
+        verify(userRepository).save(any(User.class));
+        System.out.println(userDto.getRoles().get(0).getName() + USER_1.getRoles().get(0).getName());
+        assertEquals(userDto.getRoles().get(0).getName(), USER_1.getRoles().get(0).getName());
     }
 
     @Test
     void testLoadUserByUsername() {
-        doReturn(USER_1)
-                .when(userRepository).findByUsername("user");
-        var user = userService.loadUserByUsername(("user"));
-        verify(userRepository).findByUsername("user");
-        assertEquals("user", user.getUsername());
+        when(userRepository.findByUsername("user1"))
+                .thenReturn(USER_1);
+        var user = userService.loadUserByUsername(("user1"));
+        verify(userRepository).findByUsername("user1");
+        assertEquals(user.getUsername(), USER_1.getUsername());
     }
 
     @Test
