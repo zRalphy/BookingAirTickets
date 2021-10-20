@@ -1,4 +1,4 @@
-package com.pgs.booking.mapper;
+package com.pgs.booking.mappers;
 
 import com.pgs.booking.mappers.dto.PassengerDtoMapper;
 import com.pgs.booking.model.entity.Passenger;
