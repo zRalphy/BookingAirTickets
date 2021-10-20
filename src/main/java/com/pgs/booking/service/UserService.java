@@ -1,5 +1,6 @@
 package com.pgs.booking.service;
 
+import com.pgs.booking.exception.ResourceNotFoundException;
 import com.pgs.booking.mappers.dto.CreateUserDtoMapper;
 import com.pgs.booking.mappers.dto.UserDtoMapper;
 import com.pgs.booking.model.entity.User;
@@ -33,6 +34,13 @@ public class UserService implements UserDetailsService, AuthenticationUserDetail
         return userDtoMapper.mapToUserDto(savedUser);
     }
 
+    public UserDto activateAndDeactivateUser(Long id, boolean isEnabled) {
+        var user = userRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("User with id " + id + "not found"));
+        user.setEnabled(isEnabled);
+        var savedUser = userRepository.save(user);
+        return userDtoMapper.mapToUserDto(savedUser);
+    }
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         return Optional.ofNullable(userRepository.findByUsername(username))
