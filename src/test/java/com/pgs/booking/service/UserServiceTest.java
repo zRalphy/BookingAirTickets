@@ -25,6 +25,7 @@ import org.springframework.security.oauth2.provider.token.store.InMemoryTokenSto
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -40,16 +41,16 @@ class UserServiceTest {
             .id(3L)
             .name("USER")
             .build();
-    private static final List<Role> roleList = List.of(ROLE);
-    private static final List<RoleDto> roleDtoList = List.of(ROLE_DTO);
-    private static final User USER = User.builder()
+    private static final List<Role> ROLE_LIST = List.of(ROLE);
+    private static final List<RoleDto> ROLE_DTO_LIST = List.of(ROLE_DTO);
+    private static final User USER_1 = User.builder()
             .id(2L)
             .username("user")
-            .roles(roleList)
+            .roles(ROLE_LIST)
             .build();
     private static final CreateUserDto CREATE_USER_DTO = CreateUserDto.builder()
             .username("user")
-            .roles(roleDtoList)
+            .roles(ROLE_DTO_LIST)
             .build();
     @Mock
     private UserRepository userRepository;
@@ -69,18 +70,35 @@ class UserServiceTest {
 
     @Test
     void testAddUser() {
-        when(userRepository.save(any(User.class))).thenReturn(USER);
-        var user = userService.addUser(CREATE_USER_DTO);
+        when(userRepository.save(any(User.class))).thenReturn(USER_1);
+        var userDto = userService.addUser(CREATE_USER_DTO);
         verify(userRepository).save(any(User.class));
-        assertEquals(user.getId(), USER.getId());
-        assertEquals(user.getUsername(), USER.getUsername());
-        assertEquals(user.getRoles().get(0).getId(), USER.getRoles().get(0).getId());
-        assertEquals(user.getRoles().get(0).getName(), USER.getRoles().get(0).getName());
+        assertEquals(userDto.getId(), USER_1.getId());
+        assertEquals(userDto.getUsername(), USER_1.getUsername());
+        assertEquals(userDto.getRoles().get(0).getId(), USER_1.getRoles().get(0).getId());
+        assertEquals(userDto.getRoles().get(0).getName(), USER_1.getRoles().get(0).getName());
+    }
+
+    @Test
+    void testActivateAndDeactivateUser() {
+        var optionalUser = Optional.of(USER_1);
+        when(userRepository.findById(2L)).thenReturn(optionalUser);
+        var user = User.builder()
+                .id(2L)
+                .username("user")
+                .enabled(true)
+                .roles(ROLE_LIST)
+                .build();
+        when(userRepository.save(any(User.class))).thenReturn(user);
+        var userDto = userService.activateAndDeactivateUser(2L, true);
+        verify(userRepository).findById(2L);
+        verify(userRepository).save(any(User.class));
+        assertEquals(userDto.isEnabled(), user.isEnabled());
     }
 
     @Test
     void testLoadUserByUsername() {
-        doReturn(USER)
+        doReturn(USER_1)
                 .when(userRepository).findByUsername("user");
         var user = userService.loadUserByUsername(("user"));
         verify(userRepository).findByUsername("user");
@@ -90,7 +108,7 @@ class UserServiceTest {
     @Test
     void testLoadByUsernameExceptionOccurrence() {
         when(userRepository.findByUsername("user"))
-                .thenReturn(USER);
+                .thenReturn(USER_1);
         userService.loadUserByUsername("user");
         Exception exception = assertThrows(UsernameNotFoundException.class, () ->
                 userService.loadUserByUsername("admin"));
@@ -126,7 +144,6 @@ class UserServiceTest {
                     .thenReturn(userDetails);
             var userDetailsService = userService.loadUserDetails(token);
             assertEquals(userDetails, userDetailsService);
-
         }
 
         @Test
