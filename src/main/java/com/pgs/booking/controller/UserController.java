@@ -21,22 +21,22 @@ public class UserController {
         return userService.addUser(createUserDto);
     }
 
-    @GetMapping({"/{id}"})
+    @GetMapping("/{id}")
     public UserDto getSingleUser(@Valid @PathVariable Long id) {
         return userService.getSingleUser(id);
     }
 
-    @PostMapping("/{id}/activate")
+    @PutMapping("/{id}/activate")
     public UserDto activateUser(@PathVariable Long id) {
         return userService.activateUser(id);
     }
 
-    @PostMapping("/{id}/deactivate")
+    @PutMapping("/{id}/deactivate")
     public UserDto deactivateUser(@PathVariable Long id) {
         return userService.deactivateUser(id);
     }
 
-    @PostMapping("/{id}/setRoles")
+    @PutMapping("/{id}/setRoles")
     public UserDto setUserRoles(@PathVariable Long id, @RequestBody List<String> roleDtoList) {
         return userService.setUserRoles(id, roleDtoList);
     }
