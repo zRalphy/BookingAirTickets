@@ -1,8 +1,8 @@
 package com.pgs.booking.service;
 
-import com.pgs.booking.mappers.dto.CreateUserDtoMapper;
+import com.pgs.booking.mappers.CreateUserDtoMapper;
 import com.pgs.booking.mappers.dto.RoleDtoMapper;
-import com.pgs.booking.mappers.dto.UserDtoMapper;
+import com.pgs.booking.mappers.UserDtoMapper;
 import com.pgs.booking.mappers.entity.RoleEntityMapper;
 import com.pgs.booking.model.dto.CreateUserDto;
 import com.pgs.booking.model.dto.RoleDto;
@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -40,12 +41,9 @@ class UserServiceTest {
     private static final Role ROLE_2 = Role.builder()
             .name("ADMIN")
             .build();
-    private static final RoleDto ROLE_DTO = RoleDto.builder()
-            .id(3L)
-            .name("USER")
-            .build();
+    private static final String ROLE_3 = "USER";
+    private static final String ROLE_4 = "ADMIN";
     private static final List<Role> ROLE_LIST = List.of(ROLE_1);
-    private static final List<RoleDto> ROLE_DTO_LIST = List.of(ROLE_DTO);
     private static final User USER_1 = User.builder()
             .id(2L)
             .username("user1")
@@ -59,28 +57,23 @@ class UserServiceTest {
             .build();
     private static final CreateUserDto CREATE_USER_DTO = CreateUserDto.builder()
             .username("user")
-            .roles(ROLE_DTO_LIST)
+            .roles(List.of(ROLE_3, ROLE_4))
             .build();
     @Mock
     private UserRepository userRepository;
     @Mock
     private RoleRepository roleRepository;
+    @InjectMocks
+    @Spy
     private UserService userService;
 
-    private RoleEntityMapper roleEntityMapper = new RoleEntityMapper();
-    private RoleDtoMapper roleDtoMapper = new RoleDtoMapper();
     @Spy
     private TokenStore tokenStore = new InMemoryTokenStore();
-    private CreateUserDtoMapper createUserDtoMapper = new CreateUserDtoMapper(roleEntityMapper);
-    private UserDtoMapper userDtoMapper = new UserDtoMapper(roleDtoMapper);
+    private CreateUserDtoMapper createUserDtoMapper = new CreateUserDtoMapper();
+    private UserDtoMapper userDtoMapper = new UserDtoMapper();
 
     @BeforeEach
     void setUp() {
-        userService = new UserService(userRepository,
-                userDtoMapper,
-                createUserDtoMapper,
-                roleRepository,
-                tokenStore);
     }
 
     @Test
