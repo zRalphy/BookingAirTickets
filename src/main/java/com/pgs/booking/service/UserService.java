@@ -27,10 +27,10 @@ import java.util.Optional;
 public class UserService implements UserDetailsService, AuthenticationUserDetailsService<PreAuthenticatedAuthenticationToken> {
 
     private final UserRepository userRepository;
-    private final TokenStore tokenStore;
-    private final CreateUserDtoMapper createUserDtoMapper;
     private final UserDtoMapper userDtoMapper;
+    private final CreateUserDtoMapper createUserDtoMapper;
     private final RoleRepository roleRepository;
+    private final TokenStore tokenStore;
 
     public UserDto getSingleUser(Long id) {
         var user = getUserById(id);
