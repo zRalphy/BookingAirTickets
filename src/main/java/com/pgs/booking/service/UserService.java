@@ -29,8 +29,7 @@ public class UserService implements UserDetailsService, AuthenticationUserDetail
     private final UserDtoMapper userDtoMapper;
 
     public UserDto addUser(CreateUserDto createUserDto){
-        var user = createUserDtoMapper.mapToUser(createUserDto);
-        var savedUser = userRepository.save(user);
+        var savedUser = userRepository.save(createUserDtoMapper.mapToUser(createUserDto));
         return userDtoMapper.mapToUserDto(savedUser);
     }
 
