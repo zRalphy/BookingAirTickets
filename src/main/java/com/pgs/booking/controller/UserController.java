@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,8 +20,24 @@ public class UserController {
     public UserDto addUser(@Valid @RequestBody CreateUserDto createUserDto) {
         return userService.addUser(createUserDto);
     }
-    @PutMapping("/{id}")
-    public UserDto activateOrDeactivateUser(@PathVariable Long id , @RequestParam boolean isEnabled) {
-        return userService.activateOrDeactivateUser(id, isEnabled);
+
+    @GetMapping({"/{id}"})
+    public UserDto getSingleUser(@Valid @PathVariable Long id) {
+        return userService.getSinglePassengers(id);
+    }
+
+    @PostMapping("/{id}/activate")
+    public UserDto activateUser(@PathVariable Long id) {
+        return userService.activateUser(id);
+    }
+
+    @PostMapping("/{id}/deactivate")
+    public UserDto deactivateUser(@PathVariable Long id) {
+        return userService.deactivateUser(id);
+    }
+
+    @PostMapping("/{id}/setRoles")
+    public UserDto setUserRoles(@PathVariable Long id, @RequestBody List<String> roleDtoList) {
+        return userService.setUserRoles(id, roleDtoList);
     }
 }
