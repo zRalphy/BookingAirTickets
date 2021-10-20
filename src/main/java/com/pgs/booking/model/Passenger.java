@@ -26,6 +26,10 @@ public class Passenger {
     private String country;
     @Column(name = "telephone")
     private String telephone;
+
+    @ManyToOne
+    @JoinColumn(name = "reservationId", nullable = false)
+    private Reservation reservation;
 }
 
 

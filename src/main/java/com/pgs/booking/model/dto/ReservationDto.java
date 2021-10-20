@@ -1,5 +1,6 @@
 package com.pgs.booking.model.dto;
 
+import com.pgs.booking.model.Flight;
 import com.pgs.booking.model.Reservation;
 import lombok.Builder;
 import lombok.Value;
@@ -11,6 +12,6 @@ import java.util.List;
 public class ReservationDto {
     Long id;
     Reservation.ReservationStatus status;
-    Long flight_id;
+    Flight flight;
     List<PassengerDto> passengers;
 }

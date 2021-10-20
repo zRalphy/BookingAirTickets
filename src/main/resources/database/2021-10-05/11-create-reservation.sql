@@ -3,10 +3,11 @@
 
 CREATE TABLE reservation(
 	id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    status ENUM (IN_PROGRESS, REALIZED, CANCELED),
-    flight_id BIGINT NOT NULL
+    status ENUM ('IN_PROGRESS', 'REALIZED', 'CANCELED'),
+    flightId BIGINT NOT NULL
 );
 
 ALTER TABLE reservation
-             ADD CONSTRAINT reservation_id
-             FOREIGN KEY (id) REFERENCES flight(id)
+             ADD CONSTRAINT reservationFlightId
+             FOREIGN KEY (flightId) REFERENCES flight(id);
+

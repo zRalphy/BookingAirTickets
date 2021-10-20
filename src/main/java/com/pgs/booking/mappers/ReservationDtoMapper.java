@@ -26,7 +26,7 @@ public class ReservationDtoMapper {
         return ReservationDto.builder()
                 .id(reservation.getId())
                 .status(reservation.getStatus())
-                .flight_id(reservation.getFlight_id())
+                .flight(reservation.getFlight())
                 .passengers(passengersDTOList)
                 .build();
     }

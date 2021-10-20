@@ -6,6 +6,7 @@ import com.pgs.booking.mappers.PassengerDtoMapper;
 import com.pgs.booking.mappers.ReservationDtoMapper;
 import com.pgs.booking.model.Reservation;
 import com.pgs.booking.model.dto.CreateUpdateReservationDto;
+import com.pgs.booking.model.dto.PassengerDto;
 import com.pgs.booking.model.dto.ReservationDto;
 import com.pgs.booking.repository.FlightRepository;
 import com.pgs.booking.repository.PassengerRepository;
@@ -28,8 +29,8 @@ public class ReservationService {
     private final CreateUpdatePassengerDtoMapper createUpdatePassengerDtoMapper;
     private final PassengerDtoMapper passengerDtoMapper;
 
-    public List<ReservationDto> getReservations() {
-        return null;
+    public List<PassengerDto> getPassengersByReservation(long id) {
+        return passengerDtoMapper.mapToPassengersDto(reservationRepository.getPassengersByReservation(id));
     }
 
     public ReservationDto getReservation(long id) {
@@ -38,13 +39,15 @@ public class ReservationService {
 
     public ReservationDto addReservation(CreateUpdateReservationDto createUpdateReservationDto) {
 
-        var flight_id = createUpdateReservationDto.getFlight_id();
+        var flight_id = createUpdateReservationDto.getFlight();
         var passengersDtoList = passengerService.getPassengers();
         //var passengersList = createUpdatePassengerDtoMapper.mapToPassengers(passengersDtoList);
+        //Passenger passenger = passengerRepository.save((passengersDtoList));
+
 
         Reservation reservation = new Reservation();
         //reservation.setStatus();
-        //reservation.setFlight_id();
+        //reservation.setFlight_id(flight_id);
         //reservation.setPassengers();
         reservationRepository.save(reservation);
         return reservationDtoMapper.mapToReservationDto(reservation);

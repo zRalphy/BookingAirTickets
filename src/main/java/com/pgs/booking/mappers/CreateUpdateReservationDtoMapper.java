@@ -31,7 +31,7 @@ public class CreateUpdateReservationDtoMapper {
         var createUpdatePassengersDTOList = createUpdatePassengerDtoMapper.mapToCreatePassengersDto(passengersList);
         return CreateUpdateReservationDto.builder()
                 .status(reservation.getStatus())
-                .flight_id(reservation.getFlight_id())
+                .flight(reservation.getFlight())
                 .passengers(createUpdatePassengersDTOList)
                 .build();
     }
@@ -41,7 +41,7 @@ public class CreateUpdateReservationDtoMapper {
         var passengersList = createUpdatePassengerDtoMapper.mapToPassengers(createUpdatePassengerDtoList);
         Reservation reservation = new Reservation();
         reservation.setStatus(createUpdateReservationDto.getStatus());
-        reservation.setFlight_id(createUpdateReservationDto.getFlight_id());
+        reservation.setFlight(createUpdateReservationDto.getFlight());
         reservation.setPassengers(passengersList);
         return reservation;
     }

@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -22,12 +23,11 @@ public class Reservation implements Serializable {
     private ReservationStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "flight_id", nullable = false)
-    private Long flight_id;
+    @JoinColumn(name = "flightId", nullable = false)
+    private Flight flight;
 
-    @OneToMany(mappedBy = "passenger", fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
-    private List<Passenger> passengers;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "passenger")
+    private List<Passenger> passengers = new ArrayList<>();
 
     public enum ReservationStatus {
         IN_PROGRESS, REALIZED, CANCELED
