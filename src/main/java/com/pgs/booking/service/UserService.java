@@ -1,8 +1,8 @@
 package com.pgs.booking.service;
 
 import com.pgs.booking.exception.ResourceNotFoundException;
-import com.pgs.booking.mappers.dto.CreateUserDtoMapper;
-import com.pgs.booking.mappers.dto.UserDtoMapper;
+import com.pgs.booking.mappers.CreateUserDtoMapper;
+import com.pgs.booking.mappers.UserDtoMapper;
 import com.pgs.booking.model.dto.CreateUserDto;
 import com.pgs.booking.model.dto.UserDto;
 import com.pgs.booking.model.entity.User;
@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.AuthenticationUserDetailsSe
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
@@ -29,6 +30,7 @@ public class UserService implements UserDetailsService, AuthenticationUserDetail
     private final UserRepository userRepository;
     private final UserDtoMapper userDtoMapper;
     private final CreateUserDtoMapper createUserDtoMapper;
+    private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final TokenStore tokenStore;
 
@@ -39,21 +41,16 @@ public class UserService implements UserDetailsService, AuthenticationUserDetail
 
     public UserDto addUser(CreateUserDto createUserDto) {
         var savedUser = userRepository.save(createUserDtoMapper.mapToUser(createUserDto));
+        passwordEncoder.encode(savedUser.getPassword());
         return userDtoMapper.mapToUserDto(savedUser);
     }
 
     public UserDto activateUser(Long id) {
-        var user = getUserById(id);
-        user.setEnabled(true);
-        var savedUser = userRepository.save(user);
-        return userDtoMapper.mapToUserDto(savedUser);
+        return getUserDto_UpdateEnabled(id, true);
     }
 
     public UserDto deactivateUser(Long id) {
-        var user = getUserById(id);
-        user.setEnabled(false);
-        var savedUser = userRepository.save(user);
-        return userDtoMapper.mapToUserDto(savedUser);
+        return getUserDto_UpdateEnabled(id, false);
     }
 
     public UserDto setUserRoles(Long id, List<String> roleStringList) {
@@ -87,5 +84,12 @@ public class UserService implements UserDetailsService, AuthenticationUserDetail
     private User getUserById(Long id) {
         return userRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("User with id " + id + "not found"));
+    }
+
+    private UserDto getUserDto_UpdateEnabled(Long id,boolean enabled){
+        var user = getUserById(id);
+        user.setEnabled(enabled);
+        var savedUser = userRepository.save(user);
+        return userDtoMapper.mapToUserDto(savedUser);
     }
 }
