@@ -23,7 +23,7 @@ public class UserController {
 
     @GetMapping({"/{id}"})
     public UserDto getSingleUser(@Valid @PathVariable Long id) {
-        return userService.getSinglePassengers(id);
+        return userService.getSingleUser(id);
     }
 
     @PostMapping("/{id}/activate")
