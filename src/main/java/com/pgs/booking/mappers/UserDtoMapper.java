@@ -1,4 +1,4 @@
-package com.pgs.booking.mappers.dto;
+package com.pgs.booking.mappers;
 
 
 import com.pgs.booking.model.entity.User;
@@ -6,25 +6,26 @@ import com.pgs.booking.model.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Component
 @RequiredArgsConstructor
 public class UserDtoMapper {
 
-    private final RoleDtoMapper roleDtoMapper;
+
     public UserDto mapToUserDto(User user) {
         var roleList = user.getRoles();
-        var roleDtoList = roleList.stream()
-                .map(roleDtoMapper::toDto)
+        var roleStringList = roleList.stream()
+                .map(Objects::toString)
                 .toList();
         return UserDto.builder()
                 .id(user.getId())
                 .username(user.getUsername())
-                .password(user.getPassword())
                 .accountNonExpired(user.isAccountNonExpired())
                 .accountNonLocked(user.isAccountNonLocked())
                 .credentialsNonExpired(user.isCredentialsNonExpired())
                 .enabled(user.isEnabled())
-                .roles(roleDtoList)
+                .roles(roleStringList)
                 .build();
     }
 }

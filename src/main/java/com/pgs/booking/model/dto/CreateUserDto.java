@@ -19,5 +19,5 @@ public class CreateUserDto {
     private boolean accountNonLocked;
     private boolean credentialsNonExpired;
     private boolean enabled;
-    private List<RoleDto> roles;
+    private List<String> roles;
 }
