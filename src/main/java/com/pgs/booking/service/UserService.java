@@ -3,9 +3,10 @@ package com.pgs.booking.service;
 import com.pgs.booking.exception.ResourceNotFoundException;
 import com.pgs.booking.mappers.dto.CreateUserDtoMapper;
 import com.pgs.booking.mappers.dto.UserDtoMapper;
-import com.pgs.booking.model.entity.User;
 import com.pgs.booking.model.dto.CreateUserDto;
 import com.pgs.booking.model.dto.UserDto;
+import com.pgs.booking.model.entity.User;
+import com.pgs.booking.repository.RoleRepository;
 import com.pgs.booking.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -18,6 +19,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,19 +30,42 @@ public class UserService implements UserDetailsService, AuthenticationUserDetail
     private final TokenStore tokenStore;
     private final CreateUserDtoMapper createUserDtoMapper;
     private final UserDtoMapper userDtoMapper;
+    private final RoleRepository roleRepository;
 
-    public UserDto addUser(CreateUserDto createUserDto){
+    public UserDto getSingleUser(Long id) {
+        var user = getUserById(id);
+        return userDtoMapper.mapToUserDto(user);
+    }
+
+    public UserDto addUser(CreateUserDto createUserDto) {
         var savedUser = userRepository.save(createUserDtoMapper.mapToUser(createUserDto));
         return userDtoMapper.mapToUserDto(savedUser);
     }
 
-    public UserDto activateOrDeactivateUser(Long id, boolean isEnabled) {
-        var user = userRepository.findById(id).orElseThrow(() ->
-                new ResourceNotFoundException("User with id " + id + "not found"));
-        user.setEnabled(isEnabled);
+    public UserDto activateUser(Long id) {
+        var user = getUserById(id);
+        user.setEnabled(true);
         var savedUser = userRepository.save(user);
         return userDtoMapper.mapToUserDto(savedUser);
     }
+
+    public UserDto deactivateUser(Long id) {
+        var user = getUserById(id);
+        user.setEnabled(false);
+        var savedUser = userRepository.save(user);
+        return userDtoMapper.mapToUserDto(savedUser);
+    }
+
+    public UserDto setUserRoles(Long id, List<String> roleStringList) {
+        var user = getUserById(id);
+        var roleList = roleStringList.stream()
+                .map(roleRepository::findByName)
+                .toList();
+        user.setRoles(roleList);
+        var savedUser = userRepository.save(user);
+        return userDtoMapper.mapToUserDto(savedUser);
+    }
+
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         return Optional.ofNullable(userRepository.findByUsername(username))
@@ -57,5 +82,10 @@ public class UserService implements UserDetailsService, AuthenticationUserDetail
                 .filter(Authentication::isAuthenticated)
                 .map(Authentication::getPrincipal)
                 .orElseThrow(() -> new UsernameNotFoundException(token.getName()));
+    }
+
+    private User getUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("User with id " + id + "not found"));
     }
 }
