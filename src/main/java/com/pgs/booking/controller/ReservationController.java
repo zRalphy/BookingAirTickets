@@ -13,6 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/reservations")
 public class ReservationController {
+
     private final ReservationService reservationService;
 
     @GetMapping("/flight{id}")
@@ -20,16 +21,25 @@ public class ReservationController {
         return reservationService.getReservationByFlight(id);
     }
 
-
     @Transient
     //NOT IMPLEMENTED YET
     @GetMapping("/user{id}")
-    public  List<ReservationDto> getReservationByUser(@PathVariable long id) {
+    public List<ReservationDto> getReservationByUser(@PathVariable long id) {
         return reservationService.getReservationByUser(id);
     }
 
     @PostMapping
     public ReservationDto addReservation(@Valid @RequestBody CreateUpdateReservationDto createUpdatePassengerDto) {
         return reservationService.addReservation(createUpdatePassengerDto);
+    }
+
+    @PutMapping("/{id}/realized")
+    public ReservationDto realizedReservation(@PathVariable Long id) {
+        return reservationService.realizedReservation(id);
+    }
+
+    @PutMapping("/{id}/canceled")
+    public ReservationDto canceledReservation(@PathVariable Long id) {
+        return reservationService.canceledReservation(id);
     }
 }

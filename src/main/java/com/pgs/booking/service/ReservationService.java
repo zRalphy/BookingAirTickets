@@ -42,6 +42,7 @@ public class ReservationService {
         List<Reservation> reservations = reservationRepository.findAllByFlightIdIn(ids);
         return reservationDtoMapper.mapToReservationsDto(reservations);
     }
+
     @Transient
     //NOT IMPLEMENTED YET
     public List<ReservationDto> getReservationByUser(long id) {
@@ -69,4 +70,25 @@ public class ReservationService {
         Reservation reservationToSave = reservationRepository.save(reservation);
         return reservationDtoMapper.mapToReservationDto(reservationToSave);
     }
+
+    public ReservationDto realizedReservation(long id){
+        return setReservationDtoStatus(id, Reservation.ReservationStatus.REALIZED);
+    }
+
+    public ReservationDto canceledReservation(long id){
+        return setReservationDtoStatus(id, Reservation.ReservationStatus.CANCELED);
+    }
+
+    private Reservation getReservationById(long id) {
+        return reservationRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Reservation with id " + id + "not found"));
+    }
+
+    private ReservationDto setReservationDtoStatus(long id, Reservation.ReservationStatus status) {
+        var reservation = getReservationById(id);
+        reservation.setStatus(status);
+        var reservationToSave = reservationRepository.save(reservation);
+        return reservationDtoMapper.mapToReservationDto(reservationToSave);
+    }
 }
+
