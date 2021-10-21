@@ -1,6 +1,6 @@
 package com.pgs.booking.mappers;
 
-import com.pgs.booking.model.Reservation;
+import com.pgs.booking.model.entity.Reservation;
 import com.pgs.booking.model.dto.ReservationDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

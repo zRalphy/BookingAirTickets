@@ -16,14 +16,14 @@ public class ReservationController {
 
     private final ReservationService reservationService;
 
-    @GetMapping("/flight{id}")
+    @GetMapping("/flights/{id}")
     public List<ReservationDto> getReservationByFlight(@PathVariable long id) {
         return reservationService.getReservationByFlight(id);
     }
 
     @Transient
     //NOT IMPLEMENTED YET
-    @GetMapping("/user{id}")
+    @GetMapping("/users/{id}")
     public List<ReservationDto> getReservationByUser(@PathVariable long id) {
         return reservationService.getReservationByUser(id);
     }

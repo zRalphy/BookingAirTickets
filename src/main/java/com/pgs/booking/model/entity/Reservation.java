@@ -1,7 +1,6 @@
-package com.pgs.booking.model;
+package com.pgs.booking.model.entity;
 
 import lombok.*;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
