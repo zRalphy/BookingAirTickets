@@ -1,6 +1,6 @@
 package com.pgs.booking.model.dto;
 
-import com.pgs.booking.model.Flight;
+import com.pgs.booking.model.entity.Flight;
 import lombok.Builder;
 import lombok.Value;
 

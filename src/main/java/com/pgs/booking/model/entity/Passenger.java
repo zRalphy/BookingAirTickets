@@ -1,4 +1,4 @@
-package com.pgs.booking.model;
+package com.pgs.booking.model.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

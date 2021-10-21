@@ -3,7 +3,7 @@ package com.pgs.booking.service;
 import com.pgs.booking.exception.ResourceNotFoundException;
 import com.pgs.booking.mappers.CreateUpdateFlightDtoMapper;
 import com.pgs.booking.mappers.FlightDtoMapper;
-import com.pgs.booking.model.Flight;
+import com.pgs.booking.model.entity.Flight;
 import com.pgs.booking.model.dto.CreateUpdateFlightDto;
 import com.pgs.booking.model.dto.FlightDto;
 import com.pgs.booking.repository.FlightRepository;

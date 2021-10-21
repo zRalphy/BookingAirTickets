@@ -1,6 +1,6 @@
 package com.pgs.booking.mappers;
 
-import com.pgs.booking.model.Passenger;
+import com.pgs.booking.model.entity.Passenger;
 import com.pgs.booking.model.dto.PassengerDto;
 import org.springframework.stereotype.Component;
 
