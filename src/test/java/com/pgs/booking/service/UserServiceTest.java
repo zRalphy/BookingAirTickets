@@ -1,11 +1,8 @@
 package com.pgs.booking.service;
 
 import com.pgs.booking.mappers.CreateUserDtoMapper;
-import com.pgs.booking.mappers.dto.RoleDtoMapper;
 import com.pgs.booking.mappers.UserDtoMapper;
-import com.pgs.booking.mappers.entity.RoleEntityMapper;
 import com.pgs.booking.model.dto.CreateUserDto;
-import com.pgs.booking.model.dto.RoleDto;
 import com.pgs.booking.model.entity.Role;
 import com.pgs.booking.model.entity.User;
 import com.pgs.booking.repository.RoleRepository;
@@ -21,6 +18,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
@@ -52,29 +51,29 @@ class UserServiceTest {
     private static final User USER_2 = User.builder()
             .id(3L)
             .username("user2")
+            .password("secret")
             .enabled(true)
             .roles(ROLE_LIST)
             .build();
     private static final CreateUserDto CREATE_USER_DTO = CreateUserDto.builder()
             .username("user")
-            .roles(List.of(ROLE_3, ROLE_4))
+            .password("secret")
+            .roles(List.of(ROLE_3))
             .build();
+    @InjectMocks
+    private UserService userService;
     @Mock
     private UserRepository userRepository;
     @Mock
     private RoleRepository roleRepository;
-    @InjectMocks
-    @Spy
-    private UserService userService;
-
     @Spy
     private TokenStore tokenStore = new InMemoryTokenStore();
+    @Spy
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    @Spy
     private CreateUserDtoMapper createUserDtoMapper = new CreateUserDtoMapper();
+    @Spy
     private UserDtoMapper userDtoMapper = new UserDtoMapper();
-
-    @BeforeEach
-    void setUp() {
-    }
 
     @Test
     void testGetSingleUser() {
@@ -97,9 +96,9 @@ class UserServiceTest {
         verify(userRepository).save(any(User.class));
         assertEquals(userDto.getId(), USER_1.getId());
         assertEquals(userDto.getUsername(), USER_1.getUsername());
-        assertEquals(userDto.getRoles().get(0).getId(), USER_1.getRoles().get(0).getId());
-        assertEquals(userDto.getRoles().get(0).getName(), USER_1.getRoles().get(0).getName());
+        assertEquals(userDto.getRoles().get(0), USER_1.getRoles().get(0).getName());
     }
+
     @Test
     void testActivateUser() {
         var optionalUser = Optional.of(USER_2);
@@ -135,8 +134,7 @@ class UserServiceTest {
         var userDto = userService.setUserRoles(2L, userRoleList);
         verify(roleRepository).findByName(any(String.class));
         verify(userRepository).save(any(User.class));
-        System.out.println(userDto.getRoles().get(0).getName() + USER_1.getRoles().get(0).getName());
-        assertEquals(userDto.getRoles().get(0).getName(), USER_1.getRoles().get(0).getName());
+        assertEquals(userDto.getRoles().get(0), USER_1.getRoles().get(0).getName());
     }
 
     @Test
