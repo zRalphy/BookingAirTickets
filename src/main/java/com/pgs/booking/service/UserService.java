@@ -51,11 +51,11 @@ public class UserService implements UserDetailsService, AuthenticationUserDetail
     }
 
     public UserDto activateUser(Long id) {
-        return getUserDto_UpdateEnabled(id, true);
+        return setUserEnabled(id, true);
     }
 
     public UserDto deactivateUser(Long id) {
-        return getUserDto_UpdateEnabled(id, false);
+        return setUserEnabled(id, false);
     }
 
     public UserDto setUserRoles(Long id, List<String> roleStringList) {
@@ -91,7 +91,7 @@ public class UserService implements UserDetailsService, AuthenticationUserDetail
                 new ResourceNotFoundException("User with id " + id + "not found"));
     }
 
-    private UserDto getUserDto_UpdateEnabled(Long id, boolean enabled) {
+    private UserDto setUserEnabled(Long id, boolean enabled) {
         var user = getUserById(id);
         user.setEnabled(enabled);
         var savedUser = userRepository.save(user);
