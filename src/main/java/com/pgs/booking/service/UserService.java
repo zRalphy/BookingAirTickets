@@ -30,8 +30,8 @@ public class UserService implements UserDetailsService, AuthenticationUserDetail
     private final UserRepository userRepository;
     private final UserDtoMapper userDtoMapper;
     private final CreateUserDtoMapper createUserDtoMapper;
-    private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
     private final TokenStore tokenStore;
 
     public UserDto getSingleUser(Long id) {
@@ -40,8 +40,13 @@ public class UserService implements UserDetailsService, AuthenticationUserDetail
     }
 
     public UserDto addUser(CreateUserDto createUserDto) {
-        var savedUser = userRepository.save(createUserDtoMapper.mapToUser(createUserDto));
-        passwordEncoder.encode(savedUser.getPassword());
+        var user = createUserDtoMapper.mapToUser(createUserDto);
+        var roleList = createUserDto.getRoles().stream()
+                .map(roleRepository::findByName)
+                .toList();
+        user.setPassword(passwordEncoder.encode(createUserDto.getPassword()));
+        user.setRoles(roleList);
+        var savedUser = userRepository.save(user);
         return userDtoMapper.mapToUserDto(savedUser);
     }
 
@@ -86,7 +91,7 @@ public class UserService implements UserDetailsService, AuthenticationUserDetail
                 new ResourceNotFoundException("User with id " + id + "not found"));
     }
 
-    private UserDto getUserDto_UpdateEnabled(Long id,boolean enabled){
+    private UserDto getUserDto_UpdateEnabled(Long id, boolean enabled) {
         var user = getUserById(id);
         user.setEnabled(enabled);
         var savedUser = userRepository.save(user);
