@@ -15,7 +15,7 @@ import java.util.List;
 @Table(name = "reservation")
 public class Reservation implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
     @Column(name = "status")

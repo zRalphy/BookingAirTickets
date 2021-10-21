@@ -11,6 +11,6 @@ import java.util.List;
 public class ReservationDto {
     Long id;
     Reservation.ReservationStatus status;
-    FlightDto flightDto;
+    Long flightId;
     List<PassengerDto> passengers;
 }

@@ -16,7 +16,7 @@ import java.util.List;
 public class Flight {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
     @Column(name = "type")

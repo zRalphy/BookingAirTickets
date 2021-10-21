@@ -4,8 +4,8 @@ import com.pgs.booking.model.dto.CreateUpdateReservationDto;
 import com.pgs.booking.model.dto.ReservationDto;
 import com.pgs.booking.service.ReservationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.annotation.Transient;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
 
@@ -15,23 +15,21 @@ import java.util.List;
 public class ReservationController {
     private final ReservationService reservationService;
 
-    @GetMapping
-    public List<ReservationDto> getReservations() {
-        return reservationService.getReservations();
+    @GetMapping("/flight{id}")
+    public List<ReservationDto> getReservationByFlight(@PathVariable long id) {
+        return reservationService.getReservationByFlight(id);
     }
 
-    @GetMapping("/{id}")
-    public ReservationDto getReservation(@PathVariable long id)  {
-        return reservationService.getReservation(id);
+
+    @Transient
+    //NOT IMPLEMENTED YET
+    @GetMapping("/user{id}")
+    public  List<ReservationDto> getReservationByUser(@PathVariable long id) {
+        return reservationService.getReservationByUser(id);
     }
 
     @PostMapping
-    public ReservationDto addReservation(@Valid @RequestBody CreateUpdateReservationDto createUpdateReservationDto) {
-        return reservationService.addReservation(createUpdateReservationDto);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteReservation(@PathVariable("id") long id) {
-        reservationService.deleteReservation(id);
+    public ReservationDto addReservation(@Valid @RequestBody CreateUpdateReservationDto createUpdatePassengerDto) {
+        return reservationService.addReservation(createUpdatePassengerDto);
     }
 }

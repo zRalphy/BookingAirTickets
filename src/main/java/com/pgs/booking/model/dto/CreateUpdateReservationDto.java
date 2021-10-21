@@ -1,6 +1,5 @@
 package com.pgs.booking.model.dto;
 
-import com.pgs.booking.model.Reservation;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
@@ -14,9 +13,7 @@ import java.util.List;
 @Setter
 public class CreateUpdateReservationDto {
     @NotNull
-    private Reservation.ReservationStatus status;
-    @NotNull
-    private CreateUpdateFlightDto createUpdateFlightDto;
+    private Long flightId;
     @NotNull
     private List<@NotNull CreateUpdatePassengerDto> passengers;
 }
