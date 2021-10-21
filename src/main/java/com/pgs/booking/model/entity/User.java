@@ -1,4 +1,4 @@
-package com.pgs.booking.model;
+package com.pgs.booking.model.entity;
 
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,56 +1,64 @@
 package com.pgs.booking.configuration;
 
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.SneakyThrows;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import javax.sql.DataSource;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationProcessingFilter;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalAuthentication
-@RequiredArgsConstructor
+@EnableResourceServer
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private final DataSource dataSource;
+    public WebSecurityConfiguration() {
+        super(true);
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
+                .antMatcher("/**")
+                .addFilterBefore(oAuth2AuthenticationProcessingFilter(), FilterSecurityInterceptor.class)
                 .authorizeRequests()
-                .anyRequest().authenticated()
-                .and()
-                .httpBasic();
+                .anyRequest().authenticated();
     }
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication()
-                .usersByUsernameQuery("""
-                        SELECT username, password, enabled
-                            FROM user
-                            WHERE username=?
-                                    """)
-                .authoritiesByUsernameQuery("""
-                        SELECT user.username, role.name
-                        FROM 
-                            user
-                                LEFT OUTER JOIN 
-                            user_roles ON user.id = user_roles.user_id
-                                LEFT OUTER JOIN 
-                            role ON user_roles.roles_id = role.id
-                        WHERE username = ?
-                        """)
-                .passwordEncoder(new BCryptPasswordEncoder())
-                .dataSource(dataSource)
-                .getUserDetailsService();
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
+
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    @Bean
+    @SneakyThrows
+    public OAuth2AuthenticationProcessingFilter oAuth2AuthenticationProcessingFilter() {
+        OAuth2AuthenticationProcessingFilter filter = new OAuth2AuthenticationProcessingFilter();
+        filter.setAuthenticationManager(authenticationManagerBean());
+        filter.setStateless(false);
+        return filter;
+    }
+
+    @Bean
+    public TokenStore tokenStore() {
+        return new InMemoryTokenStore();
+    }
+
 }

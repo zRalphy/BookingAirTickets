@@ -1,7 +1,6 @@
-package com.pgs.booking.controller;
+package com.pgs.booking.mappers;
 
-import com.pgs.booking.mappers.PassengerDtoMapper;
-import com.pgs.booking.model.Passenger;
+import com.pgs.booking.model.entity.Passenger;
 import com.pgs.booking.model.dto.PassengerDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
