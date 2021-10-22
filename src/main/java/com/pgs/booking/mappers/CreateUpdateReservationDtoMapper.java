@@ -1,6 +1,6 @@
 package com.pgs.booking.mappers;
 
-import com.pgs.booking.model.Reservation;
+import com.pgs.booking.model.entity.Reservation;
 import com.pgs.booking.model.dto.CreateUpdateReservationDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 public class CreateUpdateReservationDtoMapper {
 
     private final CreateUpdatePassengerDtoMapper createUpdatePassengerDtoMapper;
-    private final CreateUpdateFlightDtoMapper createUpdateFlightDtoMapper;
 
     public List<CreateUpdateReservationDto> mapToCreateReservationsDto(List<Reservation> reservations) {
         return reservations.stream()
