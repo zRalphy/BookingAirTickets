@@ -13,4 +13,5 @@ public class ReservationDto {
     Reservation.ReservationStatus status;
     Long flightId;
     List<PassengerDto> passengers;
+    Long userId;
 }

@@ -21,14 +21,20 @@ public class Reservation implements Serializable {
     @Enumerated(EnumType.STRING)
     private ReservationStatus status;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "flightId", nullable = false)
     private Flight flight;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "userId", nullable = false)
+    private User user;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "reservationId", nullable = false)
     private List<Passenger> passengers;
 
     public enum ReservationStatus {
         IN_PROGRESS, REALIZED, CANCELED
     }
+
 }

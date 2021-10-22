@@ -2,10 +2,12 @@ package com.pgs.booking.controller;
 
 import com.pgs.booking.model.dto.CreateUpdateReservationDto;
 import com.pgs.booking.model.dto.ReservationDto;
+import com.pgs.booking.model.entity.User;
 import com.pgs.booking.service.ReservationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.annotation.Transient;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.util.List;
 
@@ -21,16 +23,18 @@ public class ReservationController {
         return reservationService.getReservationByFlight(id);
     }
 
-    @Transient
-    //NOT IMPLEMENTED YET
     @GetMapping("/users/{id}")
     public List<ReservationDto> getReservationByUser(@PathVariable long id) {
         return reservationService.getReservationByUser(id);
     }
 
     @PostMapping
-    public ReservationDto addReservation(@Valid @RequestBody CreateUpdateReservationDto createUpdatePassengerDto) {
-        return reservationService.addReservation(createUpdatePassengerDto);
+    public ReservationDto addReservation(@Valid @RequestBody CreateUpdateReservationDto createUpdatePassengerDto,
+                                         PreAuthenticatedAuthenticationToken authenticationToken) {
+        if (authenticationToken.getPrincipal() instanceof User user) {
+            return reservationService.addReservation(createUpdatePassengerDto, user);
+        }
+        throw new IllegalStateException("The token does not contain user id");
     }
 
     @PutMapping("/{id}/realized")

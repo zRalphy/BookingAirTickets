@@ -12,10 +12,10 @@ import com.pgs.booking.repository.FlightRepository;
 import com.pgs.booking.repository.ReservationRepository;
 import com.pgs.booking.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,51 +32,53 @@ public class ReservationService {
 
     public List<ReservationDto> getReservationByFlight(long id) {
         Optional<Flight> flight = flightRepository.findById(id);
-        if(flight.isEmpty()){
+        if (flight.isEmpty()) {
             throw new ResourceNotFoundException("Flight with this id not exist in database.");
         }
         List<Reservation> allReservation = reservationRepository.findAll(Sort.by(Sort.Order.asc("id")));
         List<Long> ids = allReservation.stream()
                 .map(Reservation::getId)
                 .collect(Collectors.toList());
-        List<Reservation> reservations = reservationRepository.findAllByFlightIdIn(ids);
-        return reservationDtoMapper.mapToReservationsDto(reservations);
+        List<Reservation> allReservationToSave = reservationRepository.findAllByFlightIdIn(ids);
+        return reservationDtoMapper.mapToReservationsDto(allReservationToSave);
     }
 
-    @Transient
-    //NOT IMPLEMENTED YET
     public List<ReservationDto> getReservationByUser(long id) {
         Optional<User> user = userRepository.findById(id);
-        if(user.isEmpty()){
+        if (user.isEmpty()) {
             throw new ResourceNotFoundException("User with this id not exist in database.");
         }
         List<Reservation> allReservation = reservationRepository.findAll(Sort.by(Sort.Order.asc("id")));
         List<Long> ids = allReservation.stream()
                 .map(Reservation::getId)
                 .collect(Collectors.toList());
-        List<Reservation> reservations = reservationRepository.findAllByFlightIdIn(ids);
+        List<Reservation> reservations = reservationRepository.findAllByUserIdIn(ids);
         return reservationDtoMapper.mapToReservationsDto(reservations);
     }
 
-    public ReservationDto addReservation(CreateUpdateReservationDto createUpdateReservationDto) {
+    public ReservationDto addReservation(CreateUpdateReservationDto createUpdateReservationDto, User user) {
+        Optional<User> userToFind = userRepository.findById(user.getId());
         Optional<Flight> flight = flightRepository.findById(createUpdateReservationDto.getFlightId());
-        if(flight.isEmpty()){
-            throw new ResourceNotFoundException("Flight with this id not exist in database.");
+        if (flight.isEmpty() || userToFind.isEmpty()) {
+            throw new ResourceNotFoundException("Flight or user with this id not exist in database.");
         }
         Reservation reservation = new Reservation();
         reservation.setStatus(Reservation.ReservationStatus.IN_PROGRESS);
         reservation.setFlight(flight.get());
+        reservation.setId(userToFind.get().getId());
         reservation.setPassengers(createUpdatePassengerDtoMapper.mapToPassengers(createUpdateReservationDto.getPassengers()));
         Reservation reservationToSave = reservationRepository.save(reservation);
         return reservationDtoMapper.mapToReservationDto(reservationToSave);
     }
 
-    public ReservationDto realizedReservation(long id){
-        return setReservationDtoStatus(id, Reservation.ReservationStatus.REALIZED);
+    @Transactional
+    public ReservationDto realizedReservation(long id) {
+        return setReservationStatus(id, Reservation.ReservationStatus.REALIZED);
     }
 
-    public ReservationDto canceledReservation(long id){
-        return setReservationDtoStatus(id, Reservation.ReservationStatus.CANCELED);
+    @Transactional
+    public ReservationDto canceledReservation(long id) {
+        return setReservationStatus(id, Reservation.ReservationStatus.CANCELED);
     }
 
     private Reservation getReservationById(long id) {
@@ -84,7 +86,7 @@ public class ReservationService {
                 new ResourceNotFoundException("Reservation with id " + id + "not found"));
     }
 
-    private ReservationDto setReservationDtoStatus(long id, Reservation.ReservationStatus status) {
+    private ReservationDto setReservationStatus(long id, Reservation.ReservationStatus status) {
         var reservation = getReservationById(id);
         reservation.setStatus(status);
         var reservationToSave = reservationRepository.save(reservation);

@@ -1,7 +1,7 @@
 package com.pgs.booking.mappers;
 
-import com.pgs.booking.model.entity.Reservation;
 import com.pgs.booking.model.dto.ReservationDto;
+import com.pgs.booking.model.entity.Reservation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import java.util.List;
@@ -24,11 +24,12 @@ public class ReservationDtoMapper {
         var passengersList = reservation.getPassengers();
         var passengersDTOList = passengerDtoMapper.mapToPassengersDto(passengersList);
         var flightDto = flightDtoMapper.mapToFlightDto(reservation.getFlight());
-
+        var userId = reservation.getUser().getId();
         return ReservationDto.builder()
                 .id(reservation.getId())
                 .status(reservation.getStatus())
                 .flightId(flightDto.getId())
+                .userId(userId)
                 .passengers(passengersDTOList)
                 .build();
     }
