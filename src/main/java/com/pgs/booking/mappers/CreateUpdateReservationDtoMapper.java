@@ -1,7 +1,7 @@
 package com.pgs.booking.mappers;
 
-import com.pgs.booking.model.entity.Reservation;
 import com.pgs.booking.model.dto.CreateUpdateReservationDto;
+import com.pgs.booking.model.entity.Reservation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import java.util.List;

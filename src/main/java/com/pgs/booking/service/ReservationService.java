@@ -12,13 +12,10 @@ import com.pgs.booking.repository.FlightRepository;
 import com.pgs.booking.repository.ReservationRepository;
 import com.pgs.booking.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,29 +28,13 @@ public class ReservationService {
     private final CreateUpdatePassengerDtoMapper createUpdatePassengerDtoMapper;
 
     public List<ReservationDto> getReservationByFlight(long id) {
-        Optional<Flight> flight = flightRepository.findById(id);
-        if (flight.isEmpty()) {
-            throw new ResourceNotFoundException("Flight with this id not exist in database.");
-        }
-        List<Reservation> allReservation = reservationRepository.findAll(Sort.by(Sort.Order.asc("id")));
-        List<Long> ids = allReservation.stream()
-                .map(Reservation::getId)
-                .collect(Collectors.toList());
-        List<Reservation> allReservationToSave = reservationRepository.findAllByFlightIdIn(ids);
-        return reservationDtoMapper.mapToReservationsDto(allReservationToSave);
+        List<Reservation> reservationByFlight = reservationRepository.findAllByFlightId(id);
+        return reservationDtoMapper.mapToReservationsDto(reservationByFlight);
     }
 
     public List<ReservationDto> getReservationByUser(long id) {
-        Optional<User> user = userRepository.findById(id);
-        if (user.isEmpty()) {
-            throw new ResourceNotFoundException("User with this id not exist in database.");
-        }
-        List<Reservation> allReservation = reservationRepository.findAll(Sort.by(Sort.Order.asc("id")));
-        List<Long> ids = allReservation.stream()
-                .map(Reservation::getId)
-                .collect(Collectors.toList());
-        List<Reservation> reservations = reservationRepository.findAllByUserIdIn(ids);
-        return reservationDtoMapper.mapToReservationsDto(reservations);
+        List<Reservation> reservationsByUser = reservationRepository.findAllByUserId(id);
+        return reservationDtoMapper.mapToReservationsDto(reservationsByUser);
     }
 
     public ReservationDto addReservation(CreateUpdateReservationDto createUpdateReservationDto, User user) {
@@ -65,7 +46,7 @@ public class ReservationService {
         Reservation reservation = new Reservation();
         reservation.setStatus(Reservation.ReservationStatus.IN_PROGRESS);
         reservation.setFlight(flight.get());
-        reservation.setId(userToFind.get().getId());
+        reservation.setUser(userToFind.get());
         reservation.setPassengers(createUpdatePassengerDtoMapper.mapToPassengers(createUpdateReservationDto.getPassengers()));
         Reservation reservationToSave = reservationRepository.save(reservation);
         return reservationDtoMapper.mapToReservationDto(reservationToSave);
