@@ -67,7 +67,7 @@ class ReservationServiceTest {
             .roles(ROLE_LIST)
             .build();
 
-    private static Passenger PASSENGER = Passenger.builder()
+    private static final Passenger PASSENGER = Passenger.builder()
             .id(1L)
             .firstName("Tommy")
             .lastName("Hilfiger")
@@ -76,7 +76,7 @@ class ReservationServiceTest {
             .telephone("235689123")
             .build();
 
-    private static PassengerDto PASSENGER_DTO = PassengerDto.builder()
+    private static final PassengerDto PASSENGER_DTO = PassengerDto.builder()
             .id(1L)
             .firstName("Johny")
             .lastName("Deep")
@@ -85,7 +85,7 @@ class ReservationServiceTest {
             .telephone("234666788")
             .build();
 
-    private static CreateUpdatePassengerDto CREATE_UPDATE_PASSENGER_DTO = CreateUpdatePassengerDto.builder()
+    private static final CreateUpdatePassengerDto CREATE_UPDATE_PASSENGER_DTO = CreateUpdatePassengerDto.builder()
             .firstName("Dwayne")
             .lastName("Johnson")
             .email("JohnsonDwayne@gmail.com")
@@ -93,14 +93,14 @@ class ReservationServiceTest {
             .telephone("123456789")
             .build();
 
-    private static Flight FLIGHT = Flight.builder()
+    private static final Flight FLIGHT = Flight.builder()
             .id(1L)
             .type(Flight.TypeOfFlight.ECONOMY)
             .departureDate(LocalDateTime.of(2021, Month.DECEMBER, 9, 18, 30))
             .arrivalDate(LocalDateTime.of(2021, Month.DECEMBER, 9, 23, 30))
             .build();
 
-    private final Reservation RESERVATION = Reservation.builder()
+    private static final Reservation RESERVATION = Reservation.builder()
             .id(1L)
             .flight(FLIGHT)
             .user(USER_1)
@@ -108,7 +108,7 @@ class ReservationServiceTest {
             .status(Reservation.ReservationStatus.IN_PROGRESS)
             .build();
 
-    private static ReservationDto RESERVATION_DTO = ReservationDto.builder()
+    private static final ReservationDto RESERVATION_DTO = ReservationDto.builder()
             .id(1L)
             .flightId(1L)
             .userId(1L)
@@ -116,7 +116,7 @@ class ReservationServiceTest {
             .status(Reservation.ReservationStatus.IN_PROGRESS)
             .build();
 
-    private static CreateUpdateReservationDto CREATE_UPDATE_RESERVATION_DTO = CreateUpdateReservationDto.builder()
+    private static final CreateUpdateReservationDto CREATE_UPDATE_RESERVATION_DTO = CreateUpdateReservationDto.builder()
             .flightId(1L)
             .passengers(List.of(CREATE_UPDATE_PASSENGER_DTO))
             .build();
@@ -169,7 +169,7 @@ class ReservationServiceTest {
         var reservation = testReservationService.addReservation(CREATE_UPDATE_RESERVATION_DTO, USER_1);
         //then
         Assertions.assertEquals(reservation.getId(), RESERVATION.getId());
-        //Assertions.assertEquals(reservation.getFlightId(), RESERVATION.getFlight().getId().longValue());
+        Assertions.assertEquals(reservation.getFlightId(), RESERVATION.getFlight().getId());
         Assertions.assertEquals(reservation.getUserId(), USER_1.getId());
         Assertions.assertEquals(reservation.getPassengers().get(0).getFirstName(), RESERVATION.getPassengers().get(0).getFirstName());
         Assertions.assertEquals(reservation.getPassengers().get(0).getLastName(), RESERVATION.getPassengers().get(0).getLastName());
