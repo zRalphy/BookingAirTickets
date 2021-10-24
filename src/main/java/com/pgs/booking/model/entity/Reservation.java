@@ -21,11 +21,11 @@ public class Reservation implements Serializable {
     @Enumerated(EnumType.STRING)
     private ReservationStatus status;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.DETACH)
     @JoinColumn(name = "flightId", nullable = false)
     private Flight flight;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.DETACH)
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
@@ -36,5 +36,4 @@ public class Reservation implements Serializable {
     public enum ReservationStatus {
         IN_PROGRESS, REALIZED, CANCELED
     }
-
 }
