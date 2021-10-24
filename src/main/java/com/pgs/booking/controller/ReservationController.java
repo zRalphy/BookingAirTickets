@@ -37,6 +37,11 @@ public class ReservationController {
         throw new IllegalStateException("The token does not contain user id");
     }
 
+    @DeleteMapping(path = "/{id}")
+    public void deleteReservation(@PathVariable long id) {
+        reservationService.deleteReservation(id);
+    }
+
     @PutMapping("/{id}/realized")
     public ReservationDto realizedReservation(@PathVariable Long id) {
         return reservationService.realizedReservation(id);

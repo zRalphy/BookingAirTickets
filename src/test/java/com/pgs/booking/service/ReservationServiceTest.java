@@ -178,6 +178,30 @@ class ReservationServiceTest {
     }
 
     @Test
+    void testDeleteReservationIfIdExist() {
+        //given
+        long id = 1L;
+        given(reservationRepository.existsById(id)).willReturn(Boolean.TRUE);
+        Mockito.doNothing().when(reservationRepository).deleteById(id);
+        //when
+        testReservationService.deleteReservation(id);
+        //then
+        Mockito.verify(reservationRepository).deleteById(id);
+    }
+
+    @Test
+    void testDeleteReservationIfIdNotExist() {
+        //given
+        long id = 1L;
+        given(reservationRepository.existsById(id)).willReturn(Boolean.FALSE);
+        //when
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> testReservationService
+                .deleteReservation(id));
+        //then
+        Mockito.verify(reservationRepository, times(0)).deleteById(id);
+    }
+
+    @Test
     void testRealizedReservationIfIdExist() {
         //given
         long id = 1L;

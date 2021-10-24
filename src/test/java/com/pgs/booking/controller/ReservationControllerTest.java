@@ -19,13 +19,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
 import java.util.Collections;
 import java.util.List;
+
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -159,6 +160,16 @@ class ReservationControllerTest {
                 .andExpect(jsonPath("$[0].passengers.[0].telephone").value(RESERVATION_DTO.getPassengers().get(0).getTelephone()))
                 .andExpect(jsonPath("$[0].status").value(RESERVATION_DTO.getStatus().toString()));
         verify(reservationService).addReservation(CREATE_UPDATE_RESERVATION_DTO, USER_1);
+    }
+
+    @SneakyThrows
+    @Test
+    void testDeleteReservation() {
+        long id = 1L;
+        doNothing().when(reservationService).deleteReservation(id);
+        mockMvc.perform(delete("/api/reservations/1"))
+                .andExpect(status().isOk());
+        verify(reservationService).deleteReservation(id);
     }
 
     @SneakyThrows

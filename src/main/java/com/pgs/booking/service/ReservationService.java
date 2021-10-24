@@ -13,6 +13,7 @@ import com.pgs.booking.repository.ReservationRepository;
 import com.pgs.booking.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -50,6 +51,13 @@ public class ReservationService {
         reservation.setPassengers(createUpdatePassengerDtoMapper.mapToPassengers(createUpdateReservationDto.getPassengers()));
         Reservation reservationToSave = reservationRepository.save(reservation);
         return reservationDtoMapper.mapToReservationDto(reservationToSave);
+    }
+
+    public void deleteReservation(long id) {
+        if (!reservationRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Reservation with id " + id + " does not exists.");
+        }
+        reservationRepository.deleteById(id);
     }
 
     @Transactional
