@@ -56,6 +56,7 @@ class ReservationServiceTest {
     }
 
     private static final Role ROLE_1 = Role.builder()
+            .id(1L)
             .name("USER")
             .build();
 
@@ -63,7 +64,12 @@ class ReservationServiceTest {
 
     private static final User USER_1 = User.builder()
             .id(1L)
-            .username("user1")
+            .username("user")
+            .password("user")
+            .accountNonExpired(true)
+            .accountNonLocked(true)
+            .credentialsNonExpired(true)
+            .enabled(true)
             .roles(ROLE_LIST)
             .build();
 
@@ -130,7 +136,6 @@ class ReservationServiceTest {
         //when
         var reservationsByFlight = testReservationService.getReservationByFlight(id);
         var reservationByFlight = reservationsByFlight.get(0);
-
         //then
         Assertions.assertEquals(RESERVATION.getId(), reservationByFlight.getId().longValue());
         Assertions.assertEquals(RESERVATION.getFlight().getId(), reservationByFlight.getFlightId());
@@ -150,7 +155,6 @@ class ReservationServiceTest {
         //when
         var reservationsByUser = testReservationService.getReservationByUser(id);
         var reservationByUser = reservationsByUser.get(0);
-
         //then
         Assertions.assertEquals(RESERVATION.getId(), reservationByUser.getId().longValue());
         Assertions.assertEquals(RESERVATION.getFlight().getId(), reservationByUser.getFlightId());
@@ -165,12 +169,13 @@ class ReservationServiceTest {
     void addReservation() {
         //given
         given(reservationRepository.save(any(Reservation.class))).willReturn(RESERVATION);
+        given(flightRepository.findById(1L)).willReturn(Optional.ofNullable(FLIGHT));
         //when
         var reservation = testReservationService.addReservation(CREATE_UPDATE_RESERVATION_DTO, USER_1);
         //then
         Assertions.assertEquals(reservation.getId(), RESERVATION.getId());
         Assertions.assertEquals(reservation.getFlightId(), RESERVATION.getFlight().getId());
-        Assertions.assertEquals(reservation.getUserId(), USER_1.getId());
+        Assertions.assertEquals(reservation.getUserId(), RESERVATION.getUser().getId());
         Assertions.assertEquals(reservation.getPassengers().get(0).getFirstName(), RESERVATION.getPassengers().get(0).getFirstName());
         Assertions.assertEquals(reservation.getPassengers().get(0).getLastName(), RESERVATION.getPassengers().get(0).getLastName());
         Assertions.assertEquals(reservation.getStatus(), RESERVATION.getStatus());
@@ -249,7 +254,6 @@ class ReservationServiceTest {
     void testCanceledReservationIfIdNotExist() {
         //given
         long id = 1L;
-
         given(reservationRepository.findById(id))
                 .willReturn(Optional.empty());
         //when

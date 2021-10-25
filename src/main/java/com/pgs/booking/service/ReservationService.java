@@ -39,15 +39,14 @@ public class ReservationService {
     }
 
     public ReservationDto addReservation(CreateUpdateReservationDto createUpdateReservationDto, User user) {
-        Optional<User> userToFind = userRepository.findById(user.getId());
         Optional<Flight> flight = flightRepository.findById(createUpdateReservationDto.getFlightId());
-        if (flight.isEmpty() || userToFind.isEmpty()) {
-            throw new ResourceNotFoundException("Flight or user with this id not exist in database.");
+        if (flight.isEmpty()) {
+            throw new ResourceNotFoundException("Flight with this id not exist in database.");
         }
         Reservation reservation = new Reservation();
         reservation.setStatus(Reservation.ReservationStatus.IN_PROGRESS);
         reservation.setFlight(flight.get());
-        reservation.setUser(userToFind.get());
+        reservation.setUser(user);
         reservation.setPassengers(createUpdatePassengerDtoMapper.mapToPassengers(createUpdateReservationDto.getPassengers()));
         Reservation reservationToSave = reservationRepository.save(reservation);
         return reservationDtoMapper.mapToReservationDto(reservationToSave);

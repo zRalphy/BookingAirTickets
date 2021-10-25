@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -88,7 +89,7 @@ class ReservationControllerTest {
     private static ReservationDto RESERVATION_DTO = ReservationDto.builder()
             .id(1L)
             .flightId(1L)
-            .userId(1L)
+            .userId(2L)
             .passengers(List.of(PASSENGER_DTO))
             .status(Reservation.ReservationStatus.IN_PROGRESS)
             .build();
@@ -143,22 +144,25 @@ class ReservationControllerTest {
     @SneakyThrows
     @Test
     void testAddReservation() {
-        when(reservationService.addReservation(CREATE_UPDATE_RESERVATION_DTO, USER_1)).thenReturn(RESERVATION_DTO);
+        when(reservationService.addReservation(eq(CREATE_UPDATE_RESERVATION_DTO), eq(USER_1))).thenReturn(RESERVATION_DTO);
+        var authenticationToken = mock(PreAuthenticatedAuthenticationToken.class);
+        when(authenticationToken.getPrincipal()).thenReturn(USER_1);
         mockMvc.perform(post("/api/reservations")
                         .content(objectMapper.writeValueAsString(CREATE_UPDATE_RESERVATION_DTO))
+                        .principal(authenticationToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id", equalTo(RESERVATION_DTO.getId().intValue())))
-                .andExpect(jsonPath("$[0].userId", equalTo(USER_1.getId().intValue())))
-                .andExpect(jsonPath("$[0].passengers.*", hasSize(RESERVATION_DTO.getPassengers().size())))
-                .andExpect(jsonPath("$[0].passengers.[0].id").value(RESERVATION_DTO.getPassengers().get(0).getId()))
-                .andExpect(jsonPath("$[0].passengers.[0].firstName").value(RESERVATION_DTO.getPassengers().get(0).getFirstName()))
-                .andExpect(jsonPath("$[0].passengers.[0].lastName").value(RESERVATION_DTO.getPassengers().get(0).getLastName()))
-                .andExpect(jsonPath("$[0].passengers.[0].email").value(RESERVATION_DTO.getPassengers().get(0).getEmail()))
-                .andExpect(jsonPath("$[0].passengers.[0].country").value(RESERVATION_DTO.getPassengers().get(0).getCountry()))
-                .andExpect(jsonPath("$[0].passengers.[0].telephone").value(RESERVATION_DTO.getPassengers().get(0).getTelephone()))
-                .andExpect(jsonPath("$[0].status").value(RESERVATION_DTO.getStatus().toString()));
+                .andExpect(jsonPath("$.id", equalTo(RESERVATION_DTO.getId().intValue())))
+                .andExpect(jsonPath("$.userId", equalTo(USER_1.getId().intValue())))
+                .andExpect(jsonPath("$.passengers.*", hasSize(RESERVATION_DTO.getPassengers().size())))
+                .andExpect(jsonPath("$.passengers.[0].id").value(RESERVATION_DTO.getPassengers().get(0).getId()))
+                .andExpect(jsonPath("$.passengers.[0].firstName").value(RESERVATION_DTO.getPassengers().get(0).getFirstName()))
+                .andExpect(jsonPath("$.passengers.[0].lastName").value(RESERVATION_DTO.getPassengers().get(0).getLastName()))
+                .andExpect(jsonPath("$.passengers.[0].email").value(RESERVATION_DTO.getPassengers().get(0).getEmail()))
+                .andExpect(jsonPath("$.passengers.[0].country").value(RESERVATION_DTO.getPassengers().get(0).getCountry()))
+                .andExpect(jsonPath("$.passengers.[0].telephone").value(RESERVATION_DTO.getPassengers().get(0).getTelephone()))
+                .andExpect(jsonPath("$.status").value(RESERVATION_DTO.getStatus().toString()));
         verify(reservationService).addReservation(CREATE_UPDATE_RESERVATION_DTO, USER_1);
     }
 
