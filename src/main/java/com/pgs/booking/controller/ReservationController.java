@@ -34,7 +34,7 @@ public class ReservationController {
         if (authenticationToken.getPrincipal() instanceof User user) {
             return reservationService.addReservation(createUpdatePassengerDto, user);
         }
-        throw new IllegalStateException("The token does not contain user id");
+        throw new IllegalStateException("The token does not contain authorized user data.");
     }
 
     @DeleteMapping("/{id}")

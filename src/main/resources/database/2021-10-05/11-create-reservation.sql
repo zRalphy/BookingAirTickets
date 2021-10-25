@@ -4,7 +4,7 @@
 CREATE TABLE reservation(
 	id BIGINT AUTO_INCREMENT PRIMARY KEY,
     status ENUM ('IN_PROGRESS', 'REALIZED', 'CANCELED'),
-    flightId BIGINT NOT NULL,
+    flightId BIGINT,
     userId BIGINT NOT NULL
 );
 

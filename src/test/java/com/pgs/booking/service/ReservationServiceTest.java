@@ -12,12 +12,10 @@ import com.pgs.booking.model.dto.ReservationDto;
 import com.pgs.booking.model.entity.*;
 import com.pgs.booking.repository.FlightRepository;
 import com.pgs.booking.repository.ReservationRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
@@ -26,10 +24,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ReservationServiceTest {
@@ -133,12 +132,12 @@ class ReservationServiceTest {
         var reservationsByFlight = testReservationService.getReservationByFlight(id);
         var reservationByFlight = reservationsByFlight.get(0);
         //then
-        Assertions.assertEquals(RESERVATION.getId(), reservationByFlight.getId().longValue());
-        Assertions.assertEquals(RESERVATION.getFlight().getId(), reservationByFlight.getFlightId());
-        Assertions.assertEquals(RESERVATION.getPassengers().get(0).getId(), reservationByFlight.getPassengers().get(0).getId().longValue());
-        Assertions.assertEquals(RESERVATION.getPassengers().get(0).getFirstName(), reservationByFlight.getPassengers().get(0).getFirstName());
-        Assertions.assertEquals(RESERVATION.getPassengers().get(0).getLastName(), reservationByFlight.getPassengers().get(0).getLastName());
-        Assertions.assertEquals(RESERVATION.getStatus().toString(), reservationByFlight.getStatus().toString());
+        assertEquals(RESERVATION.getId(), reservationByFlight.getId().longValue());
+        assertEquals(RESERVATION.getFlight().getId(), reservationByFlight.getFlightId());
+        assertEquals(RESERVATION.getPassengers().get(0).getId(), reservationByFlight.getPassengers().get(0).getId().longValue());
+        assertEquals(RESERVATION.getPassengers().get(0).getFirstName(), reservationByFlight.getPassengers().get(0).getFirstName());
+        assertEquals(RESERVATION.getPassengers().get(0).getLastName(), reservationByFlight.getPassengers().get(0).getLastName());
+        assertEquals(RESERVATION.getStatus().toString(), reservationByFlight.getStatus().toString());
         verify(reservationRepository).findAllByFlightId(id);
     }
 
@@ -152,12 +151,12 @@ class ReservationServiceTest {
         var reservationsByUser = testReservationService.getReservationByUser(id);
         var reservationByUser = reservationsByUser.get(0);
         //then
-        Assertions.assertEquals(RESERVATION.getId(), reservationByUser.getId().longValue());
-        Assertions.assertEquals(RESERVATION.getFlight().getId(), reservationByUser.getFlightId());
-        Assertions.assertEquals(RESERVATION.getPassengers().get(0).getId(), reservationByUser.getPassengers().get(0).getId().longValue());
-        Assertions.assertEquals(RESERVATION.getPassengers().get(0).getFirstName(), reservationByUser.getPassengers().get(0).getFirstName());
-        Assertions.assertEquals(RESERVATION.getPassengers().get(0).getLastName(), reservationByUser.getPassengers().get(0).getLastName());
-        Assertions.assertEquals(RESERVATION.getStatus().toString(), reservationByUser.getStatus().toString());
+        assertEquals(RESERVATION.getId(), reservationByUser.getId().longValue());
+        assertEquals(RESERVATION.getFlight().getId(), reservationByUser.getFlightId());
+        assertEquals(RESERVATION.getPassengers().get(0).getId(), reservationByUser.getPassengers().get(0).getId().longValue());
+        assertEquals(RESERVATION.getPassengers().get(0).getFirstName(), reservationByUser.getPassengers().get(0).getFirstName());
+        assertEquals(RESERVATION.getPassengers().get(0).getLastName(), reservationByUser.getPassengers().get(0).getLastName());
+        assertEquals(RESERVATION.getStatus().toString(), reservationByUser.getStatus().toString());
         verify(reservationRepository).findAllByUserId(id);
     }
 
@@ -169,12 +168,12 @@ class ReservationServiceTest {
         //when
         var reservation = testReservationService.addReservation(CREATE_UPDATE_RESERVATION_DTO, USER_1);
         //then
-        Assertions.assertEquals(reservation.getId(), RESERVATION.getId());
-        Assertions.assertEquals(reservation.getFlightId(), RESERVATION.getFlight().getId());
-        Assertions.assertEquals(reservation.getUserId(), RESERVATION.getUser().getId());
-        Assertions.assertEquals(reservation.getPassengers().get(0).getFirstName(), RESERVATION.getPassengers().get(0).getFirstName());
-        Assertions.assertEquals(reservation.getPassengers().get(0).getLastName(), RESERVATION.getPassengers().get(0).getLastName());
-        Assertions.assertEquals(reservation.getStatus(), RESERVATION.getStatus());
+        assertEquals(reservation.getId(), RESERVATION.getId());
+        assertEquals(reservation.getFlightId(), RESERVATION.getFlight().getId());
+        assertEquals(reservation.getUserId(), RESERVATION.getUser().getId());
+        assertEquals(reservation.getPassengers().get(0).getFirstName(), RESERVATION.getPassengers().get(0).getFirstName());
+        assertEquals(reservation.getPassengers().get(0).getLastName(), RESERVATION.getPassengers().get(0).getLastName());
+        assertEquals(reservation.getStatus(), RESERVATION.getStatus());
         verify(reservationRepository).save(any(Reservation.class));
     }
 
@@ -183,11 +182,11 @@ class ReservationServiceTest {
         //given
         long id = 1L;
         given(reservationRepository.existsById(id)).willReturn(Boolean.TRUE);
-        Mockito.doNothing().when(reservationRepository).deleteById(id);
+        doNothing().when(reservationRepository).deleteById(id);
         //when
         testReservationService.deleteReservation(id);
         //then
-        Mockito.verify(reservationRepository).deleteById(id);
+        verify(reservationRepository).deleteById(id);
     }
 
     @Test
@@ -196,10 +195,10 @@ class ReservationServiceTest {
         long id = 1L;
         given(reservationRepository.existsById(id)).willReturn(Boolean.FALSE);
         //when
-        Assertions.assertThrows(ResourceNotFoundException.class, () -> testReservationService
+        assertThrows(ResourceNotFoundException.class, () -> testReservationService
                 .deleteReservation(id));
         //then
-        Mockito.verify(reservationRepository, times(0)).deleteById(id);
+        verify(reservationRepository, times(0)).deleteById(id);
     }
 
     @Test
@@ -213,7 +212,7 @@ class ReservationServiceTest {
         //when
         var reservation = testReservationService.realizedReservation(id);
         //then
-        Assertions.assertEquals("REALIZED", reservation.getStatus().toString());
+        assertEquals("REALIZED", reservation.getStatus().toString());
         verify(reservationRepository).save(any(Reservation.class));
     }
 
@@ -225,10 +224,10 @@ class ReservationServiceTest {
         given(reservationRepository.findById(id))
                 .willReturn(Optional.empty());
         //when
-        Assertions.assertThrows(ResourceNotFoundException.class, () -> testReservationService
+        assertThrows(ResourceNotFoundException.class, () -> testReservationService
                 .realizedReservation(id));
         //then
-        Mockito.verify(reservationRepository, times(0)).save(any(Reservation.class));
+        verify(reservationRepository, times(0)).save(any(Reservation.class));
     }
 
     @Test
@@ -242,7 +241,7 @@ class ReservationServiceTest {
         //when
         var reservation = testReservationService.canceledReservation(id);
         //then
-        Assertions.assertEquals("CANCELED", reservation.getStatus().toString());
+        assertEquals("CANCELED", reservation.getStatus().toString());
         verify(reservationRepository).save(any(Reservation.class));
     }
 
@@ -253,9 +252,9 @@ class ReservationServiceTest {
         given(reservationRepository.findById(id))
                 .willReturn(Optional.empty());
         //when
-        Assertions.assertThrows(ResourceNotFoundException.class, () -> testReservationService
+        assertThrows(ResourceNotFoundException.class, () -> testReservationService
                 .canceledReservation(id));
         //then
-        Mockito.verify(reservationRepository, times(0)).save(any(Reservation.class));
+        verify(reservationRepository, times(0)).save(any(Reservation.class));
     }
 }

@@ -22,7 +22,7 @@ public class Reservation implements Serializable {
     private ReservationStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "flightId", nullable = false)
+    @JoinColumn(name = "flightId")
     private Flight flight;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.DETACH)
