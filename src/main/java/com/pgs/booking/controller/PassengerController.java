@@ -14,18 +14,17 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/api/passengers")
+@PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'USER')")
 public class PassengerController {
 
     private final PassengerService passengerService;
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF') or hasRole('USER')")
     @GetMapping
     public List<PassengerDto> getPassengers() {
         log.trace("Controller method: getPassengers.");
         return passengerService.getPassengers();
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF') or hasRole('USER')")
     @GetMapping("/{id}")
     public PassengerDto getSinglePassenger(@Valid @PathVariable long id)  {
         log.trace("Controller method: getSinglePassenger.");
@@ -39,7 +38,6 @@ public class PassengerController {
         return passengerService.addPassenger(createUpdatePassengerDto);
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF') or hasRole('USER')")
     @PutMapping("/{id}")
     public PassengerDto editPassenger(@Valid @RequestBody CreateUpdatePassengerDto createUpdatePassengerDto, @PathVariable long id) {
         log.trace("Controller method: editPassenger.");

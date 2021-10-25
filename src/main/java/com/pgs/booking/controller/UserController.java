@@ -13,35 +13,31 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/users")
+@PreAuthorize("hasAnyRole('ADMIN')")
 public class UserController {
 
     private final UserService userService;
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public UserDto getSingleUser(@Valid @PathVariable Long id) {
         return userService.getSingleUser(id);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public UserDto addUser(@Valid @RequestBody CreateUserDto createUserDto) {
         return userService.addUser(createUserDto);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/activate")
     public UserDto activateUser(@PathVariable Long id) {
         return userService.activateUser(id);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/deactivate")
     public UserDto deactivateUser(@PathVariable Long id) {
         return userService.deactivateUser(id);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/setRoles")
     public UserDto setUserRoles(@PathVariable Long id, @RequestBody List<String> roleDtoList) {
         return userService.setUserRoles(id, roleDtoList);
