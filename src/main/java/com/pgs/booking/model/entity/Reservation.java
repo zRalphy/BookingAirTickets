@@ -29,7 +29,7 @@ public class Reservation implements Serializable {
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, orphanRemoval = true)
     @JoinColumn(name = "reservationId", nullable = false)
     private List<Passenger> passengers;
 

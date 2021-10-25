@@ -3,10 +3,12 @@ package com.pgs.booking.service;
 import com.pgs.booking.exception.ResourceNotFoundException;
 import com.pgs.booking.mappers.CreateUpdateFlightDtoMapper;
 import com.pgs.booking.mappers.FlightDtoMapper;
-import com.pgs.booking.model.entity.Flight;
 import com.pgs.booking.model.dto.CreateUpdateFlightDto;
 import com.pgs.booking.model.dto.FlightDto;
+import com.pgs.booking.model.entity.Flight;
+import com.pgs.booking.model.entity.Reservation;
 import com.pgs.booking.repository.FlightRepository;
+import com.pgs.booking.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,8 @@ public class FlightService {
     private final FlightRepository flightRepository;
     private final FlightDtoMapper flightDtoMapper;
     private final CreateUpdateFlightDtoMapper createUpdateFlightDtoMapper;
+    private final ReservationRepository reservationRepository;
+    private final ReservationService reservationService;
 
     public List<FlightDto> getFlights() {
         List<Flight> allFlights = flightRepository.findAll();
@@ -52,5 +56,7 @@ public class FlightService {
             throw new ResourceNotFoundException("Flight with id " + id + " not found.");
         }
         flightRepository.deleteById(id);
+        List<Reservation> reservationsCanceled = reservationRepository.findAllByFlightId(id);
+        reservationsCanceled.stream().mapToLong(Reservation::getId).forEach(reservationService::canceledReservation);
     }
 }
