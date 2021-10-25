@@ -10,7 +10,6 @@ import com.pgs.booking.model.entity.Reservation;
 import com.pgs.booking.model.entity.User;
 import com.pgs.booking.repository.FlightRepository;
 import com.pgs.booking.repository.ReservationRepository;
-import com.pgs.booking.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +23,6 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final FlightRepository flightRepository;
-    private final UserRepository userRepository;
     private final ReservationDtoMapper reservationDtoMapper;
     private final CreateUpdatePassengerDtoMapper createUpdatePassengerDtoMapper;
 

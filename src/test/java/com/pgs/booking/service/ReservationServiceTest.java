@@ -12,7 +12,6 @@ import com.pgs.booking.model.dto.ReservationDto;
 import com.pgs.booking.model.entity.*;
 import com.pgs.booking.repository.FlightRepository;
 import com.pgs.booking.repository.ReservationRepository;
-import com.pgs.booking.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,9 +40,6 @@ class ReservationServiceTest {
     @Mock
     private FlightRepository flightRepository;
 
-    @Mock
-    private UserRepository userRepository;
-
     private final FlightDtoMapper flightDtoMapper = new FlightDtoMapper();
     private final PassengerDtoMapper passengerDtoMapper = new PassengerDtoMapper();
     private final ReservationDtoMapper reservationDtoMapper = new ReservationDtoMapper(passengerDtoMapper, flightDtoMapper);
@@ -52,7 +48,7 @@ class ReservationServiceTest {
 
     @BeforeEach
     void setUp() {
-        testReservationService = new ReservationService(reservationRepository, flightRepository, userRepository, reservationDtoMapper, createUpdatePassengerDtoMapper);
+        testReservationService = new ReservationService(reservationRepository, flightRepository, reservationDtoMapper, createUpdatePassengerDtoMapper);
     }
 
     private static final Role ROLE_1 = Role.builder()
