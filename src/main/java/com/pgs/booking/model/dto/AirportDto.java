@@ -7,10 +7,8 @@ import lombok.Value;
 @Builder
 public class AirportDto {
     Long id;
-    String departureAirportCode;
-    String arrivalAirportCode;
-    String departureAirportName;
-    String arrivalAirportName;
+    String code;
+    String name;
     String country;
     String city;
 }

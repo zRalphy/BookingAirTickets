@@ -13,4 +13,6 @@ public class FlightDto {
     Flight.TypeOfFlight type;
     LocalDateTime departureDate;
     LocalDateTime arrivalDate;
+    String departureAirport;
+    String arrivalAirport;
 }

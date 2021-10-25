@@ -18,14 +18,10 @@ public class Airport {
     @GeneratedValue
     @Column(name = "id")
     private Long id;
-    @Column(name = "departureAirportCode")
-    private String departureAirportCode;
-    @Column(name = "arrivalAirportCode")
-    private String arrivalAirportCode;
-    @Column(name = "departureAirportName")
-    private String departureAirportName;
-    @Column(name = "arrivalAirportName")
-    private String arrivalAirportName;
+    @Column(name = "code")
+    private String code;
+    @Column(name = "name")
+    private String name;
     @Column(name = "country")
     private String country;
     @Column(name = "city")

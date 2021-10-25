@@ -12,18 +12,12 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 public class CreateUpdateAirportDto {
-    @NotBlank(message = "Please enter your departureAirportCode.")
-    @Size(min = 3, max = 6, message = "DepartureAirportCode should have at least 3 and at most 6 characters.")
-    private String departureAirportCode;
-    @NotBlank(message = "Please enter your arrivalAirportCode.")
-    @Size(min = 3, max = 6, message = "ArrivalAirportCode should have at least 3 and at most 6 characters.")
-    private String arrivalAirportCode;
-    @NotBlank(message = "Please enter your departureAirportName.")
-    @Size(min = 5, max = 45, message = "DepartureAirportName should have at least 5 and at most 45 characters.")
-    private String departureAirportName;
-    @NotBlank(message = "Please enter your arrivalAirportName.")
-    @Size(min = 5, max = 45, message = "ArrivalAirportName should have at least 5 and at most 45 characters.")
-    private String arrivalAirportName;
+    @NotBlank(message = "Please enter your airport code.")
+    @Size(min = 3, max = 6, message = "Airport code should have at least 3 and at most 6 characters.")
+    private String code;
+    @NotBlank(message = "Please enter your airport name.")
+    @Size(min = 5, max = 45, message = "Airport name should have at least 5 and at most 45 characters.")
+    private String name;
     @NotBlank(message = "Please enter your airport country.")
     @Size(min = 3, max = 45, message = "Country should have at least 3 and at most 45 characters.")
     private String country;
