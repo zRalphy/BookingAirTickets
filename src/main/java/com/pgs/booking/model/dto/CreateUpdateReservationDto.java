@@ -15,6 +15,7 @@ import java.util.List;
 public class CreateUpdateReservationDto {
     @NotNull
     private Long flightId;
+    @NotNull
     @NotEmpty
     private List<CreateUpdatePassengerDto> passengers;
 }
