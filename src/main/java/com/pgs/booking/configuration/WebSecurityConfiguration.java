@@ -31,9 +31,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/api/passengers/**").authenticated()
-                .antMatchers("/api/flights/**").hasAnyRole("STAFF", "ADMIN")
-                .antMatchers("/api/users/**").hasRole("ADMIN")
+                .antMatchers("/api/passengers/**").hasAnyAuthority("USER", "STAFF", "ADMIN")
+                .antMatchers("/api/flights/**").hasAnyAuthority("STAFF", "ADMIN")
+                .antMatchers("/api/users/**").hasAnyAuthority("ADMIN")
                 .and()
                 .addFilterBefore(oAuth2AuthenticationProcessingFilter(), FilterSecurityInterceptor.class)
                 .authorizeRequests()
