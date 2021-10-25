@@ -16,31 +16,31 @@ public class FlightController {
 
     private final FlightService flightService;
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     @GetMapping
     public List<FlightDto> getFlights() {
         return flightService.getFlights();
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     @GetMapping("/{id}")
     public FlightDto getFlight(@PathVariable long id)  {
         return flightService.getFlight(id);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     @PostMapping
     public FlightDto addFlight(@Valid @RequestBody CreateUpdateFlightDto createUpdateFlightDto) {
         return flightService.addFlight(createUpdateFlightDto);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     @PutMapping("/{id}")
     public FlightDto editFlight(@Valid @RequestBody CreateUpdateFlightDto createUpdateFlightDto, @PathVariable long id) {
         return flightService.editFlight(id, createUpdateFlightDto);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     @DeleteMapping("/{id}")
     public void deleteFlight(@PathVariable("id") long id) {
         flightService.deleteFlight(id);

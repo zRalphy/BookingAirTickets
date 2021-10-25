@@ -18,28 +18,28 @@ public class PassengerController {
 
     private final PassengerService passengerService;
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'STUFF', 'USER')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF') or hasRole('USER')")
     @GetMapping
     public List<PassengerDto> getPassengers() {
         log.trace("Controller method: getPassengers.");
         return passengerService.getPassengers();
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'STUFF', 'USER')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF') or hasRole('USER')")
     @GetMapping("/{id}")
     public PassengerDto getSinglePassenger(@Valid @PathVariable long id)  {
         log.trace("Controller method: getSinglePassenger.");
             return passengerService.getSinglePassenger(id);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'STUFF', 'USER')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF') or hasRole('USER')")
     @PostMapping
     public PassengerDto addPassenger(@Valid @RequestBody CreateUpdatePassengerDto createUpdatePassengerDto) {
         log.trace("Controller method: addPassenger.");
         return passengerService.addPassenger(createUpdatePassengerDto);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'STUFF', 'USER')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF') or hasRole('USER')")
     @PutMapping("/{id}")
     public PassengerDto editPassenger(@Valid @RequestBody CreateUpdatePassengerDto createUpdatePassengerDto, @PathVariable long id) {
         log.trace("Controller method: editPassenger.");
