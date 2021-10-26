@@ -1,18 +1,25 @@
 package com.pgs.booking.validators;
 
+import com.pgs.booking.exception.IllegalUserException;
+import com.pgs.booking.model.entity.Role;
 import com.pgs.booking.model.entity.User;
+import lombok.AllArgsConstructor;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
 @Component
+@AllArgsConstructor
 public class UserValidator {
 
-    public void handleSingleUser(Long id, PreAuthenticatedAuthenticationToken token) {
-        if(token.getPrincipal() instanceof User user) {
-            if(!Objects.equals(user.getId(), id) || !user.getRoles().contains("ADMIN")){
-                throw new IllegalArgumentException("The token doesn't have the permission to access single user.");
+    public void validateSingleUser(Long id, PreAuthenticatedAuthenticationToken token) {
+        if (token.getPrincipal() instanceof User user) {
+            var hasAdmin = user.getRoles().stream()
+                    .map(Role::getName)
+                    .anyMatch("ADMIN"::equals);
+            if (!(Objects.equals(user.getId(), id) || hasAdmin)) {
+                throw new IllegalUserException("The token doesn't have the permission to access single user.");
             }
         }
     }
