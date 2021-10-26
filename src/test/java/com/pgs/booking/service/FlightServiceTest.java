@@ -3,24 +3,26 @@ package com.pgs.booking.service;
 import com.pgs.booking.exception.ResourceNotFoundException;
 import com.pgs.booking.mappers.CreateUpdateFlightDtoMapper;
 import com.pgs.booking.mappers.FlightDtoMapper;
-import com.pgs.booking.model.entity.Flight;
 import com.pgs.booking.model.dto.CreateUpdateFlightDto;
+import com.pgs.booking.model.entity.Flight;
 import com.pgs.booking.repository.FlightRepository;
-import org.junit.jupiter.api.Assertions;
+import com.pgs.booking.repository.ReservationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class FlightServiceTest {
@@ -28,13 +30,16 @@ class FlightServiceTest {
     @Mock
     private FlightRepository flightRepository;
 
+    @Mock
+    private ReservationRepository reservationRepository;
+
     private final FlightDtoMapper flightDtoMapper = new FlightDtoMapper();
     private final CreateUpdateFlightDtoMapper createUpdateFlightDtoMapper = new CreateUpdateFlightDtoMapper();
     private FlightService underTest;
 
     @BeforeEach
     void setUp() {
-        underTest = new FlightService(flightRepository, flightDtoMapper, createUpdateFlightDtoMapper);
+        underTest = new FlightService(flightRepository, flightDtoMapper, createUpdateFlightDtoMapper, reservationRepository);
     }
 
     private static Flight FLIGHT = Flight.builder()
@@ -57,7 +62,7 @@ class FlightServiceTest {
         //when
         var flights = underTest.getFlights();
         //then
-        Assertions.assertEquals(4, flights.size());
+        assertEquals(4, flights.size());
         verify(flightRepository).findAll();
     }
 
@@ -70,9 +75,9 @@ class FlightServiceTest {
         //when
         var flight = underTest.getFlight(id);
         //then
-        Assertions.assertEquals(FLIGHT.getType(), flight.getType());
-        Assertions.assertEquals(FLIGHT.getDepartureDate(), flight.getDepartureDate());
-        Assertions.assertEquals(FLIGHT.getArrivalDate(), flight.getArrivalDate());
+        assertEquals(FLIGHT.getType(), flight.getType());
+        assertEquals(FLIGHT.getDepartureDate(), flight.getDepartureDate());
+        assertEquals(FLIGHT.getArrivalDate(), flight.getArrivalDate());
         verify(flightRepository).findById(id);
     }
 
@@ -83,10 +88,10 @@ class FlightServiceTest {
         //when
         var flight = underTest.addFlight(CREATE_UPDATE_FLIGHT_DTO);
         //then
-        Assertions.assertEquals(flight.getId(), FLIGHT.getId());
-        Assertions.assertEquals(flight.getType(), FLIGHT.getType());
-        Assertions.assertEquals(flight.getDepartureDate(), FLIGHT.getDepartureDate());
-        Assertions.assertEquals(flight.getArrivalDate(), FLIGHT.getArrivalDate());
+        assertEquals(flight.getId(), FLIGHT.getId());
+        assertEquals(flight.getType(), FLIGHT.getType());
+        assertEquals(flight.getDepartureDate(), FLIGHT.getDepartureDate());
+        assertEquals(flight.getArrivalDate(), FLIGHT.getArrivalDate());
         verify(flightRepository).save(any(Flight.class));
     }
 
@@ -100,9 +105,9 @@ class FlightServiceTest {
         //when
         var flight = underTest.editFlight(id, CREATE_UPDATE_FLIGHT_DTO);
         //then
-        Assertions.assertEquals(flight.getType(), FLIGHT.getType());
-        Assertions.assertEquals(flight.getDepartureDate(), FLIGHT.getDepartureDate());
-        Assertions.assertEquals(flight.getArrivalDate(), FLIGHT.getArrivalDate());
+        assertEquals(flight.getType(), FLIGHT.getType());
+        assertEquals(flight.getDepartureDate(), FLIGHT.getDepartureDate());
+        assertEquals(flight.getArrivalDate(), FLIGHT.getArrivalDate());
         verify(flightRepository).save(any(Flight.class));
     }
 
@@ -113,10 +118,10 @@ class FlightServiceTest {
         given(flightRepository.findById(id))
                 .willReturn(Optional.empty());
         //when
-        Assertions.assertThrows(ResourceNotFoundException.class, () -> underTest
+        assertThrows(ResourceNotFoundException.class, () -> underTest
                 .editFlight(id, CREATE_UPDATE_FLIGHT_DTO));
         //then
-        Mockito.verify(flightRepository, times(0)).save(any(Flight.class));
+        verify(flightRepository, times(0)).save(any(Flight.class));
     }
 
     @Test
@@ -124,11 +129,11 @@ class FlightServiceTest {
         //given
         long id = 1L;
         given(flightRepository.existsById(id)).willReturn(Boolean.TRUE);
-        Mockito.doNothing().when(flightRepository).deleteById(id);
+        doNothing().when(flightRepository).deleteById(id);
         //when
         underTest.deleteFlight(id);
         //then
-        Mockito.verify(flightRepository).deleteById(id);
+        verify(flightRepository).deleteById(id);
     }
 
     @Test
@@ -137,9 +142,9 @@ class FlightServiceTest {
         long id = 1L;
         given(flightRepository.existsById(id)).willReturn(Boolean.FALSE);
         //when
-        Assertions.assertThrows(ResourceNotFoundException.class, () -> underTest
+        assertThrows(ResourceNotFoundException.class, () -> underTest
                 .deleteFlight(id));
         //then
-        Mockito.verify(flightRepository, times(0)).deleteById(id);
+        verify(flightRepository, times(0)).deleteById(id);
     }
 }

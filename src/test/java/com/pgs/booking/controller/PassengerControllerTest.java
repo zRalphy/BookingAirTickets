@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -38,7 +39,7 @@ class PassengerControllerTest {
     private PassengerService passengerService;
     private MockMvc mockMvc;
 
-    private static PassengerDto PASSENGER_DTO = PassengerDto.builder()
+    private static final PassengerDto PASSENGER_DTO = PassengerDto.builder()
             .id(5L)
             .firstName("John")
             .lastName("Thin")
@@ -47,7 +48,7 @@ class PassengerControllerTest {
             .telephone("123456789")
             .build();
 
-    private static CreateUpdatePassengerDto CREATE_UPDATE_PASSENGER_DTO = CreateUpdatePassengerDto.builder()
+    private static final CreateUpdatePassengerDto CREATE_UPDATE_PASSENGER_DTO = CreateUpdatePassengerDto.builder()
             .firstName("Dwayne")
             .lastName("Johnson")
             .email("JohnsonDwayne@gmail.com")
@@ -62,6 +63,7 @@ class PassengerControllerTest {
                 .build();
     }
 
+    @WithMockUser(authorities = "ADMIN")
     @SneakyThrows
     @Test
     void testGetPassengers() {
@@ -79,6 +81,7 @@ class PassengerControllerTest {
         verify(passengerService).getPassengers();
     }
 
+    @WithMockUser(authorities = "ADMIN")
     @SneakyThrows
     @Test
     void testGetSinglePassenger() {
@@ -94,6 +97,7 @@ class PassengerControllerTest {
         verify(passengerService).getSinglePassenger(5L);
     }
 
+    @WithMockUser(authorities = "ADMIN")
     @SneakyThrows
     @Test
     void testAddPassenger() {
@@ -112,6 +116,7 @@ class PassengerControllerTest {
         verify(passengerService).addPassenger(CREATE_UPDATE_PASSENGER_DTO);
     }
 
+    @WithMockUser(authorities = "STAFF")
     @SneakyThrows
     @Test
     void testEditPassenger() {

@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 public class Flight {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
     @Column(name = "type")
@@ -33,4 +34,8 @@ public class Flight {
     public enum TypeOfFlight {
         ECONOMY, PREMIUM, BUSINESS
     }
+
+    @OneToMany(mappedBy = "flight", fetch = FetchType.LAZY,
+            cascade = CascadeType.DETACH)
+    private List<Reservation> reservations;
 }
