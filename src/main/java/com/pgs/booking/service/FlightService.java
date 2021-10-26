@@ -12,6 +12,7 @@ import com.pgs.booking.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -51,6 +52,7 @@ public class FlightService {
         return flightDtoMapper.mapToFlightDto(flightToSave);
     }
 
+    @Transactional
     public void deleteFlight(long id) {
         if(!flightRepository.existsById(id)) {
             throw new ResourceNotFoundException("Flight with id " + id + " not found.");
