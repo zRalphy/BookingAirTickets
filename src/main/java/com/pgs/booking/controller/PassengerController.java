@@ -5,6 +5,7 @@ import com.pgs.booking.model.dto.PassengerDto;
 import com.pgs.booking.service.PassengerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/api/passengers")
+@PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
 public class PassengerController {
 
     private final PassengerService passengerService;
@@ -24,9 +26,9 @@ public class PassengerController {
     }
 
     @GetMapping("/{id}")
-    public PassengerDto getSinglePassenger(@Valid @PathVariable long id)  {
+    public PassengerDto getSinglePassenger(@Valid @PathVariable long id) {
         log.trace("Controller method: getSinglePassenger.");
-            return passengerService.getSinglePassenger(id);
+        return passengerService.getSinglePassenger(id);
     }
 
     @PostMapping
