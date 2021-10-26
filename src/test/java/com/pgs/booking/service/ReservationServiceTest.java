@@ -7,8 +7,6 @@ import com.pgs.booking.mappers.PassengerDtoMapper;
 import com.pgs.booking.mappers.ReservationDtoMapper;
 import com.pgs.booking.model.dto.CreateUpdatePassengerDto;
 import com.pgs.booking.model.dto.CreateUpdateReservationDto;
-import com.pgs.booking.model.dto.PassengerDto;
-import com.pgs.booking.model.dto.ReservationDto;
 import com.pgs.booking.model.entity.*;
 import com.pgs.booking.repository.FlightRepository;
 import com.pgs.booking.repository.ReservationRepository;
@@ -50,22 +48,10 @@ class ReservationServiceTest {
         testReservationService = new ReservationService(reservationRepository, flightRepository, reservationDtoMapper, createUpdatePassengerDtoMapper);
     }
 
-    private static final Role ROLE_1 = Role.builder()
-            .id(1L)
-            .name("USER")
-            .build();
-
-    private static final List<Role> ROLE_LIST = List.of(ROLE_1);
-
     private static final User USER_1 = User.builder()
             .id(1L)
             .username("user")
             .password("user")
-            .accountNonExpired(true)
-            .accountNonLocked(true)
-            .credentialsNonExpired(true)
-            .enabled(true)
-            .roles(ROLE_LIST)
             .build();
 
     private static final Passenger PASSENGER = Passenger.builder()
@@ -75,15 +61,6 @@ class ReservationServiceTest {
             .email("HilfigerTommy@gmail.com")
             .country("USA")
             .telephone("235689123")
-            .build();
-
-    private static final PassengerDto PASSENGER_DTO = PassengerDto.builder()
-            .id(1L)
-            .firstName("Johny")
-            .lastName("Deep")
-            .email("DeepJohn@gmail.com")
-            .country("USA")
-            .telephone("234666788")
             .build();
 
     private static final CreateUpdatePassengerDto CREATE_UPDATE_PASSENGER_DTO = CreateUpdatePassengerDto.builder()
@@ -109,14 +86,6 @@ class ReservationServiceTest {
             .status(Reservation.ReservationStatus.IN_PROGRESS)
             .build();
 
-    private static final ReservationDto RESERVATION_DTO = ReservationDto.builder()
-            .id(1L)
-            .flightId(1L)
-            .userId(1L)
-            .passengers(List.of(PASSENGER_DTO))
-            .status(Reservation.ReservationStatus.IN_PROGRESS)
-            .build();
-
     private static final CreateUpdateReservationDto CREATE_UPDATE_RESERVATION_DTO = CreateUpdateReservationDto.builder()
             .flightId(1L)
             .passengers(List.of(CREATE_UPDATE_PASSENGER_DTO))
@@ -129,7 +98,7 @@ class ReservationServiceTest {
         given(reservationRepository.findAllByFlightId(id))
                 .willReturn(Collections.singletonList(RESERVATION));
         //when
-        var reservationsByFlight = testReservationService.getReservationByFlight(id);
+        var reservationsByFlight = testReservationService.getReservationsByFlight(id);
         var reservationByFlight = reservationsByFlight.get(0);
         //then
         assertEquals(RESERVATION.getId(), reservationByFlight.getId().longValue());
@@ -148,7 +117,7 @@ class ReservationServiceTest {
         given(reservationRepository.findAllByUserId(id))
                 .willReturn(Collections.singletonList(RESERVATION));
         //when
-        var reservationsByUser = testReservationService.getReservationByUser(id);
+        var reservationsByUser = testReservationService.getReservationsByUser(id);
         var reservationByUser = reservationsByUser.get(0);
         //then
         assertEquals(RESERVATION.getId(), reservationByUser.getId().longValue());

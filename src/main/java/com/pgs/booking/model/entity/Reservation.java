@@ -21,7 +21,7 @@ public class Reservation implements Serializable {
     @Enumerated(EnumType.STRING)
     private ReservationStatus status;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.DETACH)
     @JoinColumn(name = "flightId")
     private Flight flight;
 
@@ -29,7 +29,7 @@ public class Reservation implements Serializable {
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "reservationId", nullable = false)
     private List<Passenger> passengers;
 

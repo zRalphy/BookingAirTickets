@@ -26,12 +26,17 @@ public class ReservationService {
     private final ReservationDtoMapper reservationDtoMapper;
     private final CreateUpdatePassengerDtoMapper createUpdatePassengerDtoMapper;
 
-    public List<ReservationDto> getReservationByFlight(long id) {
-        List<Reservation> reservationByFlight = reservationRepository.findAllByFlightId(id);
-        return reservationDtoMapper.mapToReservationsDto(reservationByFlight);
+    public List<ReservationDto> getReservationsByFlight(long id) {
+        List<Reservation> reservationsByFlight = reservationRepository.findAllByFlightId(id);
+        return reservationDtoMapper.mapToReservationsDto(reservationsByFlight);
     }
 
-    public List<ReservationDto> getReservationByUser(long id) {
+    public List<ReservationDto> getReservationsByCurrentUser(User user) {
+        List<Reservation> reservationsByCurrentUser = reservationRepository.findAllByUserId(user.getId());
+        return reservationDtoMapper.mapToReservationsDto(reservationsByCurrentUser);
+    }
+
+    public List<ReservationDto> getReservationsByUser(long id) {
         List<Reservation> reservationsByUser = reservationRepository.findAllByUserId(id);
         return reservationDtoMapper.mapToReservationsDto(reservationsByUser);
     }

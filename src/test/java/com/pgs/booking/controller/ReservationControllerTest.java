@@ -70,7 +70,7 @@ class ReservationControllerTest {
             .roles(ROLE_LIST)
             .build();
 
-    private static PassengerDto PASSENGER_DTO = PassengerDto.builder()
+    private static final PassengerDto PASSENGER_DTO = PassengerDto.builder()
             .id(2L)
             .firstName("Johny")
             .lastName("Deep")
@@ -79,7 +79,7 @@ class ReservationControllerTest {
             .telephone("234666788")
             .build();
 
-    private static CreateUpdatePassengerDto CREATE_UPDATE_PASSENGER_DTO = CreateUpdatePassengerDto.builder()
+    private static final CreateUpdatePassengerDto CREATE_UPDATE_PASSENGER_DTO = CreateUpdatePassengerDto.builder()
             .firstName("Dwayne")
             .lastName("Johnson")
             .email("JohnsonDwayne@gmail.com")
@@ -87,7 +87,7 @@ class ReservationControllerTest {
             .telephone("123456789")
             .build();
 
-    private static ReservationDto RESERVATION_DTO = ReservationDto.builder()
+    private static final ReservationDto RESERVATION_DTO = ReservationDto.builder()
             .id(1L)
             .flightId(1L)
             .userId(2L)
@@ -95,7 +95,7 @@ class ReservationControllerTest {
             .status(Reservation.ReservationStatus.IN_PROGRESS)
             .build();
 
-    private static CreateUpdateReservationDto CREATE_UPDATE_RESERVATION_DTO = CreateUpdateReservationDto.builder()
+    private static final CreateUpdateReservationDto CREATE_UPDATE_RESERVATION_DTO = CreateUpdateReservationDto.builder()
             .flightId(1L)
             .passengers(List.of(CREATE_UPDATE_PASSENGER_DTO))
             .build();
@@ -105,7 +105,7 @@ class ReservationControllerTest {
     @Test
     void testGetReservationByFlight() {
         long id = 1L;
-        given(reservationService.getReservationByFlight(id)).willReturn(Collections.singletonList(RESERVATION_DTO));
+        given(reservationService.getReservationsByFlight(id)).willReturn(Collections.singletonList(RESERVATION_DTO));
         mockMvc.perform(get("/api/reservations/flights/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -119,7 +119,7 @@ class ReservationControllerTest {
                 .andExpect(jsonPath("$[0].passengers.[0].country").value(RESERVATION_DTO.getPassengers().get(0).getCountry()))
                 .andExpect(jsonPath("$[0].passengers.[0].telephone").value(RESERVATION_DTO.getPassengers().get(0).getTelephone()))
                 .andExpect(jsonPath("$[0].status").value(RESERVATION_DTO.getStatus().toString()));
-        verify(reservationService).getReservationByFlight(id);
+        verify(reservationService).getReservationsByFlight(id);
     }
 
     @WithMockUser(authorities = "USER")
@@ -127,7 +127,7 @@ class ReservationControllerTest {
     @Test
     void testGetReservationByUser() {
         long id = 1L;
-        given(reservationService.getReservationByUser(id)).willReturn(Collections.singletonList(RESERVATION_DTO));
+        given(reservationService.getReservationsByUser(id)).willReturn(Collections.singletonList(RESERVATION_DTO));
         mockMvc.perform(get("/api/reservations/users/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -141,7 +141,7 @@ class ReservationControllerTest {
                 .andExpect(jsonPath("$[0].passengers.[0].country").value(RESERVATION_DTO.getPassengers().get(0).getCountry()))
                 .andExpect(jsonPath("$[0].passengers.[0].telephone").value(RESERVATION_DTO.getPassengers().get(0).getTelephone()))
                 .andExpect(jsonPath("$[0].status").value(RESERVATION_DTO.getStatus().toString()));
-        verify(reservationService).getReservationByUser(id);
+        verify(reservationService).getReservationsByUser(id);
     }
 
     @WithMockUser(authorities = "STAFF")

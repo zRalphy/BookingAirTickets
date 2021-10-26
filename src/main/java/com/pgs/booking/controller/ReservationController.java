@@ -10,6 +10,7 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -20,16 +21,22 @@ public class ReservationController {
 
     private final ReservationService reservationService;
 
-    @PreAuthorize("hasAnyRole('STAFF')")
     @GetMapping("/flights/{id}")
-    public List<ReservationDto> getReservationByFlight(@PathVariable long id) {
-        return reservationService.getReservationByFlight(id);
+    public List<ReservationDto> getReservationsByFlight(@PathVariable long id) {
+        return reservationService.getReservationsByFlight(id);
     }
 
-    @PreAuthorize("hasAnyRole('USER')")
+    @GetMapping("/users")
+    public List<ReservationDto> getReservationsForCurrentUser(@PathParam("authenticationToken") PreAuthenticatedAuthenticationToken authenticationToken) {
+        if (authenticationToken.getPrincipal() instanceof User user) {
+            return reservationService.getReservationsByCurrentUser(user);
+        }
+        throw new IllegalStateException("The token does not contain authorized user data.");
+    }
+
     @GetMapping("/users/{id}")
-    public List<ReservationDto> getReservationByUser(@PathVariable long id) {
-        return reservationService.getReservationByUser(id);
+    public List<ReservationDto> getReservationsByUser(@PathVariable long id) {
+        return reservationService.getReservationsByUser(id);
     }
 
     @PostMapping

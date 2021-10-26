@@ -22,7 +22,6 @@ public class FlightService {
     private final FlightDtoMapper flightDtoMapper;
     private final CreateUpdateFlightDtoMapper createUpdateFlightDtoMapper;
     private final ReservationRepository reservationRepository;
-    private final ReservationService reservationService;
 
     public List<FlightDto> getFlights() {
         List<Flight> allFlights = flightRepository.findAll();
@@ -57,8 +56,12 @@ public class FlightService {
         if(!flightRepository.existsById(id)) {
             throw new ResourceNotFoundException("Flight with id " + id + " not found.");
         }
-        flightRepository.deleteById(id);
         List<Reservation> reservationsCanceled = reservationRepository.findAllByFlightId(id);
-        reservationsCanceled.stream().mapToLong(Reservation::getId).forEach(reservationService::canceledReservation);
+        reservationsCanceled.forEach((reservation)-> {
+            reservation.setFlight(null);
+            reservation.setStatus(Reservation.ReservationStatus.CANCELED);
+            reservation.getPassengers().clear();
+        });
+        flightRepository.deleteById(id);
     }
 }

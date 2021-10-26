@@ -33,16 +33,13 @@ class FlightServiceTest {
     @Mock
     private ReservationRepository reservationRepository;
 
-    @Mock
-    private ReservationService reservationService;
-
     private final FlightDtoMapper flightDtoMapper = new FlightDtoMapper();
     private final CreateUpdateFlightDtoMapper createUpdateFlightDtoMapper = new CreateUpdateFlightDtoMapper();
     private FlightService underTest;
 
     @BeforeEach
     void setUp() {
-        underTest = new FlightService(flightRepository, flightDtoMapper, createUpdateFlightDtoMapper,reservationRepository,reservationService);
+        underTest = new FlightService(flightRepository, flightDtoMapper, createUpdateFlightDtoMapper, reservationRepository);
     }
 
     private static Flight FLIGHT = Flight.builder()
