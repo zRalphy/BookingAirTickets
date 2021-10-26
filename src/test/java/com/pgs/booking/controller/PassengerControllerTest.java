@@ -81,7 +81,7 @@ class PassengerControllerTest {
         verify(passengerService).getPassengers();
     }
 
-    @WithMockUser(authorities = "USER")
+    @WithMockUser(authorities = "ADMIN")
     @SneakyThrows
     @Test
     void testGetSinglePassenger() {
