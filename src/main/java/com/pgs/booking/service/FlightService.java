@@ -48,7 +48,7 @@ public class FlightService {
     }
 
     public void deleteFlight(long id) {
-        if(!flightRepository.existsById(id)) {
+        if (!flightRepository.existsById(id)) {
             throw new ResourceNotFoundException("Flight with id " + id + " not found.");
         }
         flightRepository.deleteById(id);
