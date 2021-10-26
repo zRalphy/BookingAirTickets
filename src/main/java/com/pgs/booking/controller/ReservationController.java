@@ -5,6 +5,7 @@ import com.pgs.booking.model.dto.ReservationDto;
 import com.pgs.booking.model.entity.User;
 import com.pgs.booking.service.ReservationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'USER')")
 @RequestMapping("/api/reservations")
 public class ReservationController {
 
