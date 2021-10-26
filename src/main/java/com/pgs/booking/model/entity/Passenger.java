@@ -1,20 +1,23 @@
 package com.pgs.booking.model.entity;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
-@Getter
-@Setter
-@RequiredArgsConstructor
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "passenger")
 public class Passenger {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private final Long id = null;
+    private Long id;
     @Column(name = "firstName")
     private String firstName;
     @Column(name = "lastName")
@@ -26,4 +29,5 @@ public class Passenger {
     @Column(name = "telephone")
     private String telephone;
 }
+
 
