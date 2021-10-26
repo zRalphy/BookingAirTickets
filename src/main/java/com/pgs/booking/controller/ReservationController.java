@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'USER')")
+@PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
 @RequestMapping("/api/reservations")
 public class ReservationController {
 
@@ -26,6 +26,7 @@ public class ReservationController {
         return reservationService.getReservationsByFlight(id);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'USER')")
     @GetMapping("/users")
     public List<ReservationDto> getReservationsForCurrentUser(@PathParam("authenticationToken") PreAuthenticatedAuthenticationToken authenticationToken) {
         if (authenticationToken.getPrincipal() instanceof User user) {
@@ -39,6 +40,7 @@ public class ReservationController {
         return reservationService.getReservationsByUser(id);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'USER')")
     @PostMapping
     public ReservationDto addReservation(@Valid @RequestBody CreateUpdateReservationDto createUpdatePassengerDto,
                                          PreAuthenticatedAuthenticationToken authenticationToken) {

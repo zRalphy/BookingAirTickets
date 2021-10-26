@@ -60,7 +60,6 @@ public class FlightService {
         reservationsCanceled.forEach((reservation)-> {
             reservation.setFlight(null);
             reservation.setStatus(Reservation.ReservationStatus.CANCELED);
-            reservation.getPassengers().clear();
         });
         flightRepository.deleteById(id);
     }
