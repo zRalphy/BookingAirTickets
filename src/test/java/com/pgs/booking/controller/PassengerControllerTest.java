@@ -63,7 +63,7 @@ class PassengerControllerTest {
                 .build();
     }
 
-    @WithMockUser(authorities = {"USER"})
+    @WithMockUser(authorities = "ADMIN")
     @SneakyThrows
     @Test
     void testGetPassengers() {
@@ -81,7 +81,7 @@ class PassengerControllerTest {
         verify(passengerService).getPassengers();
     }
 
-    @WithMockUser(authorities = {"ADMIN"})
+    @WithMockUser(authorities = "USER")
     @SneakyThrows
     @Test
     void testGetSinglePassenger() {
@@ -97,7 +97,7 @@ class PassengerControllerTest {
         verify(passengerService).getSinglePassenger(5L);
     }
 
-    @WithMockUser(authorities = {"ADMIN"})
+    @WithMockUser(authorities = "ADMIN")
     @SneakyThrows
     @Test
     void testAddPassenger() {
@@ -116,7 +116,7 @@ class PassengerControllerTest {
         verify(passengerService).addPassenger(CREATE_UPDATE_PASSENGER_DTO);
     }
 
-    @WithMockUser(authorities = {"STAFF"})
+    @WithMockUser(authorities = "STAFF")
     @SneakyThrows
     @Test
     void testEditPassenger() {
