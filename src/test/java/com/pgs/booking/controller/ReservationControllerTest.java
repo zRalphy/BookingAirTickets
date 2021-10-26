@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -99,6 +100,7 @@ class ReservationControllerTest {
             .passengers(List.of(CREATE_UPDATE_PASSENGER_DTO))
             .build();
 
+    @WithMockUser(authorities = "STAFF")
     @SneakyThrows
     @Test
     void testGetReservationByFlight() {
@@ -120,6 +122,7 @@ class ReservationControllerTest {
         verify(reservationService).getReservationByFlight(id);
     }
 
+    @WithMockUser(authorities = "USER")
     @SneakyThrows
     @Test
     void testGetReservationByUser() {
@@ -141,6 +144,7 @@ class ReservationControllerTest {
         verify(reservationService).getReservationByUser(id);
     }
 
+    @WithMockUser(authorities = "STAFF")
     @SneakyThrows
     @Test
     void testAddReservation() {
@@ -166,6 +170,7 @@ class ReservationControllerTest {
         verify(reservationService).addReservation(CREATE_UPDATE_RESERVATION_DTO, USER_1);
     }
 
+    @WithMockUser(authorities = "STAFF")
     @SneakyThrows
     @Test
     void testDeleteReservation() {
@@ -176,6 +181,7 @@ class ReservationControllerTest {
         verify(reservationService).deleteReservation(id);
     }
 
+    @WithMockUser(authorities = "STAFF")
     @SneakyThrows
     @Test
     void testRealizedReservation() {
@@ -187,6 +193,7 @@ class ReservationControllerTest {
         verify(reservationService).realizedReservation(id);
     }
 
+    @WithMockUser(authorities = "STAFF")
     @SneakyThrows
     @Test
     void testCanceledReservation() {
