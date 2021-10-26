@@ -38,4 +38,8 @@ public class Flight {
     @OneToMany(mappedBy = "flight", fetch = FetchType.LAZY,
             cascade = CascadeType.DETACH)
     private List<Reservation> reservations;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.DETACH)
+    @JoinColumn(name = "airportId", nullable = false)
+    private Airport airport;
 }

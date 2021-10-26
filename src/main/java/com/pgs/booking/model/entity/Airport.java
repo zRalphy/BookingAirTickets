@@ -1,17 +1,15 @@
 package com.pgs.booking.model.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Getter
 @Setter
 @RequiredArgsConstructor
-@Entity
+@AllArgsConstructor
 @Builder
+@Entity
 @Table(name = "airport")
 public class Airport {
     @Id
