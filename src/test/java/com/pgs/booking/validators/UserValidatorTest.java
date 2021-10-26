@@ -19,14 +19,7 @@ class UserValidatorTest {
 
     private UserValidator userValidator;
 
-    private static final Role ROLE = Role.builder()
-            .name("USER")
-            .build();
-    private static final List<Role> ROLE_LIST = List.of(ROLE);
-    private static final User USER = User.builder()
-            .id(1L)
-            .roles(ROLE_LIST)
-            .build();
+    private static final Long REQUESTED_USER_ID = 1L;
 
     @BeforeEach
     void setUp() {
@@ -44,7 +37,7 @@ class UserValidatorTest {
                 .id(id)
                 .roles(List.of(Role.builder().name(role).build()))
                 .build());
-        assertThrows(IllegalUserException.class, () -> userValidator.validateSingleUser(1L, token));
+        assertThrows(IllegalUserException.class, () -> userValidator.validateSingleUser(REQUESTED_USER_ID, token));
     }
 
     @ParameterizedTest
@@ -59,7 +52,7 @@ class UserValidatorTest {
                 .id(id)
                 .roles(List.of(Role.builder().name(role).build()))
                 .build());
-        assertDoesNotThrow(() -> userValidator.validateSingleUser(1L, token));
+        assertDoesNotThrow(() -> userValidator.validateSingleUser(REQUESTED_USER_ID, token));
 
     }
 }
