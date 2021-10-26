@@ -19,6 +19,7 @@ public class PassengerController {
 
     private final PassengerService passengerService;
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @GetMapping
     public List<PassengerDto> getPassengers() {
         log.trace("Controller method: getPassengers.");
@@ -31,7 +32,6 @@ public class PassengerController {
             return passengerService.getSinglePassenger(id);
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF') or hasRole('USER')")
     @PostMapping
     public PassengerDto addPassenger(@Valid @RequestBody CreateUpdatePassengerDto createUpdatePassengerDto) {
         log.trace("Controller method: addPassenger.");
