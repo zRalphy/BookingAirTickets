@@ -14,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
 @RequestMapping("/api/flights")
+@PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
 public class FlightController {
 
     private final FlightService flightService;

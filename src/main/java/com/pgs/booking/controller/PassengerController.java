@@ -16,6 +16,7 @@ import java.util.List;
 @Slf4j
 @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'USER')")
 @RequestMapping("/api/passengers")
+@PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
 public class PassengerController {
 
     private final PassengerService passengerService;
