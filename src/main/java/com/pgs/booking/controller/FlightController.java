@@ -6,13 +6,14 @@ import com.pgs.booking.service.FlightService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/flights")
 @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
+@RequestMapping("/api/flights")
 public class FlightController {
 
     private final FlightService flightService;

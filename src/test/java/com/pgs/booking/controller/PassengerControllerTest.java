@@ -39,7 +39,7 @@ class PassengerControllerTest {
     private PassengerService passengerService;
     private MockMvc mockMvc;
 
-    private static PassengerDto PASSENGER_DTO = PassengerDto.builder()
+    private static final PassengerDto PASSENGER_DTO = PassengerDto.builder()
             .id(5L)
             .firstName("John")
             .lastName("Thin")
@@ -48,7 +48,7 @@ class PassengerControllerTest {
             .telephone("123456789")
             .build();
 
-    private static CreateUpdatePassengerDto CREATE_UPDATE_PASSENGER_DTO = CreateUpdatePassengerDto.builder()
+    private static final CreateUpdatePassengerDto CREATE_UPDATE_PASSENGER_DTO = CreateUpdatePassengerDto.builder()
             .firstName("Dwayne")
             .lastName("Johnson")
             .email("JohnsonDwayne@gmail.com")
