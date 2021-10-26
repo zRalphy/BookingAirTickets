@@ -6,7 +6,6 @@ import com.pgs.booking.model.dto.CreateUpdateReservationDto;
 import com.pgs.booking.model.dto.PassengerDto;
 import com.pgs.booking.model.dto.ReservationDto;
 import com.pgs.booking.model.entity.Reservation;
-import com.pgs.booking.model.entity.Role;
 import com.pgs.booking.model.entity.User;
 import com.pgs.booking.service.ReservationService;
 import lombok.SneakyThrows;
@@ -57,18 +56,6 @@ class ReservationControllerTest {
                 .webAppContextSetup(wac)
                 .build();
     }
-
-    private static final Role ROLE_1 = Role.builder()
-            .name("USER")
-            .build();
-
-    private static final List<Role> ROLE_LIST = List.of(ROLE_1);
-
-    private static final User USER_1 = User.builder()
-            .id(2L)
-            .username("user1")
-            .roles(ROLE_LIST)
-            .build();
 
     private static final PassengerDto PASSENGER_DTO = PassengerDto.builder()
             .id(2L)
@@ -122,7 +109,7 @@ class ReservationControllerTest {
         verify(reservationService).getReservationsByFlight(id);
     }
 
-    @WithMockUser(authorities = "USER")
+    @WithMockUser(authorities = "STAFF")
     @SneakyThrows
     @Test
     void testGetReservationByUser() {
@@ -148,6 +135,11 @@ class ReservationControllerTest {
     @SneakyThrows
     @Test
     void testAddReservation() {
+        User USER_1 = User.builder()
+                .id(2L)
+                .username("user1")
+                .build();
+
         when(reservationService.addReservation(eq(CREATE_UPDATE_RESERVATION_DTO), eq(USER_1))).thenReturn(RESERVATION_DTO);
         var authenticationToken = mock(PreAuthenticatedAuthenticationToken.class);
         when(authenticationToken.getPrincipal()).thenReturn(USER_1);
