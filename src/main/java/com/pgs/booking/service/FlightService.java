@@ -53,7 +53,7 @@ public class FlightService {
 
     @Transactional
     public void deleteFlight(long id) {
-        if(!flightRepository.existsById(id)) {
+        if (!flightRepository.existsById(id)) {
             throw new ResourceNotFoundException("Flight with id " + id + " not found.");
         }
         List<Reservation> reservationsCanceled = reservationRepository.findAllByFlightId(id);
