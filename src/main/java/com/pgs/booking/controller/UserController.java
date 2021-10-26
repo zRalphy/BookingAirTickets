@@ -24,8 +24,8 @@ public class UserController {
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{id}")
     public UserDto getSingleUser(@Valid @PathVariable Long id, PreAuthenticatedAuthenticationToken token) {
-       userValidator.handleSingleUser(id, token);
-       return userService.getSingleUser(id);
+        userValidator.validateSingleUser(id, token);
+        return userService.getSingleUser(id);
     }
 
     @PostMapping
