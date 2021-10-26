@@ -14,12 +14,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/api/passengers")
-@PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'USER')")
+@PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
 public class PassengerController {
 
     private final PassengerService passengerService;
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @GetMapping
     public List<PassengerDto> getPassengers() {
         log.trace("Controller method: getPassengers.");
@@ -27,9 +26,9 @@ public class PassengerController {
     }
 
     @GetMapping("/{id}")
-    public PassengerDto getSinglePassenger(@Valid @PathVariable long id)  {
+    public PassengerDto getSinglePassenger(@Valid @PathVariable long id) {
         log.trace("Controller method: getSinglePassenger.");
-            return passengerService.getSinglePassenger(id);
+        return passengerService.getSinglePassenger(id);
     }
 
     @PostMapping
