@@ -18,6 +18,7 @@ public class UserController {
 
     private final UserService userService;
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{id}")
     public UserDto getSingleUser(@Valid @PathVariable Long id) {
         return userService.getSingleUser(id);
