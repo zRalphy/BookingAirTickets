@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
@@ -46,6 +47,21 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Override
+    public void init(WebSecurity web) throws Exception {
+        web.ignoring()
+                .antMatchers(
+                        "/v2/api-docs",
+                        "/v3/api-docs",
+                        "/swagger-resources/**",
+                        "/configuration/**",
+                        "/swagger-ui",
+                        "/swagger-ui/**",
+                        "/swagger-resources/**",
+                        "/webjars/**",
+                        "/actuator/**");
     }
 
     @Bean
