@@ -21,6 +21,11 @@ public class ReservationController {
 
     private final ReservationService reservationService;
 
+    @GetMapping("/{id}")
+    public ReservationDto getReservationWithPassengersAndFlight(@PathVariable long id) {
+        return reservationService.getReservationWithPassengersAndFlight(id);
+    }
+
     @GetMapping("/flights/{id}")
     public List<ReservationDto> getReservationsByFlight(@PathVariable long id) {
         return reservationService.getReservationsByFlight(id);

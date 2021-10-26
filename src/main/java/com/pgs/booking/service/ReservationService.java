@@ -26,6 +26,11 @@ public class ReservationService {
     private final ReservationDtoMapper reservationDtoMapper;
     private final CreateUpdatePassengerDtoMapper createUpdatePassengerDtoMapper;
 
+    public ReservationDto getReservationWithPassengersAndFlight(long id) {
+        Reservation reservationById = reservationRepository.findReservationById(id);
+        return reservationDtoMapper.mapToReservationDto(reservationById);
+    }
+
     public List<ReservationDto> getReservationsByFlight(long id) {
         List<Reservation> reservationsByFlight = reservationRepository.findAllByFlightId(id);
         return reservationDtoMapper.mapToReservationsDto(reservationsByFlight);
