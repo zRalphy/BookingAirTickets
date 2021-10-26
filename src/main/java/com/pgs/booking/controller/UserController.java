@@ -3,8 +3,10 @@ package com.pgs.booking.controller;
 import com.pgs.booking.model.dto.CreateUserDto;
 import com.pgs.booking.model.dto.UserDto;
 import com.pgs.booking.service.UserService;
+import com.pgs.booking.validators.UserValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,10 +19,12 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final UserValidator userValidator;
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{id}")
-    public UserDto getSingleUser(@Valid @PathVariable Long id) {
+    public UserDto getSingleUser(@Valid @PathVariable Long id, PreAuthenticatedAuthenticationToken token) {
+        userValidator.validateSingleUser(id, token);
         return userService.getSingleUser(id);
     }
 
