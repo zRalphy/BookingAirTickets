@@ -16,6 +16,8 @@ public class SpringFoxConfig {
             The Booking Air Tickets API is organized around REST. 
             Our API is used for creating flight reservations by users.
             It uses the Oauth 2 for authentication of the user.
+            When user successfully login to our API, 
+            he automatically send request for token and assign this token to him.
             """;
 
     @Bean
