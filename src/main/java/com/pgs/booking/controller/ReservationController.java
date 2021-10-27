@@ -78,6 +78,7 @@ public class ReservationController {
         }
         throw new IllegalStateException("The token does not contain authorized user data.");
     }
+
     @Operation(summary = "Delete reservation by its id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Deleted reservation"),
