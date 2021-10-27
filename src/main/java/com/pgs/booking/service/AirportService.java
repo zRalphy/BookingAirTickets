@@ -25,16 +25,16 @@ public class AirportService {
         return airportDtoMapper.mapToAirportsDto(allAirports);
     }
 
-    public AirportDto getAirportByCode(String code) {
-        Airport airport = airportRepository.findAirportByCode(code);
-        return airportDtoMapper.mapToAirportDto(airport);
-    }
-
-    public AirportDto getAirportById(long id) {
-        Airport airport = airportRepository
+    public AirportDto getAirport(long id) {
+        Airport airportById = airportRepository
                 .findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Airport with id " + id + " not found."));
-        return airportDtoMapper.mapToAirportDto(airport);
+        return airportDtoMapper.mapToAirportDto(airportById);
+    }
+
+    public AirportDto getAirportByCode(String code) {
+        Airport airportByCode = airportRepository.findAirportByIataCode(code);
+        return airportDtoMapper.mapToAirportDto(airportByCode);
     }
 
     public AirportDto addAirport(CreateUpdateAirportDto createUpdateAirportDto) {

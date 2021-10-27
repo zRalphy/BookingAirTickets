@@ -10,8 +10,10 @@ import java.util.Optional;
 
 @Repository
 public interface AirportRepository extends JpaRepository<Airport, Long> {
+
     @Query("SELECT a FROM Airport a WHERE a.code = :code")
     Optional<Airport> findAirportByCode_Opt(@Param("code") String code);
 
-    Airport findAirportByCode(@Param("code") String code);
+    @Query("SELECT a FROM Airport a WHERE a.code = :code")
+    Airport findAirportByIataCode(@Param("code") String code);
 }

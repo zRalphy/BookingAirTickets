@@ -25,10 +25,10 @@ public class AirportController {
 
     @GetMapping("/{id}")
     public AirportDto getAirportById(@PathVariable long id)  {
-        return airportService.getAirportById(id);
+        return airportService.getAirport(id);
     }
 
-    @GetMapping("/{code}")
+    @GetMapping("/")
     public AirportDto getAirportByCode(@RequestParam("code") String code)  {
         return airportService.getAirportByCode(code);
     }

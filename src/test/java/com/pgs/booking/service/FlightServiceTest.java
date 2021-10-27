@@ -126,7 +126,8 @@ class FlightServiceTest {
         long id = 1L;
         //given
         given(flightRepository.findById(id))
-                .willReturn(java.util.Optional.ofNullable(FLIGHT));
+                .willReturn(Optional.ofNullable(FLIGHT));
+        given(airportRepository.findAirportByCode_Opt(any(String.class))).willReturn(Optional.empty());
         given(flightRepository.save(any(Flight.class))).willReturn(FLIGHT);
         //when
         var flight = underTest.editFlight(id, CREATE_UPDATE_FLIGHT_DTO);
