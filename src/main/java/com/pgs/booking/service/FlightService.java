@@ -49,8 +49,8 @@ public class FlightService {
         Flight flightToEdit = createUpdateFlightDtoMapper.mapToFlight(createUpdateFlightDto);
         flightToEdit.setDepartureAirport(departureAirport.get());
         flightToEdit.setArrivalAirport(arrivalAirport.get());
-        Flight flightToSave = flightRepository.save(flightToEdit);
-        return flightDtoMapper.mapToFlightDto(flightToSave);
+        Flight flightSaved = flightRepository.save(flightToEdit);
+        return flightDtoMapper.mapToFlightDto(flightSaved);
     }
 
     public FlightDto editFlight(long id, CreateUpdateFlightDto createUpdateFlightDto) {

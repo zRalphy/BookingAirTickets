@@ -5,6 +5,7 @@ import com.pgs.booking.mappers.AirportDtoMapper;
 import com.pgs.booking.mappers.CreateUpdateFlightDtoMapper;
 import com.pgs.booking.mappers.FlightDtoMapper;
 import com.pgs.booking.model.dto.CreateUpdateFlightDto;
+import com.pgs.booking.model.entity.Airport;
 import com.pgs.booking.model.entity.Flight;
 import com.pgs.booking.repository.AirportRepository;
 import com.pgs.booking.repository.FlightRepository;
@@ -48,23 +49,41 @@ class FlightServiceTest {
         underTest = new FlightService(flightRepository, flightDtoMapper, createUpdateFlightDtoMapper, reservationRepository, airportRepository);
     }
 
+    private static final Airport AIRPORT1 = Airport.builder()
+            .id(1L)
+            .code("PSS")
+            .country("POLAND")
+            .name("Wroclaw Airport")
+            .build();
+
+    private static final Airport AIRPORT2 = Airport.builder()
+            .id(2L)
+            .code("BMM")
+            .country("FRANCE")
+            .name("US Airport")
+            .build();
+
     private static Flight FLIGHT = Flight.builder()
             .id(1L)
             .type(Flight.TypeOfFlight.ECONOMY)
             .departureDate(LocalDateTime.of(2021, Month.DECEMBER, 9, 18, 30))
             .arrivalDate(LocalDateTime.of(2021, Month.DECEMBER, 9, 23, 30))
+            .departureAirport(AIRPORT1)
+            .arrivalAirport(AIRPORT2)
             .build();
 
-    private static CreateUpdateFlightDto CREATE_UPDATE_FLIGHT_DTO = CreateUpdateFlightDto.builder()
+    private static final CreateUpdateFlightDto CREATE_UPDATE_FLIGHT_DTO = CreateUpdateFlightDto.builder()
             .type(Flight.TypeOfFlight.BUSINESS)
             .departureDate(LocalDateTime.of(2021, Month.SEPTEMBER, 10, 8, 30))
             .arrivalDate(LocalDateTime.of(2021, Month.SEPTEMBER, 10, 11, 30))
+            .arrivalAirportIataCode("PSS")
+            .arrivalAirportIataCode("CCD")
             .build();
 
     @Test
     void testGetFlights() {
         given(flightRepository.findAll())
-                .willReturn(List.of(new Flight(), new Flight(), new Flight(), new Flight()));
+                .willReturn(List.of(FLIGHT, FLIGHT, FLIGHT, FLIGHT));
         //when
         var flights = underTest.getFlights();
         //then
@@ -91,6 +110,7 @@ class FlightServiceTest {
     void testAddFlight() {
         //given
         given(flightRepository.save(any(Flight.class))).willReturn(FLIGHT);
+        given(airportRepository.findAirportByCode_Opt(any(String.class))).willReturn(Optional.ofNullable(AIRPORT1));
         //when
         var flight = underTest.addFlight(CREATE_UPDATE_FLIGHT_DTO);
         //then
