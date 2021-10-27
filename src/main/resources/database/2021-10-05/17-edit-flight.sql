@@ -2,7 +2,7 @@
 --changeset rmecwaldowski:4
 
 ALTER TABLE flight
-      ADD departureAirportId BIGINT;
+      ADD departureAirportId BIGINT,
       ADD arrivalAirportId BIGINT;
 
 ALTER TABLE flight

@@ -1,13 +1,13 @@
 package com.pgs.booking.service;
 
 import com.pgs.booking.exception.ResourceNotFoundException;
-import com.pgs.booking.mappers.CreateUpdatePassengerDtoMapper;
-import com.pgs.booking.mappers.FlightDtoMapper;
-import com.pgs.booking.mappers.PassengerDtoMapper;
-import com.pgs.booking.mappers.ReservationDtoMapper;
+import com.pgs.booking.mappers.*;
 import com.pgs.booking.model.dto.CreateUpdatePassengerDto;
 import com.pgs.booking.model.dto.CreateUpdateReservationDto;
-import com.pgs.booking.model.entity.*;
+import com.pgs.booking.model.entity.Flight;
+import com.pgs.booking.model.entity.Passenger;
+import com.pgs.booking.model.entity.Reservation;
+import com.pgs.booking.model.entity.User;
 import com.pgs.booking.repository.FlightRepository;
 import com.pgs.booking.repository.ReservationRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +37,8 @@ class ReservationServiceTest {
     @Mock
     private FlightRepository flightRepository;
 
-    private final FlightDtoMapper flightDtoMapper = new FlightDtoMapper();
+    private final AirportDtoMapper airportDtoMapper = new AirportDtoMapper();
+    private final FlightDtoMapper flightDtoMapper = new FlightDtoMapper(airportDtoMapper);
     private final PassengerDtoMapper passengerDtoMapper = new PassengerDtoMapper();
     private final ReservationDtoMapper reservationDtoMapper = new ReservationDtoMapper(passengerDtoMapper, flightDtoMapper);
     private final CreateUpdatePassengerDtoMapper createUpdatePassengerDtoMapper = new CreateUpdatePassengerDtoMapper();

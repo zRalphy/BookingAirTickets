@@ -1,6 +1,7 @@
 package com.pgs.booking.service;
 
 import com.pgs.booking.exception.ResourceNotFoundException;
+import com.pgs.booking.mappers.AirportDtoMapper;
 import com.pgs.booking.mappers.CreateUpdateFlightDtoMapper;
 import com.pgs.booking.mappers.FlightDtoMapper;
 import com.pgs.booking.model.dto.CreateUpdateFlightDto;
@@ -37,7 +38,8 @@ class FlightServiceTest {
     @Mock
     private AirportRepository airportRepository;
 
-    private final FlightDtoMapper flightDtoMapper = new FlightDtoMapper();
+    private final AirportDtoMapper airportDtoMapper = new AirportDtoMapper();
+    private final FlightDtoMapper flightDtoMapper = new FlightDtoMapper(airportDtoMapper);
     private final CreateUpdateFlightDtoMapper createUpdateFlightDtoMapper = new CreateUpdateFlightDtoMapper();
     private FlightService underTest;
 

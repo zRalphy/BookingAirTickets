@@ -32,11 +32,11 @@ public class Flight {
     private List<Reservation> reservations;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.DETACH)
-    @JoinColumn(name = "airportId", nullable = false)
+    @JoinColumn(name = "departureAirportId", nullable = false)
     private Airport departureAirport;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.DETACH)
-    @JoinColumn(name = "airportId", nullable = false)
+    @JoinColumn(name = "arrivalAirportId", nullable = false)
     private Airport arrivalAirport;
 
     public enum TypeOfFlight {
