@@ -21,10 +21,10 @@ public class CreateUpdateFlightDto {
     private LocalDateTime departureDate;
     @NotNull(message = "Please enter your dateOfArrival.")
     private LocalDateTime arrivalDate;
-    @NotBlank(message = "Please enter your departureAirport.")
-    @Size(min = 3, max = 45, message = "DepartureAirport should have at least 3 and at most 45 characters.")
-    private String departureAirport;
-    @NotBlank(message = "Please enter your arrivalAirport.")
-    @Size(min = 3, max = 45, message = "ArrivalAirport should have at least 3 and at most 45 characters.")
-    private String arrivalAirport;
+    @NotBlank(message = "Please enter your departureAirportIataCode.")
+    @Size(min = 1, max = 3, message = "DepartureAirportIataCode should have at least 1 and at most 3 characters.")
+    private String departureAirportIataCode;
+    @NotBlank(message = "Please enter your arrivalAirportIataCode.")
+    @Size(min = 1, max = 3, message = "ArrivalAirportIataCode should have at least 1 and at most 3 characters.")
+    private String arrivalAirportIataCode;
 }

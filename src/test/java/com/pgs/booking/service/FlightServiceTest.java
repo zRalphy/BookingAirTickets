@@ -5,6 +5,7 @@ import com.pgs.booking.mappers.CreateUpdateFlightDtoMapper;
 import com.pgs.booking.mappers.FlightDtoMapper;
 import com.pgs.booking.model.dto.CreateUpdateFlightDto;
 import com.pgs.booking.model.entity.Flight;
+import com.pgs.booking.repository.AirportRepository;
 import com.pgs.booking.repository.FlightRepository;
 import com.pgs.booking.repository.ReservationRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,13 +34,16 @@ class FlightServiceTest {
     @Mock
     private ReservationRepository reservationRepository;
 
+    @Mock
+    private AirportRepository airportRepository;
+
     private final FlightDtoMapper flightDtoMapper = new FlightDtoMapper();
     private final CreateUpdateFlightDtoMapper createUpdateFlightDtoMapper = new CreateUpdateFlightDtoMapper();
     private FlightService underTest;
 
     @BeforeEach
     void setUp() {
-        underTest = new FlightService(flightRepository, flightDtoMapper, createUpdateFlightDtoMapper, reservationRepository);
+        underTest = new FlightService(flightRepository, flightDtoMapper, createUpdateFlightDtoMapper, reservationRepository, airportRepository);
     }
 
     private static Flight FLIGHT = Flight.builder()

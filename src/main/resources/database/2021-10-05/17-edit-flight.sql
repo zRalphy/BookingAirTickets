@@ -2,5 +2,8 @@
 -- changeset rmecwaldowski:5
 
 ALTER TABLE flight
-      ADD CONSTRAINT airportFlightId
-      FOREIGN KEY (flightId) REFERENCES airport(id);
+      ADD airportCode BIGINT;
+
+ALTER TABLE flight
+      ADD CONSTRAINT flightAirportCode
+      FOREIGN KEY (airportCode) REFERENCES airport(code);

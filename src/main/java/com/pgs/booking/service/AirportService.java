@@ -25,8 +25,8 @@ public class AirportService {
         return airportDtoMapper.mapToAirportsDto(allAirports);
     }
 
-    public AirportDto getAirportByCity(String code) {
-        Airport airport = airportRepository.findAirportByCity(code);
+    public AirportDto getAirportByCode(String code) {
+        Airport airport = airportRepository.findAirportByCode(code);
         return airportDtoMapper.mapToAirportDto(airport);
     }
 
@@ -52,12 +52,5 @@ public class AirportService {
         airportToEdit.setCity(createUpdateAirportDto.getCity());
         Airport airportToSave = airportRepository.save(airportToEdit);
         return airportDtoMapper.mapToAirportDto(airportToSave);
-    }
-
-    public void deleteAirport(long id) {
-        if (!airportRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Airport with id " + id + " does not exists.");
-        }
-        airportRepository.deleteById(id);
     }
 }

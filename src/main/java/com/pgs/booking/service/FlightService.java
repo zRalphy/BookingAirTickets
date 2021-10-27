@@ -5,8 +5,10 @@ import com.pgs.booking.mappers.CreateUpdateFlightDtoMapper;
 import com.pgs.booking.mappers.FlightDtoMapper;
 import com.pgs.booking.model.dto.CreateUpdateFlightDto;
 import com.pgs.booking.model.dto.FlightDto;
+import com.pgs.booking.model.entity.Airport;
 import com.pgs.booking.model.entity.Flight;
 import com.pgs.booking.model.entity.Reservation;
+import com.pgs.booking.repository.AirportRepository;
 import com.pgs.booking.repository.FlightRepository;
 import com.pgs.booking.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class FlightService {
     private final FlightDtoMapper flightDtoMapper;
     private final CreateUpdateFlightDtoMapper createUpdateFlightDtoMapper;
     private final ReservationRepository reservationRepository;
+    private final AirportRepository airportRepository;
 
     public List<FlightDto> getFlights() {
         List<Flight> allFlights = flightRepository.findAll();
@@ -36,6 +39,11 @@ public class FlightService {
     }
 
     public FlightDto addFlight(CreateUpdateFlightDto createUpdateFlightDto) {
+        Airport departureAirport = airportRepository.findAirportByCode(createUpdateFlightDto.getDepartureAirportIataCode());
+        Airport arrivalAirport = airportRepository.findAirportByCode(createUpdateFlightDto.getArrivalAirportIataCode());
+        if (departureAirport.getCode().isEmpty() || arrivalAirport.getCode().isEmpty()) {
+            throw new ResourceNotFoundException("DepartureAirportIataCode or ArrivalAirportIataCode not exist in database.");
+        }
         Flight flight = flightRepository.save(createUpdateFlightDtoMapper.mapToFlight(createUpdateFlightDto));
         return flightDtoMapper.mapToFlightDto(flight);
     }
@@ -44,9 +52,17 @@ public class FlightService {
         Flight flightToEdit = flightRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Flight with id " + id + " not found."));
 
+        Airport departureAirport = airportRepository.findAirportByCode(createUpdateFlightDto.getDepartureAirportIataCode());
+        Airport arrivalAirport = airportRepository.findAirportByCode(createUpdateFlightDto.getArrivalAirportIataCode());
+        if (departureAirport.getCode().isEmpty() || arrivalAirport.getCode().isEmpty()) {
+            throw new ResourceNotFoundException("DepartureAirportIataCode or ArrivalAirportIataCode not exist in database.");
+        }
+
         flightToEdit.setType(createUpdateFlightDto.getType());
         flightToEdit.setDepartureDate(createUpdateFlightDto.getDepartureDate());
         flightToEdit.setArrivalDate(createUpdateFlightDto.getArrivalDate());
+        flightToEdit.setDepartureAirportIataCode(departureAirport.getCode());
+        flightToEdit.setArrivalAirportIataCode(arrivalAirport.getCode());
         Flight flightToSave = flightRepository.save(flightToEdit);
         return flightDtoMapper.mapToFlightDto(flightToSave);
     }

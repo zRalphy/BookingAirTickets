@@ -40,6 +40,6 @@ public class Flight {
     private List<Reservation> reservations;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.DETACH)
-    @JoinColumn(name = "airportId", nullable = false)
+    @JoinColumn(name = "airportCode", nullable = false)
     private Airport airport;
 }

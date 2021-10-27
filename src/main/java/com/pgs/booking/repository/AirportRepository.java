@@ -7,5 +7,5 @@ import org.springframework.data.repository.query.Param;
 
 public interface AirportRepository extends JpaRepository<Airport, Long> {
     @Query("SELECT a FROM Airport a WHERE a.code = :code")
-    Airport findAirportByCity(@Param("code") String code);
+    Airport findAirportByCode(@Param("code") String code);
 }

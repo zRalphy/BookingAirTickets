@@ -29,8 +29,8 @@ public class AirportController {
     }
 
     @GetMapping("/{city}")
-    public AirportDto getAirportByCity(@PathVariable String code)  {
-        return airportService.getAirportByCity(code);
+    public AirportDto getAirportByCode(@PathVariable String code)  {
+        return airportService.getAirportByCode(code);
     }
 
     @PostMapping
@@ -41,10 +41,5 @@ public class AirportController {
     @PutMapping("/{id}")
     public AirportDto editAirport(@Valid @RequestBody CreateUpdateAirportDto createUpdateAirportDto, @PathVariable long id) {
         return airportService.editAirport(id, createUpdateAirportDto);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteAirport(@PathVariable long id) {
-        airportService.deleteAirport(id);
     }
 }
