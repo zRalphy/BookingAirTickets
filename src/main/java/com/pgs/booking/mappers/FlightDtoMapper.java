@@ -21,17 +21,13 @@ public class FlightDtoMapper {
     }
 
     public FlightDto mapToFlightDto(Flight flight) {
-        var departureAirport = flight.getDepartureAirport();
-        var arrivalAirport = flight.getArrivalAirport();
-        var departureAirportIataCode = airportDtoMapper.mapToAirportDto(departureAirport).getCode();
-        var arrivalAirportIataCode = airportDtoMapper.mapToAirportDto(arrivalAirport).getCode();
         return FlightDto.builder()
                 .id(flight.getId())
                 .type(flight.getType())
                 .departureDate(flight.getDepartureDate())
                 .arrivalDate(flight.getArrivalDate())
-                .departureAirportIataCode(departureAirportIataCode)
-                .arrivalAirportIataCode(arrivalAirportIataCode)
+                .departureAirportIataCode(flight.getDepartureAirport().getCode())
+                .arrivalAirportIataCode(flight.getDepartureAirport().getCode())
                 .build();
     }
 }

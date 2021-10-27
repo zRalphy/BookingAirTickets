@@ -45,8 +45,7 @@ public class FlightService {
         if (departureAirport.isEmpty() || arrivalAirport.isEmpty()) {
             throw new ResourceNotFoundException("DepartureAirportIataCode or ArrivalAirportIataCode not exist in database.");
         }
-        createUpdateFlightDto.setArrivalAirportIataCode(departureAirport.get().getCode());
-        createUpdateFlightDto.setArrivalAirportIataCode(arrivalAirport.get().getCode());
+
         Flight flight = flightRepository.save(createUpdateFlightDtoMapper.mapToFlight(createUpdateFlightDto));
         return flightDtoMapper.mapToFlightDto(flight);
     }

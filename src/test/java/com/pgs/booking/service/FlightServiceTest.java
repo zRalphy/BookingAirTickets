@@ -40,7 +40,7 @@ class FlightServiceTest {
 
     private final AirportDtoMapper airportDtoMapper = new AirportDtoMapper();
     private final FlightDtoMapper flightDtoMapper = new FlightDtoMapper(airportDtoMapper);
-    private final CreateUpdateFlightDtoMapper createUpdateFlightDtoMapper = new CreateUpdateFlightDtoMapper();
+    private final CreateUpdateFlightDtoMapper createUpdateFlightDtoMapper = new CreateUpdateFlightDtoMapper(airportRepository);
     private FlightService underTest;
 
     @BeforeEach
