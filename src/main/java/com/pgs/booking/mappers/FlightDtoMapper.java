@@ -20,8 +20,8 @@ public class FlightDtoMapper {
                 .type(flight.getType())
                 .departureDate(flight.getDepartureDate())
                 .arrivalDate(flight.getArrivalDate())
-                .departureAirportIataCode(flight.getDepartureAirport())
-                .arrivalAirportIataCode(flight.getArrivalAirport())
+                .departureAirportIataCode(flight.getDepartureAirport().getCode())
+                .arrivalAirportIataCode(flight.getArrivalAirport().getCode())
                 .build();
     }
 }

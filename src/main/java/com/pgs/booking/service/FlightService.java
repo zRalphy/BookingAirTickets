@@ -40,8 +40,8 @@ public class FlightService {
     }
 
     public FlightDto addFlight(CreateUpdateFlightDto createUpdateFlightDto) {
-        Optional<Airport> departureAirport = airportRepository.findAirportByCode(createUpdateFlightDto.getDepartureAirportIataCode());
-        Optional<Airport> arrivalAirport = airportRepository.findAirportByCode(createUpdateFlightDto.getArrivalAirportIataCode());
+        Optional<Airport> departureAirport = airportRepository.findAirportByCode_Opt(createUpdateFlightDto.getDepartureAirportIataCode());
+        Optional<Airport> arrivalAirport = airportRepository.findAirportByCode_Opt(createUpdateFlightDto.getArrivalAirportIataCode());
         if (departureAirport.isEmpty() || arrivalAirport.isEmpty()) {
             throw new ResourceNotFoundException("DepartureAirportIataCode or ArrivalAirportIataCode not exist in database.");
         }
@@ -55,16 +55,16 @@ public class FlightService {
         Flight flightToEdit = flightRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Flight with id " + id + " not found."));
 
-        Optional<Airport> departureAirport = airportRepository.findAirportByCode(createUpdateFlightDto.getDepartureAirportIataCode());
-        Optional<Airport> arrivalAirport = airportRepository.findAirportByCode(createUpdateFlightDto.getArrivalAirportIataCode());
+        Optional<Airport> departureAirport = airportRepository.findAirportByCode_Opt(createUpdateFlightDto.getDepartureAirportIataCode());
+        Optional<Airport> arrivalAirport = airportRepository.findAirportByCode_Opt(createUpdateFlightDto.getArrivalAirportIataCode());
         if (departureAirport.isEmpty() || arrivalAirport.isEmpty()) {
             throw new ResourceNotFoundException("DepartureAirportIataCode or ArrivalAirportIataCode not exist in database.");
         }
         flightToEdit.setType(createUpdateFlightDto.getType());
         flightToEdit.setDepartureDate(createUpdateFlightDto.getDepartureDate());
         flightToEdit.setArrivalDate(createUpdateFlightDto.getArrivalDate());
-        flightToEdit.setDepartureAirport(departureAirport.get().getCode());
-        flightToEdit.setArrivalAirport(arrivalAirport.get().getCode());
+        flightToEdit.setDepartureAirport(departureAirport.get());
+        flightToEdit.setArrivalAirport(arrivalAirport.get());
         Flight flightToSave = flightRepository.save(flightToEdit);
         return flightDtoMapper.mapToFlightDto(flightToSave);
     }

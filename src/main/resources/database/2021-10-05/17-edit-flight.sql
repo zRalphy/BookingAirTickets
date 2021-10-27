@@ -2,8 +2,13 @@
 --changeset rmecwaldowski:4
 
 ALTER TABLE flight
-      ADD airportId BIGINT;
+      ADD departureAirportId BIGINT;
+      ADD arrivalAirportId BIGINT;
 
 ALTER TABLE flight
-      ADD CONSTRAINT flightAirportId
-      FOREIGN KEY (AirportId) REFERENCES airport(id);
+      ADD CONSTRAINT departureAirportId
+      FOREIGN KEY (departureAirportId) REFERENCES airport(id);
+
+      ALTER TABLE flight
+            ADD CONSTRAINT arrivalAirportId
+            FOREIGN KEY (arrivalAirportId) REFERENCES airport(id);
