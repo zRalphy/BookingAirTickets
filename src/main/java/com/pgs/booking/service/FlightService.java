@@ -21,6 +21,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class FlightService {
+
     private final FlightRepository flightRepository;
     private final FlightDtoMapper flightDtoMapper;
     private final CreateUpdateFlightDtoMapper createUpdateFlightDtoMapper;
@@ -45,9 +46,11 @@ public class FlightService {
         if (departureAirport.isEmpty() || arrivalAirport.isEmpty()) {
             throw new ResourceNotFoundException("DepartureAirportIataCode or ArrivalAirportIataCode not exist in database.");
         }
-
-        Flight flight = flightRepository.save(createUpdateFlightDtoMapper.mapToFlight(createUpdateFlightDto));
-        return flightDtoMapper.mapToFlightDto(flight);
+        Flight flightToEdit = createUpdateFlightDtoMapper.mapToFlight(createUpdateFlightDto);
+        flightToEdit.setDepartureAirport(departureAirport.get());
+        flightToEdit.setArrivalAirport(arrivalAirport.get());
+        Flight flightToSave = flightRepository.save(flightToEdit);
+        return flightDtoMapper.mapToFlightDto(flightToSave);
     }
 
     public FlightDto editFlight(long id, CreateUpdateFlightDto createUpdateFlightDto) {
@@ -74,7 +77,7 @@ public class FlightService {
             throw new ResourceNotFoundException("Flight with id " + id + " not found.");
         }
         List<Reservation> reservationsCanceled = reservationRepository.findAllByFlightId(id);
-        reservationsCanceled.forEach((reservation)-> {
+        reservationsCanceled.forEach((reservation) -> {
             reservation.setFlight(null);
             reservation.setStatus(Reservation.ReservationStatus.CANCELED);
         });
