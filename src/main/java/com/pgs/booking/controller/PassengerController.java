@@ -3,6 +3,7 @@ package com.pgs.booking.controller;
 import com.pgs.booking.model.dto.CreateUpdatePassengerDto;
 import com.pgs.booking.model.dto.PassengerDto;
 import com.pgs.booking.service.PassengerService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+@OpenAPIDefinition
 @RestController
 @RequiredArgsConstructor
 @Slf4j
