@@ -1,7 +1,7 @@
 -- liquibase formatted sql
 -- changeset rmecwaldowski:6
-DROP TABLE IF EXISTS passenger;
-insert into passenger (id, firstName, lastName, email, country, telephone, reservationId) values (1, "Rafal", "Mec", "rafmec@gmail.com", "Poland", "123123123", 1);
+DELETE FROM passenger where id IS NOT NULL;
+INSERT INTO passenger (id, firstName, lastName, email, country, telephone, reservationId) values (1, "Rafal", "Mec", "rafmec@gmail.com", "Poland", "123123123", 1);
 insert into passenger (id, firstName, lastName, email, country, telephone, reservationId) values (2, "Adam", "Mec", "adammec@gmail.com", "Italy", "122133111", 6);
 insert into passenger (id, firstName, lastName, email, country, telephone, reservationId) values (3, "Asia", "Kot", "asiakot@gmail.com", "Poland", "213123123", 1);
 insert into passenger (id, firstName, lastName, email, country, telephone, reservationId) values (4, "Jan", "Stan", "janstan@gmail.com", "France", "222222222", 8);

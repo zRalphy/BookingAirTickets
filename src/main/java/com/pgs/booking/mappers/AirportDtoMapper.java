@@ -22,7 +22,6 @@ public class AirportDtoMapper {
                 .code(airport.getCode())
                 .name(airport.getName())
                 .country(airport.getCountry())
-                .city(airport.getCity())
                 .build();
     }
 }

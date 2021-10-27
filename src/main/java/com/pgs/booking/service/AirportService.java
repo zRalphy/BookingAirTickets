@@ -49,7 +49,6 @@ public class AirportService {
         airportToEdit.setCode(createUpdateAirportDto.getCode());
         airportToEdit.setName(createUpdateAirportDto.getName());
         airportToEdit.setCountry(createUpdateAirportDto.getCountry());
-        airportToEdit.setCity(createUpdateAirportDto.getCity());
         Airport airportToSave = airportRepository.save(airportToEdit);
         return airportDtoMapper.mapToAirportDto(airportToSave);
     }

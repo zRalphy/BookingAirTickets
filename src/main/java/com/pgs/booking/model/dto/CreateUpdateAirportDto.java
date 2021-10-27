@@ -21,7 +21,4 @@ public class CreateUpdateAirportDto {
     @NotBlank(message = "Please enter your airport country.")
     @Size(min = 3, max = 45, message = "Country should have at least 3 and at most 45 characters.")
     private String country;
-    @NotBlank(message = "Please enter your airport city.")
-    @Size(min = 3, max = 45, message = "City should have at least 3 and at most 45 characters.")
-    private String city;
 }

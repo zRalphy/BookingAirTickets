@@ -12,7 +12,6 @@ public class CreateUpdateAirportDtoMapper {
                 .code(createUpdateAirportDto.getCode())
                 .name(createUpdateAirportDto.getName())
                 .country(createUpdateAirportDto.getCountry())
-                .city(createUpdateAirportDto.getCity())
                 .build();
     }
 }

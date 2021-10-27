@@ -10,5 +10,4 @@ public class AirportDto {
     String code;
     String name;
     String country;
-    String city;
 }

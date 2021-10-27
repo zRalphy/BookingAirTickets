@@ -22,6 +22,4 @@ public class Airport {
     private String name;
     @Column(name = "country")
     private String country;
-    @Column(name = "city")
-    private String city;
 }
