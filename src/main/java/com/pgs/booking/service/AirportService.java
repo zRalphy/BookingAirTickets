@@ -25,8 +25,8 @@ public class AirportService {
         return airportDtoMapper.mapToAirportsDto(allAirports);
     }
 
-    public AirportDto getAirportByCity(String city) {
-        Airport airport = airportRepository.findAirportByCity(city);
+    public AirportDto getAirportByCity(String code) {
+        Airport airport = airportRepository.findAirportByCity(code);
         return airportDtoMapper.mapToAirportDto(airport);
     }
 

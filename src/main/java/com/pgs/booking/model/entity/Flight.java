@@ -27,9 +27,9 @@ public class Flight {
     @Column(name = "arrivalDate")
     private LocalDateTime arrivalDate;
     @Column(name = "departureAirport")
-    private String departureAirport;
+    private String departureAirportIataCode;
     @Column(name = "arrivalAirport")
-    private String arrivalAirport;
+    private String arrivalAirportIataCode;
 
     public enum TypeOfFlight {
         ECONOMY, PREMIUM, BUSINESS

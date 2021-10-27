@@ -29,8 +29,8 @@ public class AirportController {
     }
 
     @GetMapping("/{city}")
-    public AirportDto getAirportByCity(@PathVariable String city)  {
-        return airportService.getAirportByCity(city);
+    public AirportDto getAirportByCity(@PathVariable String code)  {
+        return airportService.getAirportByCity(code);
     }
 
     @PostMapping
