@@ -30,7 +30,8 @@ public class ReservationController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found all reservations"),
             @ApiResponse(responseCode = "400", description = "Invalid flight id supplied"),
-            @ApiResponse(responseCode = "401", description = "User unauthorized for this action")
+            @ApiResponse(responseCode = "401", description = "Request is not authorize for this action"),
+            @ApiResponse(responseCode = "403", description = "User is not authorize for this action")
     })
     @GetMapping("/flights/{id}")
     public List<ReservationDto> getReservationsByFlight(@PathVariable long id) {
@@ -41,7 +42,8 @@ public class ReservationController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found all reservation for this user"),
             @ApiResponse(responseCode = "400", description = "Invalid user id supplied"),
-            @ApiResponse(responseCode = "401", description = "User unauthorized for this action")
+            @ApiResponse(responseCode = "401", description = "Request is not authorize for this action"),
+            @ApiResponse(responseCode = "403", description = "User is not authorize for this action")
     })
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'USER')")
     @GetMapping("/users")
@@ -56,7 +58,8 @@ public class ReservationController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found all reservation for user"),
             @ApiResponse(responseCode = "400", description = "Invalid user id supplied"),
-            @ApiResponse(responseCode = "401", description = "User unauthorized for this action")
+            @ApiResponse(responseCode = "401", description = "Request is not authorize for this action"),
+            @ApiResponse(responseCode = "403", description = "User is not authorize for this action")
     })
     @GetMapping("/users/{id}")
     public List<ReservationDto> getReservationsByUser(@PathVariable long id) {
@@ -67,7 +70,7 @@ public class ReservationController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Added reservation"),
             @ApiResponse(responseCode = "400", description = "Invalid data passed"),
-            @ApiResponse(responseCode = "401", description = "User unauthorized for this action")
+            @ApiResponse(responseCode = "401", description = "Request is not authorize for this action")
     })
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'USER')")
     @PostMapping
@@ -83,7 +86,8 @@ public class ReservationController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Deleted reservation"),
             @ApiResponse(responseCode = "400", description = "Invalid reservation id supplied"),
-            @ApiResponse(responseCode = "401", description = "User unauthorized for this action")
+            @ApiResponse(responseCode = "401", description = "Request is not authorize for this action"),
+            @ApiResponse(responseCode = "403", description = "User is not authorize for this action")
     })
     @DeleteMapping("/{id}")
     public void deleteReservation(@PathVariable long id) {
@@ -94,7 +98,8 @@ public class ReservationController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Changed reservation status to REALIZED"),
             @ApiResponse(responseCode = "400", description = "Invalid reservation id supplied"),
-            @ApiResponse(responseCode = "401", description = "User unauthorized for this action")
+            @ApiResponse(responseCode = "401", description = "Request is not authorize for this action"),
+            @ApiResponse(responseCode = "403", description = "User is not authorize for this action")
     })
     @PutMapping("/{id}/realized")
     public ReservationDto realizedReservation(@PathVariable Long id) {
@@ -105,7 +110,8 @@ public class ReservationController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Changed reservation status to CANCELED"),
             @ApiResponse(responseCode = "400", description = "Invalid reservation id supplied"),
-            @ApiResponse(responseCode = "401", description = "User unauthorized for this action")
+            @ApiResponse(responseCode = "401", description = "Request is not authorize for this action"),
+            @ApiResponse(responseCode = "403", description = "User is not authorize for this action")
     })
     @PutMapping("/{id}/canceled")
     public ReservationDto canceledReservation(@PathVariable Long id) {
