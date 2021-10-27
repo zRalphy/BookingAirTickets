@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -39,11 +40,13 @@ public class FlightService {
     }
 
     public FlightDto addFlight(CreateUpdateFlightDto createUpdateFlightDto) {
-        Airport departureAirport = airportRepository.findAirportByCode(createUpdateFlightDto.getDepartureAirportIataCode());
-        Airport arrivalAirport = airportRepository.findAirportByCode(createUpdateFlightDto.getArrivalAirportIataCode());
-        if (departureAirport.getCode().isEmpty() || arrivalAirport.getCode().isEmpty()) {
+        Optional<Airport> departureAirport = airportRepository.findAirportByCode(createUpdateFlightDto.getDepartureAirportIataCode());
+        Optional<Airport> arrivalAirport = airportRepository.findAirportByCode(createUpdateFlightDto.getArrivalAirportIataCode());
+        if (departureAirport.isEmpty() || arrivalAirport.isEmpty()) {
             throw new ResourceNotFoundException("DepartureAirportIataCode or ArrivalAirportIataCode not exist in database.");
         }
+        createUpdateFlightDto.setArrivalAirportIataCode(departureAirport.get().getCode());
+        createUpdateFlightDto.setArrivalAirportIataCode(arrivalAirport.get().getCode());
         Flight flight = flightRepository.save(createUpdateFlightDtoMapper.mapToFlight(createUpdateFlightDto));
         return flightDtoMapper.mapToFlightDto(flight);
     }
@@ -52,17 +55,16 @@ public class FlightService {
         Flight flightToEdit = flightRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Flight with id " + id + " not found."));
 
-        Airport departureAirport = airportRepository.findAirportByCode(createUpdateFlightDto.getDepartureAirportIataCode());
-        Airport arrivalAirport = airportRepository.findAirportByCode(createUpdateFlightDto.getArrivalAirportIataCode());
-        if (departureAirport.getCode().isEmpty() || arrivalAirport.getCode().isEmpty()) {
+        Optional<Airport> departureAirport = airportRepository.findAirportByCode(createUpdateFlightDto.getDepartureAirportIataCode());
+        Optional<Airport> arrivalAirport = airportRepository.findAirportByCode(createUpdateFlightDto.getArrivalAirportIataCode());
+        if (departureAirport.isEmpty() || arrivalAirport.isEmpty()) {
             throw new ResourceNotFoundException("DepartureAirportIataCode or ArrivalAirportIataCode not exist in database.");
         }
-
         flightToEdit.setType(createUpdateFlightDto.getType());
         flightToEdit.setDepartureDate(createUpdateFlightDto.getDepartureDate());
         flightToEdit.setArrivalDate(createUpdateFlightDto.getArrivalDate());
-        flightToEdit.setDepartureAirportIataCode(departureAirport.getCode());
-        flightToEdit.setArrivalAirportIataCode(arrivalAirport.getCode());
+        flightToEdit.setDepartureAirport(departureAirport.get().getCode());
+        flightToEdit.setArrivalAirport(arrivalAirport.get().getCode());
         Flight flightToSave = flightRepository.save(flightToEdit);
         return flightDtoMapper.mapToFlightDto(flightToSave);
     }

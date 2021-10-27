@@ -1,9 +1,9 @@
--- liquibase formatted sql
--- changeset rmecwaldowski:5
+--liquibase formatted sql
+--changeset rmecwaldowski:4
 
 ALTER TABLE flight
-      ADD airportCode BIGINT;
+      ADD airportId BIGINT;
 
 ALTER TABLE flight
-      ADD CONSTRAINT flightAirportCode
-      FOREIGN KEY (airportCode) REFERENCES airport(code);
+      ADD CONSTRAINT flightAirportId
+      FOREIGN KEY (AirportId) REFERENCES airport(id);

@@ -26,7 +26,7 @@ public class AirportService {
     }
 
     public AirportDto getAirportByCode(String code) {
-        Airport airport = airportRepository.findAirportByCode(code);
+        Airport airport = airportRepository.findAirportByCode(code).orElseThrow(() -> new ResourceNotFoundException("Airport with id " + code + " not found."));
         return airportDtoMapper.mapToAirportDto(airport);
     }
 

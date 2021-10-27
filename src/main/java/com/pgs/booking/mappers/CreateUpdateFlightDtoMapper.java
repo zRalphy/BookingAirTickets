@@ -12,8 +12,6 @@ public class CreateUpdateFlightDtoMapper {
                 .type(createUpdateFlightDto.getType())
                 .departureDate(createUpdateFlightDto.getDepartureDate())
                 .arrivalDate(createUpdateFlightDto.getArrivalDate())
-                .departureAirportIataCode(createUpdateFlightDto.getDepartureAirportIataCode())
-                .arrivalAirportIataCode(createUpdateFlightDto.getArrivalAirportIataCode())
                 .build();
     }
 }

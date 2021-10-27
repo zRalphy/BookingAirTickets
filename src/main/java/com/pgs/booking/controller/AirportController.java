@@ -28,8 +28,8 @@ public class AirportController {
         return airportService.getAirportById(id);
     }
 
-    @GetMapping("/{city}")
-    public AirportDto getAirportByCode(@PathVariable String code)  {
+    @GetMapping("/{code}")
+    public AirportDto getAirportByCode(@RequestParam("code") String code)  {
         return airportService.getAirportByCode(code);
     }
 
