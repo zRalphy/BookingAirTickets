@@ -91,8 +91,9 @@ public class ReservationController {
         @ApiResponse(responseCode = "404", description = "Selected reservation was not found")
     })
     @DeleteMapping("/{id}")
-    public void deleteReservation(@PathVariable long id) {
+    public String deleteReservation(@PathVariable long id) {
         reservationService.deleteReservation(id);
+        return "Success delete reservation with id: " + id;
     }
 
     // MARK: - PUT METHODS
