@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'USER')")
+@PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
 @RequestMapping("/api/passengers")
 public class PassengerController {
 
@@ -34,6 +34,10 @@ public class PassengerController {
         return passengerService.getSinglePassenger(id);
     }
 
+    /**
+     * @deprecated add passengers via `POST /api/reservations/`
+     */
+    @Deprecated(forRemoval = true)
     @PostMapping
     public PassengerDto addPassenger(@Valid @RequestBody CreateUpdatePassengerDto createUpdatePassengerDto) {
         log.trace("Controller method: addPassenger.");
