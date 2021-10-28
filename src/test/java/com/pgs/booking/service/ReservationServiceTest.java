@@ -1,10 +1,7 @@
 package com.pgs.booking.service;
 
 import com.pgs.booking.exception.ResourceNotFoundException;
-import com.pgs.booking.mappers.CreateUpdatePassengerDtoMapper;
-import com.pgs.booking.mappers.FlightDtoMapper;
-import com.pgs.booking.mappers.PassengerDtoMapper;
-import com.pgs.booking.mappers.ReservationDtoMapper;
+import com.pgs.booking.mappers.*;
 import com.pgs.booking.model.dto.CreateUpdatePassengerDto;
 import com.pgs.booking.model.dto.CreateUpdateReservationDto;
 import com.pgs.booking.model.entity.*;
@@ -37,7 +34,8 @@ class ReservationServiceTest {
     @Mock
     private FlightRepository flightRepository;
 
-    private final FlightDtoMapper flightDtoMapper = new FlightDtoMapper();
+    private final AirportDtoMapper airportDtoMapper = new AirportDtoMapper();
+    private final FlightDtoMapper flightDtoMapper = new FlightDtoMapper(airportDtoMapper);
     private final PassengerDtoMapper passengerDtoMapper = new PassengerDtoMapper();
     private final ReservationDtoMapper reservationDtoMapper = new ReservationDtoMapper(passengerDtoMapper, flightDtoMapper);
     private final CreateUpdatePassengerDtoMapper createUpdatePassengerDtoMapper = new CreateUpdatePassengerDtoMapper();
@@ -47,6 +45,20 @@ class ReservationServiceTest {
     void setUp() {
         testReservationService = new ReservationService(reservationRepository, flightRepository, reservationDtoMapper, createUpdatePassengerDtoMapper);
     }
+
+    private static final Airport AIRPORT1 = Airport.builder()
+            .id(1L)
+            .code("PSS")
+            .country("POLAND")
+            .name("Wroclaw Airport")
+            .build();
+
+    private static final Airport AIRPORT2 = Airport.builder()
+            .id(2L)
+            .code("BMM")
+            .country("FRANCE")
+            .name("US Airport")
+            .build();
 
     private static final User USER_1 = User.builder()
             .id(1L)
@@ -76,6 +88,8 @@ class ReservationServiceTest {
             .type(Flight.TypeOfFlight.ECONOMY)
             .departureDate(LocalDateTime.of(2021, Month.DECEMBER, 9, 18, 30))
             .arrivalDate(LocalDateTime.of(2021, Month.DECEMBER, 9, 23, 30))
+            .departureAirport(AIRPORT1)
+            .arrivalAirport(AIRPORT2)
             .build();
 
     private static final Reservation RESERVATION = Reservation.builder()

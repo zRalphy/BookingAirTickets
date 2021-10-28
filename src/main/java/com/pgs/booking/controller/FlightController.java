@@ -41,7 +41,8 @@ public class FlightController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteFlight(@PathVariable("id") long id) {
+    public String deleteFlight(@PathVariable("id") long id) {
         flightService.deleteFlight(id);
+        return "Success delete flight with id: " + id;
     }
 }
