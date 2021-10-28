@@ -1,0 +1,30 @@
+-- liquibase formatted sql
+-- changeset rmecwaldowski:6
+DELETE FROM reservation where id IS NOT NULL;
+insert into reservation (id, status, flightID, userId) values (1, 'IN_PROGRESS', 1, 1);
+insert into reservation (id, status, flightID, userId) values (2, 'IN_PROGRESS', 1, 1);
+insert into reservation (id, status, flightID, userId) values (3, 'IN_PROGRESS', 1, 1);
+insert into reservation (id, status, flightID, userId) values (4, 'IN_PROGRESS', 2, 1);
+insert into reservation (id, status, flightID, userId) values (5, 'IN_PROGRESS', 2, 1);
+insert into reservation (id, status, flightID, userId) values (6, 'IN_PROGRESS', 2, 1);
+insert into reservation (id, status, flightID, userId) values (7, 'IN_PROGRESS', 3, 1);
+insert into reservation (id, status, flightID, userId) values (8, 'IN_PROGRESS', 3, 1);
+insert into reservation (id, status, flightID, userId) values (9, 'IN_PROGRESS', 3, 1);
+insert into reservation (id, status, flightID, userId) values (10, 'IN_PROGRESS', 1, 2);
+insert into reservation (id, status, flightID, userId) values (11, 'IN_PROGRESS', 1, 2);
+insert into reservation (id, status, flightID, userId) values (12, 'IN_PROGRESS', 1, 2);
+insert into reservation (id, status, flightID, userId) values (13, 'IN_PROGRESS', 2, 2);
+insert into reservation (id, status, flightID, userId) values (14, 'IN_PROGRESS', 2, 2);
+insert into reservation (id, status, flightID, userId) values (15, 'IN_PROGRESS', 2, 2);
+insert into reservation (id, status, flightID, userId) values (16, 'IN_PROGRESS', 3, 2);
+insert into reservation (id, status, flightID, userId) values (17, 'IN_PROGRESS', 3, 2);
+insert into reservation (id, status, flightID, userId) values (18, 'IN_PROGRESS', 3, 2);
+insert into reservation (id, status, flightID, userId) values (19, 'IN_PROGRESS', 1, 3);
+insert into reservation (id, status, flightID, userId) values (20, 'IN_PROGRESS', 1, 3);
+insert into reservation (id, status, flightID, userId) values (21, 'IN_PROGRESS', 1, 3);
+insert into reservation (id, status, flightID, userId) values (22, 'IN_PROGRESS', 2, 3);
+insert into reservation (id, status, flightID, userId) values (23, 'IN_PROGRESS', 2, 3);
+insert into reservation (id, status, flightID, userId) values (24, 'IN_PROGRESS', 2, 3);
+insert into reservation (id, status, flightID, userId) values (25, 'IN_PROGRESS', 3, 3);
+insert into reservation (id, status, flightID, userId) values (26, 'IN_PROGRESS', 3, 3);
+insert into reservation (id, status, flightID, userId) values (27, 'IN_PROGRESS', 3, 3);
