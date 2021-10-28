@@ -3,6 +3,7 @@ package com.pgs.booking.controller;
 import com.pgs.booking.model.dto.AirportDto;
 import com.pgs.booking.model.dto.CreateUpdateAirportDto;
 import com.pgs.booking.service.AirportService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+@OpenAPIDefinition
 @RestController
 @RequiredArgsConstructor
 @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
