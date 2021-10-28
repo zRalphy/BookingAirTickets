@@ -110,7 +110,8 @@ class FlightServiceTest {
     void testAddFlight() {
         //given
         given(flightRepository.save(any(Flight.class))).willReturn(FLIGHT);
-        given(airportRepository.findAirportByCode_Opt(any(String.class))).willReturn(Optional.ofNullable(AIRPORT1));
+        given(airportRepository.findAirportByCode_Opt(CREATE_UPDATE_FLIGHT_DTO.getDepartureAirportIataCode())).willReturn(Optional.ofNullable(AIRPORT1));
+        given(airportRepository.findAirportByCode_Opt(CREATE_UPDATE_FLIGHT_DTO.getArrivalAirportIataCode())).willReturn(Optional.ofNullable(AIRPORT2));
         //when
         var flight = underTest.addFlight(CREATE_UPDATE_FLIGHT_DTO);
         //then
@@ -128,6 +129,8 @@ class FlightServiceTest {
         given(flightRepository.findById(id))
                 .willReturn(Optional.ofNullable(FLIGHT));
         given(airportRepository.findAirportByCode_Opt(any(String.class))).willReturn(Optional.empty());
+        given(airportRepository.findAirportByCode_Opt(CREATE_UPDATE_FLIGHT_DTO.getDepartureAirportIataCode())).willReturn(Optional.ofNullable(AIRPORT1));
+        given(airportRepository.findAirportByCode_Opt(CREATE_UPDATE_FLIGHT_DTO.getArrivalAirportIataCode())).willReturn(Optional.ofNullable(AIRPORT2));
         given(flightRepository.save(any(Flight.class))).willReturn(FLIGHT);
         //when
         var flight = underTest.editFlight(id, CREATE_UPDATE_FLIGHT_DTO);
