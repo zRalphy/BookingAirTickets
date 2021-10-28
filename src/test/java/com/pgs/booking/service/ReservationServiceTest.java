@@ -34,10 +34,8 @@ class ReservationServiceTest {
     @Mock
     private FlightRepository flightRepository;
 
-    private final AirportDtoMapper airportDtoMapper = new AirportDtoMapper();
-    private final FlightDtoMapper flightDtoMapper = new FlightDtoMapper(airportDtoMapper);
     private final PassengerDtoMapper passengerDtoMapper = new PassengerDtoMapper();
-    private final ReservationDtoMapper reservationDtoMapper = new ReservationDtoMapper(passengerDtoMapper, flightDtoMapper);
+    private final ReservationDtoMapper reservationDtoMapper = new ReservationDtoMapper(passengerDtoMapper);
     private final CreateUpdatePassengerDtoMapper createUpdatePassengerDtoMapper = new CreateUpdatePassengerDtoMapper();
     private ReservationService testReservationService;
 

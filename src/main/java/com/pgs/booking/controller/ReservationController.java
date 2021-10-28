@@ -51,8 +51,9 @@ public class ReservationController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteReservation(@PathVariable long id) {
+    public String deleteReservation(@PathVariable long id) {
         reservationService.deleteReservation(id);
+        return "Success delete reservation with id: " + id;
     }
 
     @PutMapping("/{id}/realized")
