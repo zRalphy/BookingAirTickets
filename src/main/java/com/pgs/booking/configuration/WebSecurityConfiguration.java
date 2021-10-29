@@ -4,13 +4,10 @@ package com.pgs.booking.configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
@@ -18,28 +15,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     static final String[] WHITE_LIST = {
-        "/v2/api-docs",
-        "/v3/api-docs",
-        "/swagger-resources/**",
-        "/configuration/**",
-        "/swagger-ui",
+        "/error",
+        "/v3/**",
         "/swagger-ui/**",
-        "/swagger-resources/**",
         "/webjars/**",
         "/actuator/**"
     };
 
-    private final UserDetailsService userService;
-    private final PasswordEncoder passwordEncoder;
-    private final CustomAuthenticationProvider authenticationProvider;
-
-    public WebSecurityConfiguration(UserDetailsService userService,
-                                    PasswordEncoder passwordEncoder,
-                                    CustomAuthenticationProvider authenticationProvider) {
+    public WebSecurityConfiguration() {
         super(true);
-        this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
-        this.authenticationProvider = authenticationProvider;
     }
 
     @Override
@@ -49,15 +33,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers(WHITE_LIST).permitAll()
             .and()
             .antMatcher("/api/**")
-            .authenticationProvider(authenticationProvider)
             .authorizeRequests()
             .anyRequest().authenticated();
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService)
-            .passwordEncoder(passwordEncoder);
     }
 
     @Override
