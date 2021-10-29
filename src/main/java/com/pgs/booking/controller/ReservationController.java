@@ -10,10 +10,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.List;
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,8 +49,8 @@ public class ReservationController {
     })
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'USER')")
     @GetMapping("/users")
-    public List<ReservationDto> getReservationsForCurrentUser(@PathParam("authenticationToken") PreAuthenticatedAuthenticationToken authenticationToken) {
-        if (authenticationToken.getPrincipal() instanceof User user) {
+    public List<ReservationDto> getReservationsForCurrentUser(Authentication authentication) {
+        if (authentication.getPrincipal() instanceof User user) {
             return reservationService.getReservationsByCurrentUser(user);
         }
         throw new IllegalStateException("The token does not contain authorized user data.");
@@ -77,8 +76,8 @@ public class ReservationController {
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'USER')")
     @PostMapping
     public ReservationDto addReservation(@Valid @RequestBody CreateUpdateReservationDto createUpdatePassengerDto,
-                                         PreAuthenticatedAuthenticationToken authenticationToken) {
-        if (authenticationToken.getPrincipal() instanceof User user) {
+                                         Authentication authentication) {
+        if (authentication.getPrincipal() instanceof User user) {
             return reservationService.addReservation(createUpdatePassengerDto, user);
         }
         throw new IllegalStateException("The token does not contain authorized user data.");
