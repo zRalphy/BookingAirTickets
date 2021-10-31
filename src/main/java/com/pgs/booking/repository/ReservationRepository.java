@@ -10,9 +10,14 @@ import java.util.List;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
+
     List<Reservation> findAllByFlightId(Long id);
+
     List<Reservation> findAllByUserId(Long id);
 
-    @Query("SELECT r FROM Reservation r WHERE r.id = :id")
+    @Query("SELECT r FROM Reservation r " +
+            "LEFT JOIN FETCH r .passengers " +
+            "LEFT JOIN FETCH r.flight " +
+            "WHERE r.id = :id")
     Reservation findReservationById(@Param("id") Long id);
 }
