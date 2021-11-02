@@ -18,14 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class WeatherController {
 
     private final WeatherService weatherService;
-/*
-    @GetMapping("/")
-    public void getWeatherByCity(@RequestParam("city") String city) {
-        return weatherService.getWeatherByCity(city);
-    }
-
- */
-
     @GetMapping("/")
     public WeatherDto getWeatherByCity(@RequestParam("city") String city) {
         return weatherService.getWeatherByCity(city);
