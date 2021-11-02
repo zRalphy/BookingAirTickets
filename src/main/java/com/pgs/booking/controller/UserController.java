@@ -7,7 +7,7 @@ import com.pgs.booking.validators.UserValidator;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,8 +25,8 @@ public class UserController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{id}")
-    public UserDto getSingleUser(@Valid @PathVariable Long id, PreAuthenticatedAuthenticationToken token) {
-        userValidator.validateSingleUser(id, token);
+    public UserDto getSingleUser(@Valid @PathVariable Long id, Authentication authentication) {
+        userValidator.validateSingleUser(id, authentication);
         return userService.getSingleUser(id);
     }
 
