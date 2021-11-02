@@ -13,8 +13,8 @@ import java.util.Objects;
 @AllArgsConstructor
 public class UserValidator {
 
-    public void validateSingleUser(Long id, PreAuthenticatedAuthenticationToken token) {
-        if (token.getPrincipal() instanceof User user) {
+    public void validateSingleUser(Long id, Authentication authentication) {
+        if (authentication.getPrincipal() instanceof User user) {
             var hasAdmin = user.getRoles().stream()
                     .map(Role::getName)
                     .anyMatch("ADMIN"::equals);
