@@ -1,72 +1,57 @@
 package com.pgs.booking.service;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pgs.booking.exception.ResourceNotFoundException;
 import com.pgs.booking.model.dto.WeatherDto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import org.springframework.web.client.RestTemplate;
 
 @Getter
 @Setter
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class WeatherService {
 
-    private final String hostName = "x-rapidapi-host";
-    private final String hostValue = "community-open-weather-map.p.rapidapi.com";
-    private final String keyName = "x-rapidapi-key";
-    private final String keyValue = "c72dd541f1msh23890d6e014e604p10d3c9jsn3a67da9a0d84";
+    private final String keyValue = "ee6bbf09dcc0ab10e314eda8dce3dc74";
+    private final String mode = "json";
+    private final String units = "imperial";
+    private final ObjectMapper objectMapper;
 
     public WeatherDto getWeatherByCity(String city) {
-        OkHttpClient client = new OkHttpClient();
-        String urlWeather = "https://community-open-weather-map.p.rapidapi.com/weather?q=" + city + "&units=imperial&mode=JSON";
-
-        Request request = new Request.Builder()
-                .url(urlWeather)
-                .get()
-                .addHeader(hostName, hostValue)
-                .addHeader(keyName, keyValue)
-                .build();
-
-        Response response;
+        RestTemplate restTemplate = new RestTemplate();
+        String weatherUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + keyValue + "&mode=" + mode + "&units=" + units;
+        ResponseEntity<String> response = restTemplate.getForEntity(weatherUrl, String.class);
+        JsonNode root;
         try {
-            response = client.newCall(request).execute();
-            String jsonData = Objects.requireNonNull(response.body()).string();
-
-            Map<String, Object> respMap = jsonToMap(jsonData);
-            Map<String, Object> mainMap = jsonToMap(respMap.get("main").toString());
-            Map<String, Object> windMap = jsonToMap(respMap.get("wind").toString());
-
-            var temperature = mainMap.get("temp");
-            var humidity = mainMap.get("humidity");
-            var pressure = mainMap.get("pressure");
-            var windSpeed = windMap.get("speed");
-
+            root = objectMapper.readTree(response.getBody());
+            JsonNode main = root.get("main");
+            JsonNode wind = root.get("wind");
+            var temperature = main.get("temp");
+            var humidity = main.get("humidity");
+            var pressure = main.get("pressure");
+            var windSpeed = wind.get("speed");
             return WeatherDto.builder()
-                    .temperature(temperature.toString())
-                    .humidity(humidity.toString())
-                    .pressure(pressure.toString())
-                    .windSpeed(windSpeed.toString()).build();
-        } catch (IOException e) {
-            e.printStackTrace();
+                    .temperature(fromFahrenheitToCelsius(temperature.asInt()) + "°C")
+                    .humidity(humidity.asText() + "%")
+                    .pressure(pressure.asText() + "hPa")
+                    .windSpeed(windSpeed.asText() + "mph")
+                    .build();
+        } catch (JsonProcessingException e) {
+            log.error("Can not parse JSON content", e);
+            throw new ResourceNotFoundException("Can not load weather from server");
         }
-        throw new IllegalStateException("Can not load weather from server.");
     }
 
-    private Map<String, Object> jsonToMap(String str) {
-        return new Gson().fromJson(
-                str, new TypeToken<HashMap<String, Object>>() {
-                }.getType()
-        );
+    private String fromFahrenheitToCelsius(Integer temp) {
+        int tempInCelsius = 5 * (temp - 32) / 9;
+        return Integer.toString(tempInCelsius);
     }
 }
