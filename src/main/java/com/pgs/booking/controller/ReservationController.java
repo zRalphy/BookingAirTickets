@@ -33,6 +33,16 @@ public class ReservationController {
 
     // MARK: - GETTING METHODS
 
+    @Operation(summary = "Get reservation with passengers and flight by given id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Found reservation with this id"),
+            @ApiResponse(responseCode = "404", description = "Selected reservation was not found")
+    })
+    @GetMapping("/{id}")
+    public ReservationDto getReservationWithPassengersAndFlight(@PathVariable long id) {
+        return reservationService.getReservationWithPassengersAndFlight(id);
+    }
+
     @Operation(summary = "Get all reservation for flight with given id")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Found all reservations"),
