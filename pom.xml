@@ -100,6 +100,11 @@
             <artifactId>spring-security-jwt</artifactId>
             <version>1.1.1.RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.5.11</version>
+        </dependency>
 
         <dependency>
             <groupId>com.yannbriancon</groupId>
@@ -107,5 +112,4 @@
             <version>1.0.3</version>
         </dependency>
     </dependencies>
-
 </project>

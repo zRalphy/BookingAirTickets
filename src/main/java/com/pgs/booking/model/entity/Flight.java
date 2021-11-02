@@ -27,11 +27,19 @@ public class Flight {
     @Column(name = "arrivalDate")
     private LocalDateTime arrivalDate;
 
-    public enum TypeOfFlight {
-        ECONOMY, PREMIUM, BUSINESS
-    }
-
     @OneToMany(mappedBy = "flight", fetch = FetchType.LAZY,
             cascade = CascadeType.DETACH)
     private List<Reservation> reservations;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.DETACH)
+    @JoinColumn(name = "departureAirportId", nullable = false)
+    private Airport departureAirport;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.DETACH)
+    @JoinColumn(name = "arrivalAirportId", nullable = false)
+    private Airport arrivalAirport;
+
+    public enum TypeOfFlight {
+        ECONOMY, PREMIUM, BUSINESS
+    }
 }

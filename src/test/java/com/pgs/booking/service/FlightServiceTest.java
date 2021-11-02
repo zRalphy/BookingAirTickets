@@ -1,10 +1,13 @@
 package com.pgs.booking.service;
 
 import com.pgs.booking.exception.ResourceNotFoundException;
+import com.pgs.booking.mappers.AirportDtoMapper;
 import com.pgs.booking.mappers.CreateUpdateFlightDtoMapper;
 import com.pgs.booking.mappers.FlightDtoMapper;
 import com.pgs.booking.model.dto.CreateUpdateFlightDto;
+import com.pgs.booking.model.entity.Airport;
 import com.pgs.booking.model.entity.Flight;
+import com.pgs.booking.repository.AirportRepository;
 import com.pgs.booking.repository.FlightRepository;
 import com.pgs.booking.repository.ReservationRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,32 +36,54 @@ class FlightServiceTest {
     @Mock
     private ReservationRepository reservationRepository;
 
-    private final FlightDtoMapper flightDtoMapper = new FlightDtoMapper();
+    @Mock
+    private AirportRepository airportRepository;
+
+    private final AirportDtoMapper airportDtoMapper = new AirportDtoMapper();
+    private final FlightDtoMapper flightDtoMapper = new FlightDtoMapper(airportDtoMapper);
     private final CreateUpdateFlightDtoMapper createUpdateFlightDtoMapper = new CreateUpdateFlightDtoMapper();
     private FlightService underTest;
 
     @BeforeEach
     void setUp() {
-        underTest = new FlightService(flightRepository, flightDtoMapper, createUpdateFlightDtoMapper, reservationRepository);
+        underTest = new FlightService(flightRepository, flightDtoMapper, createUpdateFlightDtoMapper, reservationRepository, airportRepository);
     }
+
+    private static final Airport AIRPORT1 = Airport.builder()
+            .id(1L)
+            .code("PSS")
+            .country("POLAND")
+            .name("Wroclaw Airport")
+            .build();
+
+    private static final Airport AIRPORT2 = Airport.builder()
+            .id(2L)
+            .code("BMM")
+            .country("FRANCE")
+            .name("US Airport")
+            .build();
 
     private static Flight FLIGHT = Flight.builder()
             .id(1L)
             .type(Flight.TypeOfFlight.ECONOMY)
             .departureDate(LocalDateTime.of(2021, Month.DECEMBER, 9, 18, 30))
             .arrivalDate(LocalDateTime.of(2021, Month.DECEMBER, 9, 23, 30))
+            .departureAirport(AIRPORT1)
+            .arrivalAirport(AIRPORT2)
             .build();
 
-    private static CreateUpdateFlightDto CREATE_UPDATE_FLIGHT_DTO = CreateUpdateFlightDto.builder()
+    private static final CreateUpdateFlightDto CREATE_UPDATE_FLIGHT_DTO = CreateUpdateFlightDto.builder()
             .type(Flight.TypeOfFlight.BUSINESS)
             .departureDate(LocalDateTime.of(2021, Month.SEPTEMBER, 10, 8, 30))
             .arrivalDate(LocalDateTime.of(2021, Month.SEPTEMBER, 10, 11, 30))
+            .arrivalAirportIataCode("PSS")
+            .arrivalAirportIataCode("CCD")
             .build();
 
     @Test
     void testGetFlights() {
         given(flightRepository.findAll())
-                .willReturn(List.of(new Flight(), new Flight(), new Flight(), new Flight()));
+                .willReturn(List.of(FLIGHT, FLIGHT, FLIGHT, FLIGHT));
         //when
         var flights = underTest.getFlights();
         //then
@@ -85,6 +110,8 @@ class FlightServiceTest {
     void testAddFlight() {
         //given
         given(flightRepository.save(any(Flight.class))).willReturn(FLIGHT);
+        given(airportRepository.findAirportByCode_Opt(CREATE_UPDATE_FLIGHT_DTO.getDepartureAirportIataCode())).willReturn(Optional.ofNullable(AIRPORT1));
+        given(airportRepository.findAirportByCode_Opt(CREATE_UPDATE_FLIGHT_DTO.getArrivalAirportIataCode())).willReturn(Optional.ofNullable(AIRPORT2));
         //when
         var flight = underTest.addFlight(CREATE_UPDATE_FLIGHT_DTO);
         //then
@@ -100,7 +127,10 @@ class FlightServiceTest {
         long id = 1L;
         //given
         given(flightRepository.findById(id))
-                .willReturn(java.util.Optional.ofNullable(FLIGHT));
+                .willReturn(Optional.ofNullable(FLIGHT));
+        given(airportRepository.findAirportByCode_Opt(any(String.class))).willReturn(Optional.empty());
+        given(airportRepository.findAirportByCode_Opt(CREATE_UPDATE_FLIGHT_DTO.getDepartureAirportIataCode())).willReturn(Optional.ofNullable(AIRPORT1));
+        given(airportRepository.findAirportByCode_Opt(CREATE_UPDATE_FLIGHT_DTO.getArrivalAirportIataCode())).willReturn(Optional.ofNullable(AIRPORT2));
         given(flightRepository.save(any(Flight.class))).willReturn(FLIGHT);
         //when
         var flight = underTest.editFlight(id, CREATE_UPDATE_FLIGHT_DTO);

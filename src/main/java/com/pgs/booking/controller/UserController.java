@@ -4,6 +4,7 @@ import com.pgs.booking.model.dto.CreateUserDto;
 import com.pgs.booking.model.dto.UserDto;
 import com.pgs.booking.service.UserService;
 import com.pgs.booking.validators.UserValidator;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+@OpenAPIDefinition
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/users")
