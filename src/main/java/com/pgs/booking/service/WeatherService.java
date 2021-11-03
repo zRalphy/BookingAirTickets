@@ -20,10 +20,13 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @RequiredArgsConstructor
 public class WeatherService {
-    @Value("${openwaether.api-key}")
-    private String keyValue;
+
     private static final String mode = "json";
     private static final String units = "imperial";
+
+    @Value("${openwaether.api-key}")
+    private String keyValue;
+
     private final ObjectMapper objectMapper;
     private final RestTemplate restTemplate;
 
