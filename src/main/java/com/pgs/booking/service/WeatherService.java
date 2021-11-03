@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -19,14 +21,15 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @RequiredArgsConstructor
 public class WeatherService {
-
-    private final String keyValue = "ee6bbf09dcc0ab10e314eda8dce3dc74";
-    private final String mode = "json";
-    private final String units = "imperial";
+    @Value("${openwaether.api-key}")
+    private String keyValue;
+    private static final String mode = "json";
+    private static final String units = "imperial";
     private final ObjectMapper objectMapper;
+    @Autowired
+    private final RestTemplate restTemplate;
 
     public WeatherDto getWeatherByCity(String city) {
-        RestTemplate restTemplate = new RestTemplate();
         String weatherUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + keyValue + "&mode=" + mode + "&units=" + units;
         ResponseEntity<String> response = restTemplate.getForEntity(weatherUrl, String.class);
         JsonNode root;
