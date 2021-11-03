@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,6 @@ public class WeatherService {
     private static final String mode = "json";
     private static final String units = "imperial";
     private final ObjectMapper objectMapper;
-    @Autowired
     private final RestTemplate restTemplate;
 
     public WeatherDto getWeatherByCity(String city) {
