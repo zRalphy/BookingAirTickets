@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -62,7 +63,7 @@ public class UserService implements UserDetailsService, AuthenticationUserDetail
         var user = getUserById(id);
         var roleList = roleStringList.stream()
                 .map(roleRepository::findByName)
-                .toList();
+                .collect(Collectors.toList());
         user.setRoles(roleList);
         var savedUser = userRepository.save(user);
         return userDtoMapper.mapToUserDto(savedUser);
