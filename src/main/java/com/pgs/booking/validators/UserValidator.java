@@ -4,7 +4,7 @@ import com.pgs.booking.exception.IllegalUserException;
 import com.pgs.booking.model.entity.Role;
 import com.pgs.booking.model.entity.User;
 import lombok.AllArgsConstructor;
-import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
