@@ -20,7 +20,7 @@ public class AirportController {
 
     private final AirportService airportService;
 
-    @GetMapping
+    @GetMapping("/")
     public List<AirportDto> getAirports() {
         return airportService.getAirports();
     }
@@ -30,7 +30,7 @@ public class AirportController {
         return airportService.getAirport(id);
     }
 
-    @GetMapping("/")
+    @GetMapping
     public AirportDto getAirportByCode(@RequestParam("code") String code)  {
         return airportService.getAirportByCode(code);
     }
